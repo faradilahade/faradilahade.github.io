@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0E1B2C"/>
+      <stop offset="1" stop-color="#070D18"/>
+    </linearGradient>
+    <linearGradient id="b" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8FC3E3" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#8FC3E3"/>
+      <stop offset="1" stop-color="#5C9DC9" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#g)"/>
+  <path d="M-4 44 C 14 36, 26 50, 40 42 S 60 30, 70 38" stroke="url(#b)" stroke-width="2" fill="none" opacity=".9"/>
+  <text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle" font-family="Newsreader, Georgia, 'Times New Roman', serif" font-size="38" fill="#FAF9F6">F<tspan fill="#B08D4A">.</tspan></text>
+</svg>
