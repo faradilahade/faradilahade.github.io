@@ -70,8 +70,11 @@ export function applyFilters(
       if (p.year < f.year[0] || p.year > f.year[1]) return false
     }
     if (needle) {
-      const hay = [p.title, p.summary ?? '', p.client ?? '', p.role ?? '', ...p.tags, ...p.keywords, ...p.tools, catLabel(p.category)]
-        .join(' ').toLowerCase()
+      const hay = [
+        p.title, p.summary ?? '', p.client ?? '', p.role ?? '', ...p.tags, ...p.keywords, ...p.tools, catLabel(p.category),
+        p._i18n?.original.title ?? '', p._i18n?.original.summary ?? '',
+        ...Object.values(p.translations ?? {}).flatMap(tr => [tr?.title ?? '', tr?.summary ?? '']),
+      ].join(' ').toLowerCase()
       if (!hay.includes(needle)) return false
     }
     return true

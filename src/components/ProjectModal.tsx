@@ -4,11 +4,13 @@ import { Link } from 'react-router-dom'
 import { Project, isImageUrl } from '../lib/supabase'
 import { useLang } from '../contexts/LanguageContext'
 import { site, mailto, absoluteUrl } from '../lib/site'
+import { renderContent } from '../lib/richtext'
+import { useLocalizedContent } from '../hooks/useLocalized'
 import ToolBadge from './ToolBadge'
 import { CAT_DOT } from './ProjectCard'
 import {
   IconClose, IconMail, IconShare, IconTools, IconFile, IconExternal,
-  IconChevronLeft, IconChevronRight, IconDownload, IconCheck,
+  IconChevronLeft, IconChevronRight, IconDownload, IconCheck, IconLanguage,
 } from './Icons'
 
 type Props = {
@@ -20,44 +22,20 @@ type Props = {
   onNavigate: (slug: string) => void
 }
 
-/** Minimal formatting: "## " headings, "- " bullets, blank-line paragraphs. */
-function renderContent(text: string): ReactNode[] {
-  const lines = text.split(/\r?\n/)
-  const out: ReactNode[] = []
-  let list: string[] = []
-  const flush = () => {
-    if (list.length) {
-      out.push(
-        <ul key={`ul-${out.length}`} className="list-disc pl-5 space-y-1.5 marker:text-brass">
-          {list.map((li, i) => <li key={i}>{li}</li>)}
-        </ul>,
-      )
-      list = []
-    }
-  }
-  lines.forEach((raw, i) => {
-    const line = raw.trim()
-    if (!line) { flush(); return }
-    if (line.startsWith('## ')) { flush(); out.push(<h2 key={i} className="font-bold uppercase tracking-tight text-fl-base text-ink pt-3">{line.slice(3)}</h2>); return }
-    if (line.startsWith('# ')) { flush(); out.push(<h2 key={i} className="font-bold uppercase tracking-tight text-fl-base text-ink pt-3">{line.slice(2)}</h2>); return }
-    if (/^[-•*]\s+/.test(line)) { list.push(line.replace(/^[-•*]\s+/, '')); return }
-    flush()
-    out.push(<p key={i}>{line}</p>)
-  })
-  flush()
-  return out
-}
-
 export default function ProjectModal({ project, list, loading, onClose, onNavigate }: Props) {
   const { t, locale } = useLang()
   const panelRef = useRef<HTMLDivElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
   const [toast, setToast] = useState('')
   const [closing, setClosing] = useState(false)
+  const [showOriginal, setShowOriginal] = useState(false)
+  const [toolsOpen, setToolsOpen] = useState(false)
 
   const idx = project ? list.findIndex(p => p.id === project.id) : -1
   const prev = idx > 0 ? list[idx - 1] : null
   const next = idx >= 0 && idx < list.length - 1 ? list[idx + 1] : null
+
+  const { content: autoContent, translating } = useLocalizedContent(project)
 
   const requestClose = useCallback(() => {
     if (closing) return
@@ -96,10 +74,12 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
     return () => document.removeEventListener('keydown', onKey)
   }, [next, prev, onNavigate, requestClose])
 
-  // Focus + scroll to top when the project changes
+  // Focus + scroll to top + reset toggles when the project changes
   useEffect(() => {
     closeRef.current?.focus({ preventScroll: true })
     panelRef.current?.scrollTo({ top: 0 })
+    setShowOriginal(false)
+    setToolsOpen(false)
   }, [project?.id])
 
   const gallery = useMemo(() => {
@@ -108,15 +88,8 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
     return Array.from(new Set([...project.gallery, ...fromAttachments]))
   }, [project])
 
-  const files = useMemo(
-    () => (project ? project.attachments.filter(a => !isImageUrl(a.url)) : []),
-    [project],
-  )
-
-  const keywords = useMemo(
-    () => (project ? Array.from(new Set([...project.keywords, ...project.tags])) : []),
-    [project],
-  )
+  const files = useMemo(() => (project ? project.attachments.filter(a => !isImageUrl(a.url)) : []), [project])
+  const keywords = useMemo(() => (project ? Array.from(new Set([...project.keywords, ...project.tags])) : []), [project])
 
   const share = async () => {
     if (!project) return
@@ -139,6 +112,16 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
 
   const date = project ? new Date(project.created_at).toLocaleDateString(locale, { year: 'numeric', month: 'long' }) : ''
 
+  // What to display: translated (stored or auto) vs the original text
+  const i18n = project?._i18n
+  const isTranslated = Boolean(project && i18n && (i18n.mode !== 'original' || (autoContent && autoContent !== project.content)))
+  const view = project ? (
+    showOriginal && i18n
+      ? { title: i18n.original.title, summary: i18n.original.summary, content: i18n.original.content, role: i18n.original.role }
+      : { title: project.title, summary: project.summary, content: autoContent ?? project.content, role: project.role }
+  ) : null
+  const autoMode = Boolean(project && i18n && (i18n.mode === 'auto' || (i18n.mode === 'original' && autoContent && autoContent !== project.content)))
+
   const railBtn = (label: string, icon: ReactNode, onClick?: () => void, href?: string, extra = '') => {
     const inner = <><span>{icon}</span><span>{label}</span></>
     return href ? (
@@ -147,6 +130,27 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
       <button type="button" onClick={onClick} className={`rail-btn ${extra}`}>{inner}</button>
     )
   }
+
+  /** Behance-style "Tools" button: hover/click shows the tools, click also scrolls to the section. */
+  const toolsRail = project && project.tools.length > 0 && (
+    <div className="relative group" onMouseLeave={() => setToolsOpen(false)}>
+      <button type="button" onClick={() => { setToolsOpen(o => !o); scrollTo('tools') }} className="rail-btn" aria-expanded={toolsOpen} aria-controls="tools-popover">
+        <span><IconTools size={20} /></span><span>{t('modal.tools')}</span>
+      </button>
+      <div
+        id="tools-popover"
+        className={`absolute right-full top-0 mr-3 w-60 bg-paper text-ink rounded-xl shadow-lift ring-1 ring-line p-3 transition-all duration-200 ease-smooth ${toolsOpen ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 translate-x-1 pointer-events-none group-hover:opacity-100 group-hover:translate-x-0 group-hover:pointer-events-auto'}`}
+        role="tooltip"
+      >
+        <p className="label-caps mb-2">{t('modal.toolsHint')}</p>
+        <ul className="space-y-1.5">
+          {project.tools.map(tool => (
+            <li key={tool} className="flex items-center gap-2.5 text-fl-sm"><ToolBadge name={tool} size="sm" /> {tool}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )
 
   // Rendered into <body> so no page-level stacking context (e.g. the route fade) can trap it under the navbar
   return createPortal(
@@ -169,7 +173,7 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
         <IconClose size={20} />
       </button>
 
-      {/* Desktop prev / next at the edges */}
+      {/* Desktop prev at the left edge */}
       {prev && (
         <button
           type="button"
@@ -187,9 +191,7 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
           ref={panelRef}
           className="modal-panel relative w-full max-w-[1040px] h-full bg-paper text-ink md:rounded-t-2xl shadow-modal overflow-y-auto overflow-x-hidden scroll-quiet pb-24 md:pb-10"
         >
-          {loading && (
-            <div className="p-10 text-slate text-fl-sm animate-pulse">{t('work.loading')}</div>
-          )}
+          {loading && <div className="p-10 text-slate text-fl-sm animate-pulse">{t('work.loading')}</div>}
 
           {!loading && !project && (
             <div className="p-10 md:p-16 text-center">
@@ -198,57 +200,60 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
             </div>
           )}
 
-          {project && (
+          {project && view && (
             <article key={project.id} className="animate-fade">
               {project.cover_url && (
                 <figure className="relative bg-frost">
-                  <img
-                    src={project.cover_url}
-                    alt={project.title}
-                    className="w-full max-h-[62vh] object-cover md:rounded-t-2xl"
-                  />
+                  <img src={project.cover_url} alt={view.title} className="w-full max-h-[62vh] object-cover md:rounded-t-2xl" />
                 </figure>
               )}
 
               <div className="px-[clamp(1.25rem,5vw,4.5rem)] pt-[clamp(1.75rem,4vw,3.25rem)]">
-                <p className="flex flex-wrap items-center gap-x-3 gap-y-1 label-caps">
-                  <span className="inline-flex items-center gap-2">
-                    <span className={`w-1.5 h-1.5 rounded-full ${CAT_DOT[project.category]}`} />
-                    {t(`cat.${project.category}`)}
-                  </span>
-                  {project.year && <span>· {project.year}</span>}
-                  {project.client && <span>· {project.client}</span>}
-                </p>
-                <h1 id="project-title" className="mt-3 h-display text-[clamp(1.8rem,4vw,3.2rem)] text-ink max-w-3xl">
-                  {project.title}
-                </h1>
-                {project.summary && (
-                  <p className="mt-5 font-display text-fl-xl text-ink/80 leading-snug max-w-2xl">{project.summary}</p>
-                )}
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <p className="flex flex-wrap items-center gap-x-3 gap-y-1 label-caps">
+                    <span className="inline-flex items-center gap-2 text-ink">
+                      <span className={`w-1.5 h-1.5 rounded-full ${CAT_DOT[project.category]}`} />
+                      {t(`cat.${project.category}`)}
+                    </span>
+                    {project.year && <span>· {project.year}</span>}
+                    {project.client && <span>· {project.client}</span>}
+                  </p>
+
+                  {isTranslated && (
+                    <button
+                      type="button"
+                      onClick={() => setShowOriginal(o => !o)}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white px-3 py-1 text-[11px] font-medium text-slate hover:border-steel hover:text-steel transition-colors"
+                    >
+                      <IconLanguage size={13} />
+                      {translating ? t('modal.translating') : autoMode ? t('modal.autoTranslated') : t('modal.translation')}
+                      <span className="text-fog">·</span>
+                      <span className="text-steel">{showOriginal ? t('modal.showTranslated') : t('modal.showOriginal')}</span>
+                    </button>
+                  )}
+                </div>
+
+                <h1 id="project-title" className="mt-3 h-display text-[clamp(1.8rem,4vw,3.2rem)] text-ink max-w-3xl">{view.title}</h1>
+                {view.summary && <p className="mt-5 font-display text-fl-xl text-ink/80 leading-snug max-w-2xl">{view.summary}</p>}
 
                 <dl className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4 border-y border-line py-5 text-fl-sm">
-                  {project.role && (<div><dt className="text-slate text-fl-xs uppercase tracking-wider">{t('modal.role')}</dt><dd className="mt-1 text-ink">{project.role}</dd></div>)}
-                  {project.client && (<div><dt className="text-slate text-fl-xs uppercase tracking-wider">{t('modal.client')}</dt><dd className="mt-1 text-ink">{project.client}</dd></div>)}
-                  <div><dt className="text-slate text-fl-xs uppercase tracking-wider">{t('modal.category')}</dt><dd className="mt-1 text-ink">{t(`cat.${project.category}`)}</dd></div>
-                  <div><dt className="text-slate text-fl-xs uppercase tracking-wider">{project.year ? t('modal.year') : t('modal.published')}</dt><dd className="mt-1 text-ink">{project.year ?? date}</dd></div>
+                  {view.role && (<div><dt className="label-caps">{t('modal.role')}</dt><dd className="mt-1 text-ink">{view.role}</dd></div>)}
+                  {project.client && (<div><dt className="label-caps">{t('modal.client')}</dt><dd className="mt-1 text-ink">{project.client}</dd></div>)}
+                  <div><dt className="label-caps">{t('modal.category')}</dt><dd className="mt-1 text-ink">{t(`cat.${project.category}`)}</dd></div>
+                  <div><dt className="label-caps">{project.year ? t('modal.year') : t('modal.published')}</dt><dd className="mt-1 text-ink">{project.year ?? date}</dd></div>
                 </dl>
 
-                {project.content && (
-                  <div className="mt-8 md:mt-10 space-y-5 text-fl-base leading-[1.8] text-ink/90 max-w-3xl">
-                    {renderContent(project.content)}
+                {view.content && (
+                  <div className={`mt-8 md:mt-10 space-y-5 text-fl-base leading-[1.8] text-ink/90 max-w-3xl transition-opacity duration-300 ${translating && !showOriginal ? 'opacity-60' : ''}`}>
+                    {renderContent(view.content)}
                   </div>
                 )}
 
                 {project.embed_url && (
                   <div className="mt-10 rounded-xl overflow-hidden ring-1 ring-line bg-frost">
                     <iframe
-                      src={project.embed_url}
-                      title={`${project.title} — Behance`}
-                      loading="lazy"
-                      allowFullScreen
-                      allow="clipboard-write"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      className="w-full aspect-[404/316] md:aspect-[16/9]"
+                      src={project.embed_url} title={`${view.title} — Behance`} loading="lazy" allowFullScreen allow="clipboard-write"
+                      referrerPolicy="strict-origin-when-cross-origin" className="w-full aspect-[404/316] md:aspect-[16/9]"
                     />
                   </div>
                 )}
@@ -258,7 +263,7 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
                     <div className="space-y-4 md:space-y-6">
                       {gallery.map((src, i) => (
                         <figure key={src} className="rounded-xl overflow-hidden bg-frost ring-1 ring-line">
-                          <img src={src} alt={`${project.title} — ${i + 1}`} loading="lazy" decoding="async" className="w-full h-auto" />
+                          <img src={src} alt={`${view.title} — ${i + 1}`} loading="lazy" decoding="async" className="w-full h-auto" />
                         </figure>
                       ))}
                     </div>
@@ -282,9 +287,7 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
                     <section>
                       <h2 className="label-caps">{t('modal.keywords')}</h2>
                       <ul className="mt-3 flex flex-wrap gap-2">
-                        {keywords.map(k => (
-                          <li key={k} className="rounded-full bg-frost text-slate px-3 py-1 text-fl-xs">{k}</li>
-                        ))}
+                        {keywords.map(k => <li key={k} className="rounded-full bg-frost text-slate px-3 py-1 text-fl-xs">{k}</li>)}
                       </ul>
                     </section>
                   )}
@@ -322,13 +325,13 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
                   <nav className="mt-10 grid sm:grid-cols-2 gap-3" aria-label="More projects">
                     {prev ? (
                       <button type="button" onClick={() => onNavigate(prev.slug)} className="group text-left rounded-xl border border-line p-4 hover:border-steel transition-colors">
-                        <span className="text-fl-xs text-slate uppercase tracking-wider">← {t('modal.prev')}</span>
+                        <span className="label-caps">← {t('modal.prev')}</span>
                         <span className="mt-1 block font-semibold uppercase tracking-tight text-fl-sm leading-snug group-hover:text-steel transition-colors">{prev.title}</span>
                       </button>
                     ) : <span />}
                     {next && (
                       <button type="button" onClick={() => onNavigate(next.slug)} className="group text-right rounded-xl border border-line p-4 hover:border-steel transition-colors">
-                        <span className="text-fl-xs text-slate uppercase tracking-wider">{t('modal.next')} →</span>
+                        <span className="label-caps">{t('modal.next')} →</span>
                         <span className="mt-1 block font-semibold uppercase tracking-tight text-fl-sm leading-snug group-hover:text-steel transition-colors">{next.title}</span>
                       </button>
                     )}
@@ -339,11 +342,11 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
           )}
         </div>
 
-        {/* Right rail — desktop */}
+        {/* Right rail — desktop (Behance-style actions) */}
         {project && (
           <aside className="hidden md:flex flex-col items-center gap-5 pt-14 shrink-0 w-[68px]" aria-label="Project actions">
             {railBtn(t('modal.contact'), <IconMail size={20} />, undefined, contactHref, 'is-primary')}
-            {project.tools.length > 0 && railBtn(t('modal.tools'), <IconTools size={20} />, () => scrollTo('tools'))}
+            {toolsRail}
             {files.length > 0 && railBtn(t('modal.files'), <IconFile size={20} />, () => scrollTo('files'))}
             {railBtn(t('modal.share'), toast ? <IconCheck size={20} /> : <IconShare size={20} />, share)}
             {project.external_url && railBtn(t('modal.open'), <IconExternal size={20} />, undefined, project.external_url)}

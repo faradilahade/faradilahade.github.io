@@ -32,6 +32,7 @@ export default function Footer() {
 
         <nav aria-label={t('footer.work')}>
           <h4 className={head}>{t('footer.work')}</h4>
+          <Link to="/#showcase" className={item}>{t('showcase.title')}</Link>
           <Link to="/#work" className={item}>{t('work.all')}</Link>
           {CATEGORIES.map(c => (
             <Link key={c} to={`/?field=${c}#work`} className={item}>{t(`cat.${c}`)}</Link>

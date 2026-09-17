@@ -9,6 +9,8 @@ import HeroVisual from '../components/HeroVisual'
 import SectionTitle from '../components/SectionTitle'
 import ProjectCard, { PromoTile } from '../components/ProjectCard'
 import ProjectModal from '../components/ProjectModal'
+import Showcase from '../components/Showcase'
+import { useLocalizedProjects } from '../hooks/useLocalized'
 import Filters, { FilterState, emptyFilters, applyFilters, yearBoundsOf, activeFilterCount } from '../components/Filters'
 import Faq, { faqItems } from '../components/Faq'
 import BookCall from '../components/BookCall'
@@ -112,14 +114,17 @@ export default function Home() {
     if (el) requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }))
   }, [location.key, location.hash])
 
+  // Projects in the visitor's language (stored translations first, machine translation as fallback)
+  const localized = useLocalizedProjects(projects)
+
   const bounds = useMemo(() => yearBoundsOf(projects), [projects])
   const catLabel = useCallback((c: Category) => t(`cat.${c}`), [t])
-  const filtered = useMemo(() => applyFilters(projects, filters, bounds, catLabel), [projects, filters, bounds, catLabel])
+  const filtered = useMemo(() => applyFilters(localized, filters, bounds, catLabel), [localized, filters, bounds, catLabel])
   const sorted = useMemo(() => sortList(filtered, sort), [filtered, sort])
   const visible = useMemo(() => sorted.slice(0, page * PAGE), [sorted, page])
   const activeCount = activeFilterCount(filters, bounds)
 
-  const active = slug ? projects.find(p => p.slug === slug) ?? null : null
+  const active = slug ? localized.find(p => p.slug === slug) ?? null : null
   const closeModal = useCallback(() => navigate({ pathname: '/', search: location.search }), [navigate, location.search])
   const goTo = useCallback((s: string) => navigate({ pathname: `/work/${s}`, search: location.search }, { replace: true }), [navigate, location.search])
 
@@ -131,7 +136,7 @@ export default function Home() {
     if (projects.length) {
       ld.push({
         '@context': 'https://schema.org', '@type': 'ItemList', name: `${site.name} — ${t('work.title')}`,
-        itemListElement: projects.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: absoluteUrl(`work/${p.slug}`), name: p.title })),
+        itemListElement: localized.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: absoluteUrl(`work/${p.slug}`), name: p.title })),
       })
     }
     ld.push({
@@ -139,7 +144,7 @@ export default function Home() {
       mainEntity: faqItems(t).map(it => ({ '@type': 'Question', name: it.q, acceptedAnswer: { '@type': 'Answer', text: it.a } })),
     })
     return ld
-  }, [projects, lang, t])
+  }, [localized, lang, t])
 
   const projectJsonLd = useMemo(() => {
     if (!active) return undefined
@@ -195,7 +200,7 @@ export default function Home() {
             <div className="rise-4 mt-8 flex flex-wrap gap-3">
               <a href={emailHref} className={btnSolid}><IconMail size={15} /> {t('hero.cta')} <IconArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" /></a>
               <a href={site.whatsapp} target="_blank" rel="noreferrer" className={btnGhost}><IconWhatsapp size={15} /> {t('hero.cta2')}</a>
-              <a href="#work" className="inline-flex items-center gap-2 px-2 py-3.5 text-[11px] font-semibold uppercase tracking-[.16em] text-slate hover:text-ink transition-colors link-underline">{t('hero.cta3')} <IconArrowDown size={14} /></a>
+              <a href="#showcase" className="inline-flex items-center gap-2 px-2 py-3.5 text-[11px] font-semibold uppercase tracking-[.16em] text-slate hover:text-ink transition-colors link-underline">{t('hero.cta3')} <IconArrowDown size={14} /></a>
             </div>
           </div>
           <HeroVisual />
@@ -219,33 +224,9 @@ export default function Home() {
         </dl>
       </section>
 
-      {/* ================= ABOUT ================= */}
-      <section id="about" className="scroll-mt-20">
-        <div className="max-w-site mx-auto px-gutter py-section grid lg:grid-cols-[1fr_1.7fr] gap-10 lg:gap-16">
-          <div className="reveal">
-            <SectionTitle>{t('about.title')}</SectionTitle>
-            <p className="mt-5 h-display text-[clamp(1.7rem,3vw,2.6rem)] text-ink">{t('about.lead')}</p>
-            <p className="mt-5 text-fl-sm text-slate leading-relaxed">{t('about.proof')}</p>
-            <p className="label-caps mt-7 mb-2.5">{t('about.web')}</p>
-            <div className="flex flex-wrap gap-x-5 gap-y-2">
-              {site.links.map(l => (
-                <a key={l.key} href={l.href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-fl-sm text-ink hover:text-steel transition-colors link-underline">
-                  {l.label} <IconExternal size={12} className="text-fog" />
-                </a>
-              ))}
-            </div>
-          </div>
-          <ol className="grid sm:grid-cols-3 gap-6 lg:gap-8">
-            {CATEGORIES.map((k, i) => (
-              <li key={k} className={`reveal reveal-delay-${i + 1} border-t-2 border-ink pt-4`}>
-                <span className="text-fl-xs text-fog tabular-nums">0{i + 1}</span>
-                <h3 className="mt-2 font-bold uppercase tracking-tight text-fl-lg">{t(`pillar.${k}.title`)}</h3>
-                <p className="mt-2.5 text-fl-sm text-slate leading-relaxed">{t(`pillar.${k}.body`)}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
+
+      {/* ================= MY WORK (Behance-style showcase) ================= */}
+      <Showcase projects={localized} loading={loading} />
 
       {/* ================= WORK ================= */}
       <section id="work" className="border-t border-line bg-frost/50 scroll-mt-20">
@@ -351,30 +332,34 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Behance embeds */}
-          {site.behanceEmbeds.length > 0 && (
-            <div className="mt-section reveal">
-              <div className="flex items-end justify-between gap-6 flex-wrap">
-                <div>
-                  <SectionTitle>{t('work.behance')}</SectionTitle>
-                  <p className="mt-2 text-fl-sm text-slate">{t('work.behance_sub')}</p>
-                </div>
-                <a href={site.links.find(l => l.key === 'behance')?.href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[.14em] text-steel link-underline">
-                  {t('work.viewOnBehance')} <IconExternal size={13} />
+        </div>
+      </section>
+
+      {/* ================= ABOUT ================= */}
+      <section id="about" className="scroll-mt-20">
+        <div className="max-w-site mx-auto px-gutter py-section grid lg:grid-cols-[1fr_1.7fr] gap-10 lg:gap-16">
+          <div className="reveal">
+            <SectionTitle>{t('about.title')}</SectionTitle>
+            <p className="mt-5 h-display text-[clamp(1.7rem,3vw,2.6rem)] text-ink">{t('about.lead')}</p>
+            <p className="mt-5 text-fl-sm text-slate leading-relaxed">{t('about.proof')}</p>
+            <p className="label-caps mt-7 mb-2.5">{t('about.web')}</p>
+            <div className="flex flex-wrap gap-x-5 gap-y-2">
+              {site.links.map(l => (
+                <a key={l.key} href={l.href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-fl-sm text-ink hover:text-steel transition-colors link-underline">
+                  {l.label} <IconExternal size={12} className="text-fog" />
                 </a>
-              </div>
-              <div className="mt-6 grid sm:grid-cols-2 gap-5">
-                {site.behanceEmbeds.map(e => (
-                  <div key={e.id} className="rounded-xl overflow-hidden bg-white border border-line hover:border-steel/60 hover:shadow-lift transition-all duration-500">
-                    <iframe
-                      src={e.src} title={`Behance project ${e.id}`} loading="lazy" allowFullScreen allow="clipboard-write"
-                      referrerPolicy="strict-origin-when-cross-origin" className="w-full aspect-[404/316] bg-frost"
-                    />
-                  </div>
-                ))}
-              </div>
+              ))}
             </div>
-          )}
+          </div>
+          <ol className="grid sm:grid-cols-3 gap-6 lg:gap-8">
+            {CATEGORIES.map((k, i) => (
+              <li key={k} className={`reveal reveal-delay-${i + 1} border-t-2 border-ink pt-4`}>
+                <span className="text-fl-xs text-fog tabular-nums">0{i + 1}</span>
+                <h3 className="mt-2 font-bold uppercase tracking-tight text-fl-lg">{t(`pillar.${k}.title`)}</h3>
+                <p className="mt-2.5 text-fl-sm text-slate leading-relaxed">{t(`pillar.${k}.body`)}</p>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 

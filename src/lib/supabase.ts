@@ -32,7 +32,21 @@ export const supabase = createClient(
 export type Category = 'data' | 'finance' | 'risk'
 export const CATEGORIES: Category[] = ['data', 'finance', 'risk']
 
+export type Lang4 = 'en' | 'id' | 'ja' | 'zh'
+export const LANG4: Lang4[] = ['en', 'id', 'ja', 'zh']
+
 export type Attachment = { name: string; url: string }
+
+/** Fields that can be translated per project. Proper nouns (client, tools) stay as written. */
+export type TranslatedFields = { title?: string; summary?: string; content?: string; role?: string }
+export type Translations = Partial<Record<Lang4, TranslatedFields>>
+
+export type I18nInfo = {
+  lang: Lang4
+  /** original = shown in its source language; stored = admin-reviewed translation; auto = machine translated at runtime */
+  mode: 'original' | 'stored' | 'auto'
+  original: { title: string; summary: string | null; content: string | null; role: string | null }
+}
 
 export type Project = {
   id: string
@@ -55,16 +69,39 @@ export type Project = {
   attachments: Attachment[]
   published: boolean
   featured: boolean
+  translations: Translations
+  source_lang: Lang4
   created_at: string
   updated_at: string
+  /** Present on copies produced by localizeProject() */
+  _i18n?: I18nInfo
 }
 
 const strArr = (v: unknown): string[] =>
   Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string' && x.trim() !== '') : []
 
+function normalizeTranslations(v: unknown): Translations {
+  if (!v || typeof v !== 'object' || Array.isArray(v)) return {}
+  const out: Translations = {}
+  for (const l of LANG4) {
+    const t = (v as Record<string, unknown>)[l]
+    if (t && typeof t === 'object') {
+      const f = t as Record<string, unknown>
+      out[l] = {
+        title: typeof f.title === 'string' ? f.title : undefined,
+        summary: typeof f.summary === 'string' ? f.summary : undefined,
+        content: typeof f.content === 'string' ? f.content : undefined,
+        role: typeof f.role === 'string' ? f.role : undefined,
+      }
+    }
+  }
+  return out
+}
+
 /** Fills in defaults so rows from an older schema (missing the new columns) still render. */
 export function normalizeProject(raw: Record<string, unknown>): Project {
   const cat = String(raw.category ?? 'data').toLowerCase()
+  const src = String(raw.source_lang ?? 'en').toLowerCase()
   return {
     id: String(raw.id ?? ''),
     title: String(raw.title ?? ''),
@@ -86,9 +123,43 @@ export function normalizeProject(raw: Record<string, unknown>): Project {
     attachments: Array.isArray(raw.attachments) ? (raw.attachments as Attachment[]) : [],
     published: Boolean(raw.published),
     featured: Boolean(raw.featured),
+    translations: normalizeTranslations(raw.translations),
+    source_lang: (LANG4 as string[]).includes(src) ? (src as Lang4) : 'en',
     created_at: String(raw.created_at ?? new Date().toISOString()),
     updated_at: String(raw.updated_at ?? raw.created_at ?? new Date().toISOString()),
   }
+}
+
+/**
+ * Returns a copy of the project in the requested language.
+ * Stored (admin-reviewed) translations win; otherwise machine-translated fields passed in
+ * `auto` are used; otherwise the original text is kept and mode stays "original".
+ */
+export function localizeProject(p: Project, lang: Lang4, auto?: TranslatedFields): Project {
+  const original = { title: p.title, summary: p.summary, content: p.content, role: p.role }
+  if (lang === p.source_lang) return { ...p, _i18n: { lang, mode: 'original', original } }
+  const stored = p.translations[lang]
+  if (stored?.title?.trim()) {
+    return {
+      ...p,
+      title: stored.title,
+      summary: stored.summary?.trim() ? stored.summary : p.summary,
+      content: stored.content?.trim() ? stored.content : p.content,
+      role: stored.role?.trim() ? stored.role : p.role,
+      _i18n: { lang, mode: 'stored', original },
+    }
+  }
+  if (auto?.title?.trim()) {
+    return {
+      ...p,
+      title: auto.title,
+      summary: auto.summary?.trim() ? auto.summary : p.summary,
+      content: auto.content?.trim() ? auto.content : p.content,
+      role: auto.role?.trim() ? auto.role : p.role,
+      _i18n: { lang, mode: 'auto', original },
+    }
+  }
+  return { ...p, _i18n: { lang, mode: 'original', original } }
 }
 
 /** Featured first, then manual order, then newest. Done in JS so older schemas never break the query. */
