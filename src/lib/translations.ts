@@ -231,6 +231,7 @@ const en: Dict = {
   'articles.loading': 'Loading articles…',
   'articles.external': 'Read on the original site',
 
+  'articles.kicker': 'Notes & writing',
 }
 
 const id: Dict = {
@@ -455,6 +456,7 @@ const id: Dict = {
   'articles.loading': 'Memuat artikel…',
   'articles.external': 'Baca di situs asli',
 
+  'articles.kicker': 'Catatan & tulisan',
 }
 
 const ja: Dict = {
@@ -679,6 +681,7 @@ const ja: Dict = {
   'articles.loading': '記事を読み込み中…',
   'articles.external': '元のサイトで読む',
 
+  'articles.kicker': 'ノートと記事',
 }
 
 const zh: Dict = {
@@ -903,6 +906,7 @@ const zh: Dict = {
   'articles.loading': '正在加载文章…',
   'articles.external': '在原网站阅读',
 
+  'articles.kicker': '笔记与文章',
 }
 
 export const dictionaries: Record<Lang, Dict> = { en, id, ja, zh }

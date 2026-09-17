@@ -12,17 +12,17 @@ export const CAT_DOT: Record<string, string> = {
   risk: 'bg-steel',
 }
 export const CAT_GLOW: Record<string, string> = {
-  data: 'from-tide/35',
-  finance: 'from-ocean/35',
-  risk: 'from-steel/45',
+  data: 'from-tide/50',
+  finance: 'from-ocean/40',
+  risk: 'from-steel/35',
 }
 
-/** Dark gradient placeholder — varies per project so the grid never looks templated. */
+/** Light gradient placeholder — varies per project so the grid never looks templated. */
 function placeholder(seed: string) {
   let h = 0
   for (let i = 0; i < seed.length; i++) h = (h * 33 + seed.charCodeAt(i)) >>> 0
-  const a = 200 + (h % 25)
-  return { background: `linear-gradient(135deg, hsl(${a} 40% 30%) 0%, hsl(${a + 15} 45% 16%) 70%, #0B1524 100%)` }
+  const a = 196 + (h % 18)
+  return { background: `linear-gradient(135deg, hsl(${a} 45% 92%) 0%, hsl(${a + 15} 40% 82%) 100%)` }
 }
 
 const isNew = (p: Project) => Date.now() - new Date(p.created_at).getTime() < 365 * 864e5
@@ -30,7 +30,7 @@ const isNew = (p: Project) => Date.now() - new Date(p.created_at).getTime() < 36
 function Badge({ children, tone = 'solid' }: { children: ReactNode; tone?: 'solid' | 'outline' }) {
   return (
     <span className={`inline-flex items-center h-5 px-2 rounded-sm text-[10px] font-semibold uppercase tracking-[.12em] ${
-      tone === 'solid' ? 'bg-tide text-night' : 'ring-1 ring-white/20 text-paper/80'
+      tone === 'solid' ? 'bg-ink text-paper' : 'ring-1 ring-ink/15 text-slate bg-white/60'
     }`}>
       {children}
     </span>
@@ -52,10 +52,10 @@ function Thumb({ p, className = '' }: { p: Project; className?: string }) {
         />
       ) : (
         <div className="absolute inset-0 flex items-end p-4">
-          <span className="font-bold uppercase tracking-tight text-paper/80 text-fl-base leading-tight clamp-2">{p.title}</span>
+          <span className="font-bold uppercase tracking-tight text-ink/70 text-fl-base leading-tight clamp-2">{p.title}</span>
         </div>
       )}
-      <div className="absolute inset-0 bg-gradient-to-t from-night/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="absolute inset-0 bg-gradient-to-t from-ink/25 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
     </div>
   )
 }
@@ -64,8 +64,8 @@ function Spec({ label, value }: { label: string; value: string | null | undefine
   if (!value) return null
   return (
     <div className="min-w-0">
-      <dt className="label-caps text-paper/45">{label}</dt>
-      <dd className="text-fl-xs text-paper/85 truncate mt-0.5">{value}</dd>
+      <dt className="label-caps">{label}</dt>
+      <dd className="text-fl-xs text-ink/85 truncate mt-0.5">{value}</dd>
     </div>
   )
 }
@@ -90,13 +90,13 @@ export default function ProjectCard({ p, index = 0, view = 'grid' }: Props) {
     </div>
   )
   const stamp = (
-    <div className="flex items-center gap-2 text-fl-sm font-semibold text-paper tabular-nums" title={t(`cat.${p.category}`)}>
+    <div className="flex items-center gap-2 text-fl-sm font-semibold text-ink tabular-nums" title={t(`cat.${p.category}`)}>
       {when}
       <span className={`w-2 h-2 rounded-[2px] ${CAT_DOT[p.category]}`} aria-hidden="true" />
     </div>
   )
-  const btnSolid = 'inline-flex items-center justify-center gap-2 bg-paper text-night text-[11px] font-semibold uppercase tracking-[.14em] px-4 py-2.5 rounded-full hover:bg-tide transition-colors duration-300'
-  const btnGhost = 'inline-flex items-center justify-center gap-2 ring-1 ring-white/15 text-paper/80 text-[11px] font-semibold uppercase tracking-[.14em] px-4 py-2.5 rounded-full hover:ring-tide/60 hover:text-paper transition-colors duration-300'
+  const btnSolid = 'inline-flex items-center justify-center gap-2 bg-ink text-paper text-[11px] font-semibold uppercase tracking-[.14em] px-4 py-2.5 rounded-full hover:bg-steel transition-colors duration-300'
+  const btnGhost = 'inline-flex items-center justify-center gap-2 ring-1 ring-ink/15 bg-white/60 text-slate text-[11px] font-semibold uppercase tracking-[.14em] px-4 py-2.5 rounded-full hover:ring-steel hover:text-steel transition-colors duration-300'
 
   if (view === 'list') {
     return (
@@ -106,8 +106,8 @@ export default function ProjectCard({ p, index = 0, view = 'grid' }: Props) {
         </Link>
         <div className="min-w-0">
           <div className="flex items-center justify-between gap-3">{badges}{stamp}</div>
-          <h3 className="mt-2 font-bold uppercase tracking-tight text-fl-base leading-snug clamp-2 text-paper">
-            <Link to={open} className="hover:text-tide transition-colors">{p.title}</Link>
+          <h3 className="mt-2 font-bold uppercase tracking-tight text-fl-base leading-snug clamp-2 text-ink">
+            <Link to={open} className="hover:text-steel transition-colors">{p.title}</Link>
           </h3>
           <dl className="mt-3 hidden sm:grid grid-cols-3 gap-4">
             <Spec label={t('card.tools')} value={p.tools.join(', ')} />
@@ -134,12 +134,12 @@ export default function ProjectCard({ p, index = 0, view = 'grid' }: Props) {
       </div>
 
       <Link to={open} className="relative block mx-4 mt-3" aria-label={`${p.title} — ${t('work.read')}`}>
-        <Thumb p={p} className="aspect-[4/3] rounded-xl ring-1 ring-white/10" />
+        <Thumb p={p} className="aspect-[4/3] rounded-xl ring-1 ring-ink/[.06]" />
       </Link>
 
       <div className="relative px-4 pt-4 flex-1">
-        <h3 className="font-bold uppercase tracking-tight text-fl-base leading-snug clamp-2 text-paper">
-          <Link to={open} className="hover:text-tide transition-colors">{p.title}</Link>
+        <h3 className="font-bold uppercase tracking-tight text-fl-base leading-snug clamp-2 text-ink">
+          <Link to={open} className="hover:text-steel transition-colors">{p.title}</Link>
         </h3>
         <dl className="mt-3.5 space-y-2.5">
           <Spec label={t('card.tools')} value={p.tools.length ? p.tools.join(', ') : null} />
@@ -160,7 +160,7 @@ export default function ProjectCard({ p, index = 0, view = 'grid' }: Props) {
 export function PromoTile() {
   const { t } = useLang()
   return (
-    <div className="reveal relative overflow-hidden flex flex-col justify-between rounded-2xl p-6 min-h-[300px] text-paper bg-gradient-to-br from-steel via-[#2E5A7C] to-graphite ring-1 ring-white/10 grain">
+    <div className="reveal relative overflow-hidden flex flex-col justify-between rounded-2xl p-6 min-h-[300px] text-paper bg-gradient-to-br from-steel via-[#2E5A7C] to-graphite ring-1 ring-ink/10 shadow-float grain">
       <div className="absolute inset-0 bg-[radial-gradient(90%_70%_at_100%_100%,rgba(143,195,227,.40),transparent_60%)]" aria-hidden="true" />
       <p className="relative label-caps text-paper/70">{t('promo.kicker')}</p>
       <div className="relative">

@@ -12,7 +12,7 @@ export default function Footer() {
   const item = 'block py-1 text-fl-sm text-slate hover:text-ink transition-colors'
 
   return (
-    <footer className="bg-paper">
+    <footer className="border-t border-ink/[.06]">
       <div className="max-w-site mx-auto px-gutter py-12 md:py-14 grid gap-10 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1.2fr]">
         <div>
           <p className="font-bold uppercase tracking-tight text-fl-base">{site.name}<span className="text-ocean">.</span></p>
@@ -33,7 +33,7 @@ export default function Footer() {
         <nav aria-label={t('footer.work')}>
           <h4 className={head}>{t('footer.work')}</h4>
           <Link to="/#work" className={item}>{t('work.all')}</Link>
-          <Link to="/articles#work" className={item}>{t('nav.articles')}</Link>
+          <Link to="/#articles" className={item}>{t('nav.articles')}</Link>
           {CATEGORIES.map(c => (
             <Link key={c} to={`/?field=${c}#work`} className={item}>{t(`cat.${c}`)}</Link>
           ))}
@@ -64,7 +64,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-line">
+      <div className="border-t border-ink/[.06]">
         <div className="max-w-site mx-auto px-gutter py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-fl-xs text-fog">
           <p>© {year} {site.name} · {t('footer.rights')}</p>
           <p className="text-slate">{t('footer.tagline')}</p>

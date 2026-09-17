@@ -15,7 +15,7 @@ export default function Navbar() {
   const navCls = 'text-[11px] font-semibold uppercase tracking-[.14em] text-slate hover:text-ink transition-colors link-underline'
 
   return (
-    <header className="sticky top-0 z-40 bg-paper/85 backdrop-blur-xl border-b border-ink/[.06]">
+    <header className="sticky top-0 z-40 bg-paper/70 backdrop-blur-xl border-b border-ink/[.06]">
       <div className="max-w-site mx-auto px-gutter h-14 flex items-stretch justify-between gap-4">
         <div className="flex items-stretch gap-5 lg:gap-7 min-w-0">
           <Link to="/" className="self-center font-bold uppercase tracking-tight text-fl-base whitespace-nowrap" aria-label={`${site.name} — home`}>
@@ -30,7 +30,7 @@ export default function Navbar() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-6" aria-label="Primary">
-            <Link to="/articles#work" className={navCls}>{t('nav.articles')}</Link>
+            <Link to="/#articles" className={navCls}>{t('nav.articles')}</Link>
             <Link to="/#about" className={navCls}>{t('nav.about')}</Link>
             <Link to="/#faq" className={navCls}>{t('nav.faq')}</Link>
             <Link to="/#call" className={navCls}>{t('nav.call')}</Link>
@@ -80,7 +80,7 @@ export default function Navbar() {
         <div className="overflow-hidden">
           <nav className="border-t border-line bg-paper px-gutter py-4 grid gap-1 text-[12px] font-semibold uppercase tracking-[.14em]" aria-label="Mobile">
             <Link to="/#work" className="flex items-center justify-between py-2.5 border-b border-line text-steel">{t('nav.work')} <IconGrid size={15} /></Link>
-            <Link to="/articles#work" className="py-2.5 border-b border-line text-ink">{t('nav.articles')}</Link>
+            <Link to="/#articles" className="py-2.5 border-b border-line text-ink">{t('nav.articles')}</Link>
             <Link to="/#about" className="py-2.5 border-b border-line text-ink">{t('nav.about')}</Link>
             <Link to="/#faq" className="py-2.5 border-b border-line text-ink">{t('nav.faq')}</Link>
             <Link to="/#call" className="py-2.5 border-b border-line text-ink">{t('nav.call')}</Link>

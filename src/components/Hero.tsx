@@ -239,8 +239,6 @@ export default function Hero() {
 
   return (
     <section ref={ref} id="top" className="relative overflow-hidden" aria-label={site.name}>
-      <div className="hero-bg" aria-hidden="true" />
-      <div className="hero-grid" aria-hidden="true" />
       <div className="hero-blob w-[36vw] h-[36vw] bg-tide/40 -top-[10vw] right-[8vw]" aria-hidden="true" />
       <div className="hero-blob w-[28vw] h-[28vw] bg-ocean/25 bottom-[-8vw] left-[4vw] [animation-delay:-9s]" aria-hidden="true" />
 
@@ -253,7 +251,7 @@ export default function Hero() {
               <span className="relative flex w-1.5 h-1.5"><span className="absolute inline-flex w-full h-full rounded-full bg-steel opacity-60 animate-ping [animation-duration:2.4s]" /><span className="relative inline-flex w-1.5 h-1.5 rounded-full bg-steel" /></span>
               {t('hero.status')}<span className="hidden sm:inline"> · {site.location} · {site.timezone}</span>
             </p>
-            <p className="rise-2 mt-7 text-[clamp(.85rem,1.6vw,1.25rem)] font-light uppercase tracking-[.32em] text-slate">{t('hero.eyebrow').split('·')[0].trim()}</p>
+            <p className="rise-2 mt-7 kicker text-[clamp(.85rem,1.6vw,1.25rem)]">{t('hero.eyebrow').split('·')[0].trim()}</p>
             <h1 className="rise-2 mt-2 h-display name-gradient text-[clamp(2.9rem,8.6vw,7rem)] tracking-[-0.035em] leading-[.92] text-balance">{site.name}</h1>
             <p className="rise-3 mt-6 text-fl-xl text-ink/85 leading-snug max-w-2xl mx-auto">{t('hero.title')}</p>
             <p className="rise-3 mt-4 text-fl-sm text-slate leading-relaxed max-w-xl mx-auto">{t('hero.body')}</p>

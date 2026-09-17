@@ -8,7 +8,7 @@ import NotFound from './pages/NotFound'
 import Login from './pages/admin/Login'
 import Dashboard from './pages/admin/Dashboard'
 
-/** "/", "/work/:slug", "/articles" and "/articles/:slug" render one mounted Home so the reading modals open over the grid. */
+/** "/", "/work/:slug" and "/articles/:slug" render one mounted Home so the reading modals open over the grid. */
 function pageGroup(pathname: string) {
   if (pathname === '/' || pathname.startsWith('/work') || pathname.startsWith('/articles')) return 'home'
   return pathname
@@ -37,16 +37,18 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <div className="site-bg" aria-hidden="true" />
+      <div className="site-grid" aria-hidden="true" />
       <Navbar />
       <div className="flex-1" key={group}>
         <Routes>
           <Route element={<Home />}>
             <Route path="/" element={<Outlet />} />
             <Route path="/work/:slug" element={<Outlet />} />
-            <Route path="/articles" element={<Outlet />} />
             <Route path="/articles/:slug" element={<Outlet />} />
           </Route>
           <Route path="/work" element={<Navigate to="/#work" replace />} />
+          <Route path="/articles" element={<Navigate to="/#articles" replace />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
