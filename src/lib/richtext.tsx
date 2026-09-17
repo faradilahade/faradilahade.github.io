@@ -58,7 +58,7 @@ export function renderContent(text: string, opts: Opts = {}): ReactNode[] {
     const n = line.match(/^\d+[.)]\s+(.*)$/)
     if (n) { if (bullets.length) flush(); numbered.push(n[1]); return }
     const q = line.match(/^>\s?(.*)$/)
-    if (q) { flush(); out.push(<blockquote key={i} className="border-l-2 border-steel pl-4 font-display text-fl-lg text-ink/80 leading-snug">{renderInline(q[1])}</blockquote>); return }
+    if (q) { flush(); out.push(<blockquote key={i} className="border-l-2 border-steel pl-4 text-fl-lg font-medium text-ink/80 leading-snug">{renderInline(q[1])}</blockquote>); return }
     flush()
     out.push(<p key={i} className={paragraphClass}>{renderInline(line)}</p>)
   })

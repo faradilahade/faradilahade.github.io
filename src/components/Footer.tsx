@@ -12,10 +12,10 @@ export default function Footer() {
   const item = 'block py-1 text-fl-sm text-slate hover:text-ink transition-colors'
 
   return (
-    <footer className="border-t border-line bg-paper">
+    <footer className="bg-paper">
       <div className="max-w-site mx-auto px-gutter py-12 md:py-14 grid gap-10 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1.2fr]">
         <div>
-          <p className="font-bold uppercase tracking-tight text-fl-base">{site.name}<span className="text-brass">.</span></p>
+          <p className="font-bold uppercase tracking-tight text-fl-base">{site.name}<span className="text-ocean">.</span></p>
           <p className="mt-2 text-fl-sm text-slate leading-relaxed max-w-xs">{t('hero.eyebrow')}</p>
           <p className="mt-4 text-fl-xs text-fog leading-relaxed">
             {site.location} · {site.timezone}<br />{t('footer.replies')}
@@ -32,8 +32,8 @@ export default function Footer() {
 
         <nav aria-label={t('footer.work')}>
           <h4 className={head}>{t('footer.work')}</h4>
-          <Link to="/#showcase" className={item}>{t('showcase.title')}</Link>
           <Link to="/#work" className={item}>{t('work.all')}</Link>
+          <Link to="/articles#work" className={item}>{t('nav.articles')}</Link>
           {CATEGORIES.map(c => (
             <Link key={c} to={`/?field=${c}#work`} className={item}>{t(`cat.${c}`)}</Link>
           ))}
@@ -67,7 +67,7 @@ export default function Footer() {
       <div className="border-t border-line">
         <div className="max-w-site mx-auto px-gutter py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-fl-xs text-fog">
           <p>© {year} {site.name} · {t('footer.rights')}</p>
-          <p className="font-display italic text-slate">{t('footer.tagline')}</p>
+          <p className="text-slate">{t('footer.tagline')}</p>
         </div>
       </div>
 

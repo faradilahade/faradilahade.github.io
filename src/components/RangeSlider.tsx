@@ -15,9 +15,9 @@ export default function RangeSlider({ min, max, value, onChange, label = 'Range'
   return (
     <div>
       <div className="range-dual" role="group" aria-label={label}>
-        <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[3px] rounded-full bg-line" />
+        <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[3px] rounded-full bg-white/15" />
         <div
-          className="absolute top-1/2 -translate-y-1/2 h-[3px] rounded-full bg-steel"
+          className="absolute top-1/2 -translate-y-1/2 h-[3px] rounded-full bg-ocean"
           style={{ left: `${pct(lo)}%`, right: `${100 - pct(hi)}%` }}
         />
         <input
@@ -34,9 +34,9 @@ export default function RangeSlider({ min, max, value, onChange, label = 'Range'
         />
       </div>
       <div className="mt-2 grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-fl-sm">
-        <span className="border border-line bg-white rounded-sm px-2.5 py-1.5 text-center tabular-nums">{lo}</span>
-        <span className="text-fog">—</span>
-        <span className="border border-line bg-white rounded-sm px-2.5 py-1.5 text-center tabular-nums">{hi}</span>
+        <span className="ring-1 ring-white/15 bg-white/5 rounded-md px-2.5 py-1.5 text-center tabular-nums text-paper">{lo}</span>
+        <span className="text-paper/40">—</span>
+        <span className="ring-1 ring-white/15 bg-white/5 rounded-md px-2.5 py-1.5 text-center tabular-nums text-paper">{hi}</span>
       </div>
     </div>
   )

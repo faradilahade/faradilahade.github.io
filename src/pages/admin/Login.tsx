@@ -58,7 +58,7 @@ export default function Login() {
   return (
     <main className="min-h-screen bg-paper text-ink flex flex-col">
       <div className="px-gutter h-14 flex items-center justify-between border-b border-line bg-white/70 backdrop-blur">
-        <Link to="/" className="font-bold uppercase tracking-tight text-fl-base">{site.name}<span className="text-brass">.</span> <span className="text-fog font-medium normal-case tracking-normal">· Admin</span></Link>
+        <Link to="/" className="font-bold uppercase tracking-tight text-fl-base">{site.name}<span className="text-ocean">.</span> <span className="text-fog font-medium normal-case tracking-normal">· Admin</span></Link>
         <Link to="/" className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[.14em] text-slate hover:text-ink"><IconArrowLeft size={14} /> View site</Link>
       </div>
 
@@ -69,7 +69,7 @@ export default function Login() {
           <p className="mt-2 text-fl-sm text-slate">Manage your portfolio — add, edit, translate and publish work.</p>
 
           {!supabaseConfigured && (
-            <p className="mt-6 rounded-lg border border-brass/40 bg-brass/10 text-ink text-fl-sm p-4 leading-relaxed">
+            <p className="mt-6 rounded-lg border border-steel/40 bg-steel/10 text-ink text-fl-sm p-4 leading-relaxed">
               Supabase is not configured for this build. Set <code className="font-mono text-[12px]">VITE_SUPABASE_URL</code> and <code className="font-mono text-[12px]">VITE_SUPABASE_ANON_KEY</code> (GitHub → Settings → Secrets) and redeploy.
             </p>
           )}

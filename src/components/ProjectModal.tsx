@@ -160,7 +160,7 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
       aria-modal="true"
       aria-labelledby="project-title"
     >
-      <div className="modal-backdrop absolute inset-0 bg-ink/85 backdrop-blur-sm" onClick={requestClose} />
+      <div className="modal-backdrop absolute inset-0 bg-night/85 backdrop-blur-sm" onClick={requestClose} />
 
       {/* Close — always top right, like Behance */}
       <button
@@ -234,7 +234,7 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
                 </div>
 
                 <h1 id="project-title" className="mt-3 h-display text-[clamp(1.8rem,4vw,3.2rem)] text-ink max-w-3xl">{view.title}</h1>
-                {view.summary && <p className="mt-5 font-display text-fl-xl text-ink/80 leading-snug max-w-2xl">{view.summary}</p>}
+                {view.summary && <p className="mt-5 text-fl-xl text-ink/80 leading-snug max-w-2xl">{view.summary}</p>}
 
                 <dl className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4 border-y border-line py-5 text-fl-sm">
                   {view.role && (<div><dt className="label-caps">{t('modal.role')}</dt><dd className="mt-1 text-ink">{view.role}</dd></div>)}
@@ -311,11 +311,11 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
                 )}
 
                 <div className="mt-12 flex flex-wrap items-center gap-3 border-t border-line pt-8">
-                  <a href={contactHref} className="inline-flex items-center gap-2 rounded-sm bg-steel text-paper px-5 py-3 text-[11px] font-semibold uppercase tracking-[.14em] hover:bg-ink transition-colors duration-300">
+                  <a href={contactHref} className="inline-flex items-center gap-2 rounded-full bg-steel text-paper px-5 py-3 text-[11px] font-semibold uppercase tracking-[.14em] hover:bg-ink transition-colors duration-300">
                     <IconMail size={16} /> {t('modal.ask')}
                   </a>
                   {project.external_url && (
-                    <a href={project.external_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-sm border border-ink/20 px-5 py-3 text-[11px] font-semibold uppercase tracking-[.14em] hover:border-steel hover:text-steel transition-colors duration-300">
+                    <a href={project.external_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-ink/20 px-5 py-3 text-[11px] font-semibold uppercase tracking-[.14em] hover:border-steel hover:text-steel transition-colors duration-300">
                       {t('modal.viewExternal')} <IconExternal size={15} />
                     </a>
                   )}

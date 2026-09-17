@@ -68,7 +68,7 @@ export default function Contact() {
                   className="group flex items-center justify-between gap-6 py-4 hover:pl-1.5 transition-all duration-300 ease-smooth"
                 >
                   <span className="label-caps">{r.label}</span>
-                  <span className="font-display text-fl-lg text-ink group-hover:text-steel transition-colors inline-flex items-center gap-2">
+                  <span className="text-fl-lg font-semibold text-ink group-hover:text-steel transition-colors inline-flex items-center gap-2">
                     {r.value}
                     {r.href.startsWith('http') && <IconExternal size={14} className="text-fog opacity-0 group-hover:opacity-100 transition-opacity" />}
                   </span>

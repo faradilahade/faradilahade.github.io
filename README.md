@@ -1,6 +1,6 @@
 # Faradilah Ade — Portfolio 2026
 
-Portofolio profesional untuk memulai kerja remote skala internasional. Tema terang & biru: hero, bagian **My work** bergaya profil Behance, katalog karya dengan sidebar filter, pop-up detail proyek dengan rail tombol (Contact · Tools · Files · Share · Next), FAQ, form *Book a call*, **panel admin ala WordPress/Medium** (tambah, edit, hapus, duplikat, urutkan, draft, pratinjau langsung), dan **terjemahan otomatis** ke Inggris · Indonesia · 日本語 · 中文.
+Portofolio profesional untuk memulai kerja remote skala internasional. Satu keluarga huruf (Instrument Sans) dan satu palet biru: **hero tipografis** dengan nama besar di tengah, kartu-kartu melayang (dasbor peramalan, potongan kode, rumus aktuaria + statistik, daftar keahlian, pil telepon) yang bergerak halus mengikuti pointer & scroll, tombol **Request a call** di tengah; bagian **Work · Articles** bertema gelap dengan **kartu kaca (glass/blur)** dan sidebar filter; pop-up detail proyek & artikel; FAQ; form *Book a call*; **panel admin ala WordPress/Medium** untuk proyek **dan artikel** (tambah, edit, hapus, duplikat, draft, pratinjau langsung); serta **terjemahan otomatis** ke Inggris · Indonesia · 日本語 · 中文.
 
 **Stack:** Vite + React + TypeScript + Tailwind CSS + Supabase (database, auth, storage) → GitHub Pages.
 
@@ -12,13 +12,13 @@ Portofolio profesional untuk memulai kerja remote skala internasional. Tema tera
 | --- | --- |
 | `ERROR 42710: policy "Public read published" … already exists` saat run SQL | `supabase/schema.sql` sekarang **idempotent** — aman dijalankan berulang kali (drop-if-exists sebelum create, `add column if not exists`, bucket dibuat otomatis). |
 | Login admin: `Invalid path specified in request URL` | Penyebabnya `VITE_SUPABASE_URL` diisi `…supabase.co/rest/v1/`. Kode kini **menormalkan URL otomatis** (membuang `/rest/v1/`), jadi login jalan walau secret-nya masih salah. Tetap disarankan memperbaiki secret (lihat §1.3). |
-| Layout | Tata letak mengikuti referensi Behance *Framerate E-commerce* dalam versi terang & bersih dengan palet biru: hero, strip statistik, About, katalog karya dengan **sidebar filter** (tahun, bidang, tools, klien, kata kunci), toolbar hasil (urutkan, grid/list, cari), kartu spesifikasi + tile promo, FAQ, form *Book a call*, footer 4 kolom, dan wordmark raksasa. Tipografi & spasi **fluid (clamp)**. |
+| Layout (Sept 2026) | **Hero** dibangun ulang: nama FARADILAH ADE sebagai tipografi besar di tengah, dikelilingi kartu melayang — dasbor peramalan (grafik yang menggambar sendiri, angka menghitung naik), potongan kode Python, rumus aktuaria (loss ratio, chain-ladder, A<sub>x</sub>, kredibilitas, VaR) beserta statistiknya, daftar keahlian, dan pil telepon/WhatsApp. Semua elemen bergerak halus (float + paralaks pointer & scroll) dan tombol **Request a call** ada di tengah. Antar-bagian disambung dengan **gradien** (terang → gelap → terang), bukan garis tegas. |
 | URL `…/porto_faradilahade-2026/` | Workflow otomatis memakai base `/` bila repo bernama `faradilahade.github.io` (lihat §2). |
 | Kontak | Tombol **Email me** di navbar, sidebar, modal proyek, CTA, dan halaman kontak → `pmb.faradilahade@gmail.com` (subjek & isi terisi otomatis). |
-| Bagian Behance | Diganti **My work**: tata letak profil Behance (banner, avatar, info, statistik, tautan, tab Work/Featured/Data/Finance/Risk, "Most recent works" & "Selected works") berisi karya Anda sendiri. Klik karya → pop-up yang bisa di-scroll dengan tombol **Tools** yang menampilkan tools yang dipakai. |
-| Admin | Login dengan **username** (`admin-fara`), dashboard ala WordPress: Overview, Projects (cari, filter status, publish/unpublish, feature, duplikat, urutkan, hapus), editor ala Medium (judul besar, ringkasan, toolbar format, drag-drop gambar, galeri, berkas, pratinjau langsung, autosave lokal), Account (ganti password). |
-| Terjemahan | Teks UI 4 bahasa mengikuti bahasa browser. Isi proyek: tombol **Auto-translate** di editor menyimpan terjemahan ID/JA/ZH/EN yang bisa disunting; proyek tanpa terjemahan tersimpan diterjemahkan otomatis di browser pengunjung (dengan tombol "Lihat teks asli"). |
-| SEO | Meta/Open Graph/Twitter per halaman, JSON-LD (Person, ItemList, CreativeWork per proyek), canonical, `sitemap.xml` + `robots.txt` dibuat saat build, keyword & tools per proyek. |
+| Bagian **My work** (profil Behance) | **Dihapus** beserta sidebar info di kirinya. Yang dipertahankan adalah **katalog karya + filter**, kini bertema gelap dengan **kartu kaca (backdrop-blur)**. Tab di atasnya hanya dua: **Work** (chip Data · Finance · Risk) dan **Articles**. |
+| Admin | Login dengan **username** (`admin-fara`), dashboard ala WordPress: Overview, Projects (cari, filter status, publish/unpublish, feature, duplikat, urutkan, hapus), **Articles** (tambah, edit, hapus, duplikat, publish/unpublish, feature, tanggal terbit, topik, cover, terjemahan), editor ala Medium (judul besar, ringkasan, toolbar format, drag-drop gambar, pratinjau langsung, autosave lokal), Account (ganti password). |
+| Terjemahan | Teks UI 4 bahasa mengikuti bahasa browser. Isi proyek **dan artikel**: tombol **Auto-translate** di editor menyimpan terjemahan ID/JA/ZH/EN yang bisa disunting; konten tanpa terjemahan tersimpan diterjemahkan otomatis di browser pengunjung (dengan tombol "Lihat teks asli"). |
+| SEO | Meta/Open Graph/Twitter per halaman, JSON-LD (Person, ItemList, CreativeWork per proyek, Blog/BlogPosting per artikel), canonical, `sitemap.xml` (termasuk `/articles/<slug>`) + `robots.txt` dibuat saat build, keyword & tools per proyek. |
 
 ---
 
@@ -29,6 +29,7 @@ Portofolio profesional untuk memulai kerja remote skala internasional. Tema tera
 2. Paste seluruh isi `supabase/schema.sql` → **Run**.
    - Aman dijalankan lagi kapan pun (misalnya setelah update). Tidak akan muncul error "already exists" lagi.
    - Skrip ini juga membuat bucket storage `portfolio` (public) bila belum ada.
+   - **Update Sept 2026:** skrip kini juga membuat tabel `articles` (untuk tab **Articles**). **Jalankan ulang sekali** setelah deploy ini; sebelum itu tab Articles kosong dan menu Articles di admin menampilkan petunjuknya.
 
 ### 1.2 Akun admin (username `admin-fara`)
 Halaman `/admin` menerima **username**. Username dipetakan ke email `username@faradilahade.github.io`
@@ -91,6 +92,8 @@ Buka `https://faradilahade.github.io/admin` → username `admin-fara` + password
 | ↳ Details | Field (Data/Finance/Risk), tahun, klien, peran, **Tools** (jadi badge & filter), **SEO keywords**, tags, tautan eksternal, embed Behance, slug. |
 | ↳ Translations | Pilih bahasa sumber → **Auto-translate to all languages** → tinjau/sunting tab Indonesia · 日本語 · 中文 · English → publish. |
 | ↳ Publishing | Published, Featured, urutan. Tombol **Save draft** / **Publish** / **Update**. |
+| **Articles** | Daftar artikel: cari, filter All/Published/Draft/Featured, **Publish/Unpublish**, **Feature**, **Preview**, **Duplicate**, **Edit**, **Delete**. |
+| **New article / Edit** | Editor yang sama gayanya: judul, *standfirst* (≤240 karakter), isi dengan markup ringan (`##`, `-`, `1.`, `>`, **tebal**, *miring*, `kode`, [tautan]), cover 16:9, topik/tag (menjadi chip filter), tanggal terbit, tautan eksternal, slug `/articles/…`, terjemahan otomatis 4 bahasa, Published/Featured. Artikel tampil di tab **Articles** pada halaman utama dan dibuka sebagai pop-up baca. |
 | **Account** | Username, email login, **ganti password**, sign out. |
 
 Format teks studi kasus (satu paragraf per baris):
@@ -139,8 +142,9 @@ Tips agar mudah ditemukan mesin pencari: judul berisi hasil terukur, ringkasan m
 | --- | --- |
 | Nama, email, WhatsApp, link sosial, domain username admin, saklar auto-translate, kata kunci SEO | `src/lib/site.ts` |
 | Teks UI 4 bahasa (judul, tombol, bio, sorotan 240/92%/15.000/350+) | `src/lib/translations.ts` |
-| Palet warna & skala tipografi | `tailwind.config.js` (ink, paper, steel, brass, slate, mist + ocean, tide, frost, line, fog, clay) dan token `--fs-*` di `src/index.css` |
-| Visual hero & banner "data bands" | `src/components/HeroVisual.tsx`, `src/components/Banner.tsx` |
+| Palet warna & skala tipografi | `tailwind.config.js` — satu keluarga biru (night, ink, graphite, steel, ocean, tide, frost, paper, line, fog) dan satu font (Instrument Sans); token `--fs-*` di `src/index.css` |
+| Hero: kartu melayang (dasbor, kode, rumus, keahlian, pil telepon), gerak paralaks | `src/components/Hero.tsx` (angka statistik & rumus ada di komponen `DashboardCard`, `FormulaCard`, `SkillsCard`) |
+| Gaya kaca gelap, gradien penyambung antar-bagian, animasi float | kelas `.glass`, `.seam-to-dark/.seam-to-light`, `.hero-card`, keyframes di `tailwind.config.js` dan `src/index.css` |
 | FAQ (8 tanya-jawab, 4 bahasa) | kunci `faq.q1…a8` di `src/lib/translations.ts` |
 | Singkatan badge tools (Py, SQL, PBI…) | `src/components/ToolBadge.tsx` |
 
@@ -156,7 +160,7 @@ npm run build            # tsc + vite build + 404.html/.nojekyll/sitemap/robots
 npm run preview
 ```
 
-Rute: `/` (hero + katalog karya; `/?field=data#work` membuka filter bidang), `/work/<slug>` (modal proyek, bisa dibagikan), `/contact`, `/admin`, `/admin/dashboard`.
+Rute: `/` (hero + katalog karya; `/?field=data#work` membuka filter bidang), `/work/<slug>` (pop-up proyek, bisa dibagikan), `/articles` (tab Articles), `/articles/<slug>` (pop-up artikel), `/contact`, `/admin`, `/admin/dashboard`.
 
 ---
 
@@ -167,17 +171,18 @@ index.html                  meta SEO statis, JSON-LD Person, font
 public/                     favicon.svg, og.png, apple-touch-icon.png, (avatar.jpg)
 scripts/postbuild.mjs       404.html, .nojekyll, sitemap.xml, robots.txt
 scripts/make-images.mjs     generator og.png & apple-touch-icon.png
-supabase/schema.sql         skema + RLS + storage (idempotent)
+supabase/schema.sql         skema projects + articles + RLS + storage (idempotent)
 src/lib/site.ts             data diri & konfigurasi situs
 src/lib/supabase.ts         klien Supabase (normalisasi URL), tipe Project
+src/lib/articles.ts         tipe Article, normalisasi, fetch artikel yang published
 src/lib/seo.ts              hook <head> per halaman
 src/lib/translations.ts     kamus 4 bahasa
-src/pages/Home.tsx          halaman utama (hero, statistik, My work, katalog+filter, about, FAQ, book a call; modal via /work/:slug)
+src/pages/Home.tsx          halaman utama (hero, statistik, Work·Articles gelap + filter, about, FAQ, book a call; pop-up via /work/:slug dan /articles/:slug)
 src/pages/Contact.tsx       kontak + form yang membuka aplikasi email
-src/pages/admin/*           Login (username), Dashboard (shell), Overview, ProjectsTable, ProjectEditor, AccountPanel, shared.ts
+src/pages/admin/*           Login (username), Dashboard (shell), Overview, ProjectsTable, ProjectEditor, ArticlesTable, ArticleEditor, AccountPanel, shared.ts, ui.tsx
 src/lib/translate.ts        terjemahan mesin (Google gtx → MyMemory), cache, pemotongan teks
 src/lib/richtext.tsx        renderer teks (## / - / 1. / > / **bold** / *italic* / [link]) untuk pop-up & pratinjau
-src/hooks/useLocalized.ts   proyek dalam bahasa pengunjung (tersimpan → otomatis → asli)
+src/hooks/useLocalized.ts   proyek & artikel dalam bahasa pengunjung (tersimpan → otomatis → asli)
 supabase/admin-user.sql     (opsional) membuat user admin lewat SQL
-src/components/*            Navbar, Footer, Wordmark, HeroVisual, Showcase (My work), Filters, RangeSlider, ProjectCard, ProjectModal, Faq, BookCall, ToolBadge, Icons
+src/components/*            Navbar, Footer, Wordmark, Hero, Filters, RangeSlider, ProjectCard, ProjectModal, ArticleCard, ArticleModal, Faq, BookCall, ToolBadge, Icons
 ```

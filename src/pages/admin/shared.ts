@@ -1,4 +1,5 @@
 import { supabase, Project, Category, Attachment, Lang4, Translations } from '../../lib/supabase'
+import type { Article } from '../../lib/articles'
 
 export type Draft = {
   id?: string
@@ -62,6 +63,7 @@ export function hint(msg: string): string {
     return `${msg} — your session may have expired. Sign out and in again, and make sure the policies from supabase/schema.sql are applied.`
   }
   if (m.includes('duplicate key') && m.includes('slug')) return 'That slug is already used by another project. Change the slug.'
+  if (m.includes('articles') && (m.includes('does not exist') || m.includes('schema cache'))) return 'The "articles" table is missing. Run supabase/schema.sql once in the Supabase SQL Editor (it creates the table and is safe to re-run).'
   if (m.includes('bucket not found')) return 'Storage bucket "portfolio" is missing. Run supabase/schema.sql again (it creates the bucket).'
   return msg
 }
@@ -173,4 +175,88 @@ export function formatDate(iso?: string, locale = 'en-GB') {
 /** Which languages have a stored translation (title present). */
 export function translatedLangs(p: { translations: Translations; source_lang: Lang4 }): Lang4[] {
   return (Object.keys(p.translations ?? {}) as Lang4[]).filter(l => l !== p.source_lang && p.translations[l]?.title?.trim())
+}
+
+// ---------------------------------------------------------------------------
+// Articles
+// ---------------------------------------------------------------------------
+
+export type ArticleDraft = {
+  id?: string
+  title: string
+  slug: string
+  summary: string
+  content: string
+  cover_url: string
+  tags: string
+  external_url: string
+  published: boolean
+  featured: boolean
+  /** yyyy-mm-dd */
+  published_at: string
+  translations: Translations
+  source_lang: Lang4
+  created_at?: string
+  updated_at?: string
+}
+
+const today = () => new Date().toISOString().slice(0, 10)
+
+export const emptyArticleDraft: ArticleDraft = {
+  title: '', slug: '', summary: '', content: '', cover_url: '', tags: '', external_url: '',
+  published: false, featured: false, published_at: today(), translations: {}, source_lang: 'en',
+}
+
+export function draftFromArticle(a: Article): ArticleDraft {
+  return {
+    id: a.id,
+    title: a.title,
+    slug: a.slug,
+    summary: a.summary ?? '',
+    content: a.content ?? '',
+    cover_url: a.cover_url ?? '',
+    tags: a.tags.join(', '),
+    external_url: a.external_url ?? '',
+    published: a.published,
+    featured: a.featured,
+    published_at: (a.published_at || a.created_at).slice(0, 10),
+    translations: a.translations ?? {},
+    source_lang: a.source_lang ?? 'en',
+    created_at: a.created_at,
+    updated_at: a.updated_at,
+  }
+}
+
+export function payloadFromArticleDraft(d: ArticleDraft) {
+  const when = d.published_at && !Number.isNaN(Date.parse(d.published_at)) ? new Date(`${d.published_at}T09:00:00`).toISOString() : new Date().toISOString()
+  return {
+    title: d.title.trim(),
+    slug: slugify(d.slug || d.title),
+    summary: d.summary.trim() || null,
+    content: d.content.trim() || null,
+    cover_url: d.cover_url || null,
+    tags: splitList(d.tags),
+    external_url: d.external_url.trim() || null,
+    published: d.published,
+    featured: d.featured,
+    published_at: when,
+    translations: cleanTranslations(d.translations),
+    source_lang: d.source_lang,
+  }
+}
+
+export const localArticleKey = (id?: string) => `admin:article:${id ?? 'new'}`
+export function saveLocalArticle(d: ArticleDraft) {
+  try { localStorage.setItem(localArticleKey(d.id), JSON.stringify({ at: Date.now(), draft: d })) } catch { /* ignore */ }
+}
+export function loadLocalArticle(id?: string): { at: number; draft: ArticleDraft } | null {
+  try {
+    const raw = localStorage.getItem(localArticleKey(id))
+    if (!raw) return null
+    const parsed = JSON.parse(raw) as { at: number; draft: ArticleDraft }
+    return parsed && parsed.draft ? parsed : null
+  } catch { return null }
+}
+export function clearLocalArticle(id?: string) {
+  try { localStorage.removeItem(localArticleKey(id)) } catch { /* ignore */ }
 }

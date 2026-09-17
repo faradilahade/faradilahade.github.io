@@ -1,29 +1,38 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase, supabaseConfigured, Project, normalizeProject, sortProjects } from '../../lib/supabase'
+import { Article, normalizeArticle, sortArticles, isMissingArticlesTable } from '../../lib/articles'
 import { site, absoluteUrl } from '../../lib/site'
 import { useSeo } from '../../lib/seo'
-import { IconHome, IconLayers, IconPlus, IconUser, IconExternal, IconLogout, IconMenu, IconClose } from '../../components/Icons'
+import { IconHome, IconLayers, IconPlus, IconUser, IconExternal, IconLogout, IconMenu, IconClose, IconFile, IconEdit } from '../../components/Icons'
 import Overview from './Overview'
 import ProjectsTable from './ProjectsTable'
 import ProjectEditor from './ProjectEditor'
+import ArticlesTable from './ArticlesTable'
+import ArticleEditor from './ArticleEditor'
 import AccountPanel from './AccountPanel'
-import { Draft, emptyDraft, draftFromProject, payloadFromDraft, hint, clearLocalDraft, slugify } from './shared'
+import {
+  Draft, emptyDraft, draftFromProject, payloadFromDraft, hint, clearLocalDraft, slugify,
+  ArticleDraft, emptyArticleDraft, draftFromArticle, payloadFromArticleDraft, clearLocalArticle,
+} from './shared'
 
-type View = 'overview' | 'projects' | 'editor' | 'account'
+type View = 'overview' | 'projects' | 'editor' | 'articles' | 'articleEditor' | 'account'
 
 export default function Dashboard() {
   const nav = useNavigate()
   const [email, setEmail] = useState('')
   const [projects, setProjects] = useState<Project[]>([])
+  const [articles, setArticles] = useState<Article[]>([])
+  const [articlesMissing, setArticlesMissing] = useState(false)
   const [view, setView] = useState<View>('overview')
   const [draft, setDraft] = useState<Draft | null>(null)
+  const [articleDraft, setArticleDraft] = useState<ArticleDraft | null>(null)
   const [saving, setSaving] = useState(false)
   const [busyId, setBusyId] = useState<string | null>(null)
   const [toast, setToast] = useState<{ kind: 'ok' | 'err'; text: string } | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
 
-  useSeo({ title: 'Portfolio admin', description: 'Manage projects', noindex: true })
+  useSeo({ title: 'Portfolio admin', description: 'Manage projects and articles', noindex: true })
 
   const notify = useCallback((kind: 'ok' | 'err', text: string) => {
     setToast({ kind, text })
@@ -36,17 +45,27 @@ export default function Dashboard() {
     setProjects(sortProjects((data ?? []).map(normalizeProject)))
   }, [notify])
 
+  const loadArticles = useCallback(async () => {
+    const { data, error } = await supabase.from('articles').select('*').order('published_at', { ascending: false })
+    if (error) {
+      if (isMissingArticlesTable(error.message)) { setArticlesMissing(true); setArticles([]); return }
+      notify('err', hint(error.message)); return
+    }
+    setArticlesMissing(false)
+    setArticles(sortArticles((data ?? []).map(normalizeArticle)))
+  }, [notify])
+
   useEffect(() => {
     if (!supabaseConfigured) { nav('/admin', { replace: true }); return }
     supabase.auth.getSession().then(({ data }) => {
       if (!data.session) nav('/admin', { replace: true })
-      else { setEmail(data.session.user.email ?? ''); load() }
+      else { setEmail(data.session.user.email ?? ''); load(); loadArticles() }
     })
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
       if (!session) nav('/admin', { replace: true })
     })
     return () => sub.subscription.unsubscribe()
-  }, [nav, load])
+  }, [nav, load, loadArticles])
 
   useEffect(() => { window.scrollTo({ top: 0 }) }, [view])
 
@@ -55,6 +74,7 @@ export default function Dashboard() {
     nav('/admin', { replace: true })
   }
 
+  // ---- projects -----------------------------------------------------------
   const startNew = () => { setDraft({ ...emptyDraft }); setView('editor'); setToast(null) }
   const startEdit = (p: Project) => { setDraft(draftFromProject(p)); setView('editor'); setToast(null) }
   const cancelEdit = () => { setDraft(null); setView('projects') }
@@ -122,13 +142,65 @@ export default function Dashboard() {
     load()
   }
 
+  // ---- articles -----------------------------------------------------------
+  const startNewArticle = () => { setArticleDraft({ ...emptyArticleDraft, published_at: new Date().toISOString().slice(0, 10) }); setView('articleEditor'); setToast(null) }
+  const startEditArticle = (a: Article) => { setArticleDraft(draftFromArticle(a)); setView('articleEditor'); setToast(null) }
+  const cancelArticle = () => { setArticleDraft(null); setView('articles') }
+  const updateArticleDraft = (u: ArticleDraft | ((d: ArticleDraft) => ArticleDraft)) =>
+    setArticleDraft(d => (d ? (typeof u === 'function' ? u(d) : u) : d))
+
+  async function saveArticle(publish?: boolean) {
+    if (!articleDraft) return
+    setSaving(true)
+    const payload = payloadFromArticleDraft(publish === undefined ? articleDraft : { ...articleDraft, published: publish ? true : articleDraft.published })
+    const q = articleDraft.id
+      ? supabase.from('articles').update(payload).eq('id', articleDraft.id)
+      : supabase.from('articles').insert(payload)
+    const { error } = await q
+    setSaving(false)
+    if (error) { notify('err', hint(error.message)); return }
+    clearLocalArticle(articleDraft.id)
+    notify('ok', articleDraft.id ? (payload.published ? 'Article updated and live.' : 'Draft saved.') : (payload.published ? 'Article published.' : 'Draft created.'))
+    setArticleDraft(null)
+    setView('articles')
+    loadArticles()
+  }
+
+  async function removeArticle(a: Article) {
+    if (!confirm(`Delete "${a.title}"? This cannot be undone.`)) return
+    setBusyId(a.id)
+    const { error } = await supabase.from('articles').delete().eq('id', a.id)
+    setBusyId(null)
+    if (error) notify('err', hint(error.message))
+    else { notify('ok', 'Article deleted.'); loadArticles() }
+  }
+
+  async function toggleArticle(a: Article, field: 'published' | 'featured') {
+    setBusyId(a.id)
+    const { error } = await supabase.from('articles').update({ [field]: !a[field] }).eq('id', a.id)
+    setBusyId(null)
+    if (error) notify('err', hint(error.message))
+    loadArticles()
+  }
+
+  async function duplicateArticle(a: Article) {
+    setBusyId(a.id)
+    const base = payloadFromArticleDraft(draftFromArticle(a))
+    const payload = { ...base, title: `${a.title} (copy)`, slug: slugify(`${a.slug}-copy-${Math.random().toString(36).slice(2, 6)}`), published: false, featured: false }
+    const { error } = await supabase.from('articles').insert(payload)
+    setBusyId(null)
+    if (error) notify('err', hint(error.message))
+    else { notify('ok', 'Duplicated as a draft.'); loadArticles() }
+  }
+
   const previewHref = (p: Project) => absoluteUrl(`work/${p.slug}`)
-  const drafts = projects.filter(p => !p.published).length
+  const articleHref = (a: Article) => absoluteUrl(`articles/${a.slug}`)
+  const drafts = projects.filter(p => !p.published).length + articles.filter(a => !a.published).length
 
   const navItem = (key: View, icon: JSX.Element, label: string, count?: number) => (
     <button
       type="button"
-      onClick={() => { setView(key); setMenuOpen(false); if (key !== 'editor') setDraft(null) }}
+      onClick={() => { setView(key); setMenuOpen(false); if (key !== 'editor') setDraft(null); if (key !== 'articleEditor') setArticleDraft(null) }}
       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-fl-sm transition-colors ${view === key ? 'bg-ink text-paper' : 'text-slate hover:bg-white hover:text-ink'}`}
     >
       {icon}<span className="flex-1 text-left">{label}</span>
@@ -136,38 +208,57 @@ export default function Dashboard() {
     </button>
   )
 
+  const isEditing = view === 'editor' || view === 'articleEditor'
+  const heading: Record<View, [string, string]> = {
+    overview: ['Dashboard', 'Overview'], projects: ['Content', 'Projects'], editor: ['Content', 'Project'],
+    articles: ['Content', 'Articles'], articleEditor: ['Content', 'Article'], account: ['Settings', 'Account'],
+  }
+
   return (
     <div className="min-h-screen bg-paper text-ink lg:grid lg:grid-cols-[240px_minmax(0,1fr)]">
       {/* Sidebar */}
       <aside className="border-b lg:border-b-0 lg:border-r border-line bg-frost/60 lg:min-h-screen">
         <div className="px-4 h-14 flex items-center justify-between lg:justify-start gap-3 border-b border-line">
-          <Link to="/" className="font-bold uppercase tracking-tight text-fl-sm">{site.name}<span className="text-brass">.</span> <span className="text-fog font-medium normal-case tracking-normal">Admin</span></Link>
+          <Link to="/" className="font-bold uppercase tracking-tight text-fl-sm">{site.name}<span className="text-ocean">.</span> <span className="text-fog font-medium normal-case tracking-normal">Admin</span></Link>
           <button type="button" onClick={() => setMenuOpen(o => !o)} className="lg:hidden w-9 h-9 rounded-md border border-line flex items-center justify-center" aria-label="Menu">{menuOpen ? <IconClose size={16} /> : <IconMenu size={16} />}</button>
         </div>
         <nav className={`${menuOpen ? 'block' : 'hidden'} lg:block p-3 space-y-1`}>
           {navItem('overview', <IconHome size={16} />, 'Overview')}
+
+          <p className="px-3 pt-3 pb-1 label-caps">Work</p>
           {navItem('projects', <IconLayers size={16} />, 'Projects', projects.length)}
           <button type="button" onClick={() => { startNew(); setMenuOpen(false) }} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-fl-sm transition-colors ${view === 'editor' ? 'bg-ink text-paper' : 'text-slate hover:bg-white hover:text-ink'}`}>
-            <IconPlus size={16} /><span className="flex-1 text-left">{view === 'editor' && draft?.id ? 'Editing…' : 'New project'}</span>
+            <IconPlus size={16} /><span className="flex-1 text-left">{view === 'editor' && draft?.id ? 'Editing project…' : 'New project'}</span>
           </button>
-          {navItem('account', <IconUser size={16} />, 'Account')}
+
+          <p className="px-3 pt-3 pb-1 label-caps">Articles</p>
+          {navItem('articles', <IconFile size={16} />, 'Articles', articles.length)}
+          <button type="button" onClick={() => { startNewArticle(); setMenuOpen(false) }} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-fl-sm transition-colors ${view === 'articleEditor' ? 'bg-ink text-paper' : 'text-slate hover:bg-white hover:text-ink'}`}>
+            <IconEdit size={16} /><span className="flex-1 text-left">{view === 'articleEditor' && articleDraft?.id ? 'Editing article…' : 'New article'}</span>
+          </button>
+
           <div className="pt-3 mt-3 border-t border-line space-y-1">
+            {navItem('account', <IconUser size={16} />, 'Account')}
             <a href={site.url} target="_blank" rel="noreferrer" className="flex items-center gap-3 px-3 py-2 rounded-lg text-fl-sm text-slate hover:bg-white hover:text-ink"><IconExternal size={15} /> View site</a>
             <button type="button" onClick={signOut} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-fl-sm text-slate hover:bg-white hover:text-ink"><IconLogout size={15} /> Sign out</button>
           </div>
-          <p className="px-3 pt-4 text-[11px] text-fog leading-relaxed">{email}<br />{drafts > 0 ? `${drafts} draft${drafts === 1 ? '' : 's'} waiting` : 'All projects published'}</p>
+          <p className="px-3 pt-4 text-[11px] text-fog leading-relaxed">{email}<br />{drafts > 0 ? `${drafts} draft${drafts === 1 ? '' : 's'} waiting` : 'Everything is published'}</p>
         </nav>
       </aside>
 
       {/* Main */}
       <main className="px-4 md:px-6 py-6 min-w-0">
-        {view !== 'editor' && (
+        {!isEditing && (
           <header className="flex flex-wrap items-end justify-between gap-3 mb-6">
             <div>
-              <p className="label-caps">{view === 'overview' ? 'Dashboard' : view === 'projects' ? 'Content' : 'Settings'}</p>
-              <h1 className="mt-1 h-display text-fl-2xl">{view === 'overview' ? 'Overview' : view === 'projects' ? 'Projects' : 'Account'}</h1>
+              <p className="label-caps">{heading[view][0]}</p>
+              <h1 className="mt-1 h-display text-fl-2xl">{heading[view][1]}</h1>
             </div>
-            {view !== 'account' && <button type="button" onClick={startNew} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-steel text-paper text-[11px] font-semibold uppercase tracking-[.12em] hover:bg-ink"><IconPlus size={14} /> New project</button>}
+            {view === 'articles' ? (
+              <button type="button" onClick={startNewArticle} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-steel text-paper text-[11px] font-semibold uppercase tracking-[.12em] hover:bg-ink"><IconPlus size={14} /> New article</button>
+            ) : view !== 'account' && (
+              <button type="button" onClick={startNew} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-steel text-paper text-[11px] font-semibold uppercase tracking-[.12em] hover:bg-ink"><IconPlus size={14} /> New project</button>
+            )}
           </header>
         )}
 
@@ -178,7 +269,13 @@ export default function Dashboard() {
           </div>
         )}
 
-        {view === 'overview' && <Overview projects={projects} onNew={startNew} onOpenProjects={() => setView('projects')} onEdit={startEdit} />}
+        {view === 'overview' && (
+          <Overview
+            projects={projects} articles={articles} articlesMissing={articlesMissing}
+            onNew={startNew} onOpenProjects={() => setView('projects')} onEdit={startEdit}
+            onNewArticle={startNewArticle} onOpenArticles={() => setView('articles')} onEditArticle={startEditArticle}
+          />
+        )}
         {view === 'projects' && (
           <ProjectsTable
             projects={projects} busyId={busyId} onNew={startNew} onEdit={startEdit} onDelete={remove}
@@ -187,6 +284,15 @@ export default function Dashboard() {
         )}
         {view === 'editor' && draft && (
           <ProjectEditor draft={draft} onChange={updateDraft} onSave={save} onCancel={cancelEdit} saving={saving} previewHref={draft.slug ? absoluteUrl(`work/${draft.slug}`) : undefined} />
+        )}
+        {view === 'articles' && (
+          <ArticlesTable
+            articles={articles} busyId={busyId} missingTable={articlesMissing} onNew={startNewArticle} onEdit={startEditArticle}
+            onDelete={removeArticle} onToggle={toggleArticle} onDuplicate={duplicateArticle} previewHref={articleHref}
+          />
+        )}
+        {view === 'articleEditor' && articleDraft && (
+          <ArticleEditor draft={articleDraft} onChange={updateArticleDraft} onSave={saveArticle} onCancel={cancelArticle} saving={saving} previewHref={articleDraft.slug ? absoluteUrl(`articles/${articleDraft.slug}`) : undefined} />
         )}
         {view === 'account' && <AccountPanel email={email} onSignOut={signOut} />}
       </main>

@@ -8,9 +8,9 @@ import NotFound from './pages/NotFound'
 import Login from './pages/admin/Login'
 import Dashboard from './pages/admin/Dashboard'
 
-/** "/" and "/work/:slug" render one mounted Home so the project modal opens over the grid. */
+/** "/", "/work/:slug", "/articles" and "/articles/:slug" render one mounted Home so the reading modals open over the grid. */
 function pageGroup(pathname: string) {
-  if (pathname === '/' || pathname.startsWith('/work')) return 'home'
+  if (pathname === '/' || pathname.startsWith('/work') || pathname.startsWith('/articles')) return 'home'
   return pathname
 }
 
@@ -24,7 +24,7 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [group])
 
-  // The admin area has its own WordPress-style shell — no public navbar/footer.
+  // The admin area has its own shell — no public navbar/footer.
   if (isAdmin) {
     return (
       <Routes>
@@ -43,8 +43,10 @@ export default function App() {
           <Route element={<Home />}>
             <Route path="/" element={<Outlet />} />
             <Route path="/work/:slug" element={<Outlet />} />
+            <Route path="/articles" element={<Outlet />} />
+            <Route path="/articles/:slug" element={<Outlet />} />
           </Route>
-          <Route path="/work" element={<Navigate to="/#showcase" replace />} />
+          <Route path="/work" element={<Navigate to="/#work" replace />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

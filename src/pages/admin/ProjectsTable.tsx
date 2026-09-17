@@ -85,7 +85,7 @@ export default function ProjectsTable({ projects, busyId, onNew, onEdit, onDelet
                     <div className="flex flex-wrap items-center gap-2">
                       <button type="button" onClick={() => onEdit(p)} className="font-semibold text-fl-sm text-ink hover:text-steel text-left truncate max-w-full">{p.title}</button>
                       <span className={`inline-flex items-center h-5 px-2 rounded-sm text-[10px] font-semibold uppercase tracking-[.1em] ${p.published ? 'bg-steel/10 text-steel' : 'bg-frost text-fog'}`}>{p.published ? 'Published' : 'Draft'}</span>
-                      {p.featured && <span className="inline-flex items-center gap-1 h-5 px-2 rounded-sm text-[10px] font-semibold uppercase tracking-[.1em] bg-brass/15 text-brass"><IconStar size={10} /> Featured</span>}
+                      {p.featured && <span className="inline-flex items-center gap-1 h-5 px-2 rounded-sm text-[10px] font-semibold uppercase tracking-[.1em] bg-ocean/15 text-steel"><IconStar size={10} /> Featured</span>}
                     </div>
                     <p className="mt-1 text-[11px] text-fog flex flex-wrap items-center gap-x-2 gap-y-0.5">
                       <span className="inline-flex items-center gap-1.5 capitalize"><span className={`w-1.5 h-1.5 rounded-full ${CAT_DOT[p.category]}`} />{p.category}</span>
@@ -100,7 +100,7 @@ export default function ProjectsTable({ projects, busyId, onNew, onEdit, onDelet
                   <div className="col-span-2 md:col-span-1 flex flex-wrap items-center gap-1.5 justify-end">
                     <button type="button" disabled={i === 0 || busy} onClick={() => onReorder(p, -1)} className={iconBtn} aria-label="Move up"><IconArrowUp size={14} /></button>
                     <button type="button" disabled={i === shown.length - 1 || busy} onClick={() => onReorder(p, 1)} className={iconBtn} aria-label="Move down"><IconArrowDown size={14} /></button>
-                    <button type="button" disabled={busy} onClick={() => onToggle(p, 'featured')} className={`${iconBtn} ${p.featured ? 'text-brass border-brass/50' : ''}`} aria-label={p.featured ? 'Unfeature' : 'Feature'}><IconStar size={14} /></button>
+                    <button type="button" disabled={busy} onClick={() => onToggle(p, 'featured')} className={`${iconBtn} ${p.featured ? 'text-steel border-steel/50' : ''}`} aria-label={p.featured ? 'Unfeature' : 'Feature'}><IconStar size={14} /></button>
                     <button type="button" disabled={busy} onClick={() => onToggle(p, 'published')} className={`px-2.5 h-8 rounded-md border text-[11px] font-semibold uppercase tracking-[.1em] transition-colors ${p.published ? 'border-line text-slate hover:border-steel' : 'border-steel text-steel hover:bg-steel hover:text-paper'}`}>{p.published ? 'Unpublish' : 'Publish'}</button>
                     <a href={previewHref(p)} target="_blank" rel="noreferrer" className={iconBtn} aria-label="Preview"><IconEye size={14} /></a>
                     <button type="button" disabled={busy} onClick={() => onDuplicate(p)} className={iconBtn} aria-label="Duplicate"><IconCopy size={14} /></button>

@@ -11,7 +11,7 @@ export function faqItems(t: (k: string) => string) {
 
 function Item({ n, q, a, open, onToggle }: { n: number; q: string; a: string; open: boolean; onToggle: () => void }) {
   return (
-    <div className={`bg-white border rounded-lg transition-colors duration-300 ${open ? 'border-steel/60' : 'border-line hover:border-steel/40'}`}>
+    <div className={`bg-white/75 backdrop-blur ring-1 rounded-xl transition-all duration-300 ${open ? 'ring-steel/50 shadow-float' : 'ring-ink/[.06] hover:ring-steel/30'}`}>
       <button type="button" onClick={onToggle} aria-expanded={open} className="w-full flex items-center gap-4 px-4 py-3.5 text-left">
         <span className="text-fl-xs text-fog tabular-nums w-6 shrink-0">{String(n).padStart(2, '0')}</span>
         <span className="flex-1 text-[11px] sm:text-[12px] font-semibold uppercase tracking-[.08em] text-ink leading-snug">{q}</span>
@@ -41,7 +41,7 @@ export default function Faq() {
   const cols = [items.slice(0, half), items.slice(half)]
 
   return (
-    <section id="faq" className="border-t border-line scroll-mt-20">
+    <section id="faq" className="scroll-mt-20">
       <div className="max-w-site mx-auto px-gutter py-section">
         <SectionTitle className="reveal">{t('faq.title')}</SectionTitle>
         <div className="mt-8 grid md:grid-cols-2 gap-x-6 gap-y-3 reveal reveal-delay-1">

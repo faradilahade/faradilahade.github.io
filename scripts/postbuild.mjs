@@ -1,6 +1,6 @@
 /**
  * Runs after `vite build`. Never fails the build.
- *  - 404.html  : SPA fallback so /work/<slug> and /contact reload fine on GitHub Pages
+ *  - 404.html  : SPA fallback so /work/<slug>, /articles/<slug> and /contact reload fine on GitHub Pages
  *  - .nojekyll : tells Pages not to run Jekyll on the output
  *  - sitemap.xml + robots.txt : fetched live from Supabase when credentials exist
  */
@@ -29,30 +29,38 @@ function normalizeSupabaseUrl(raw) {
   return u
 }
 
-async function fetchSlugs() {
+async function fetchSlugs(table = 'projects') {
   const url = normalizeSupabaseUrl(process.env.VITE_SUPABASE_URL)
   const key = (process.env.VITE_SUPABASE_ANON_KEY || '').trim()
   if (!url || !key) return []
   try {
-    const res = await fetch(`${url}/rest/v1/projects?select=slug,updated_at&published=eq.true&order=created_at.desc`, {
+    const res = await fetch(`${url}/rest/v1/${table}?select=slug,updated_at&published=eq.true&order=updated_at.desc`, {
       headers: { apikey: key, Authorization: `Bearer ${key}` },
       signal: AbortSignal.timeout(10_000),
     })
-    if (!res.ok) { console.warn(`[postbuild] Supabase responded ${res.status}; sitemap will list static pages only`); return [] }
+    if (!res.ok) { console.warn(`[postbuild] Supabase responded ${res.status} for ${table}; sitemap will skip it`); return [] }
     const rows = await res.json()
     return Array.isArray(rows) ? rows.filter(r => r && typeof r.slug === 'string') : []
   } catch (e) {
-    console.warn('[postbuild] could not fetch projects for sitemap:', e?.message ?? e)
+    console.warn(`[postbuild] could not fetch ${table} for sitemap:`, e?.message ?? e)
     return []
   }
 }
 
 const today = new Date().toISOString().slice(0, 10)
-const slugs = await fetchSlugs()
+const slugs = await fetchSlugs('projects')
+const articleSlugs = await fetchSlugs('articles')
 
 const urls = [
   { loc: siteUrl, lastmod: today, priority: '1.0', changefreq: 'weekly' },
+  { loc: `${siteUrl}articles`, lastmod: today, priority: '0.8', changefreq: 'weekly' },
   { loc: `${siteUrl}contact`, lastmod: today, priority: '0.7', changefreq: 'monthly' },
+  ...articleSlugs.map(r => ({
+    loc: `${siteUrl}articles/${encodeURIComponent(r.slug)}`,
+    lastmod: (r.updated_at || today).slice(0, 10),
+    priority: '0.7',
+    changefreq: 'monthly',
+  })),
   ...slugs.map(r => ({
     loc: `${siteUrl}work/${encodeURIComponent(r.slug)}`,
     lastmod: (r.updated_at || today).slice(0, 10),

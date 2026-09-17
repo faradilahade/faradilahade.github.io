@@ -92,13 +92,13 @@ const toggle = <T,>(arr: T[], v: T): T[] => (arr.includes(v) ? arr.filter(x => x
 function Section({ title, badge, defaultOpen = true, children }: { title: string; badge?: number; defaultOpen?: boolean; children: ReactNode }) {
   const [open, setOpen] = useState(defaultOpen)
   return (
-    <div className="border-b border-line">
+    <div className="border-b border-white/10">
       <button type="button" onClick={() => setOpen(o => !o)} aria-expanded={open} className="w-full flex items-center justify-between py-3.5 text-left group">
-        <span className="label-caps text-ink flex items-center gap-2">
+        <span className="label-caps text-paper/80 flex items-center gap-2">
           {title}
-          {badge ? <span className="inline-flex items-center justify-center min-w-[1.1rem] h-[1.1rem] rounded-full bg-steel text-paper text-[9px] px-1 tabular-nums">{badge}</span> : null}
+          {badge ? <span className="inline-flex items-center justify-center min-w-[1.1rem] h-[1.1rem] rounded-full bg-tide text-night text-[9px] px-1 tabular-nums">{badge}</span> : null}
         </span>
-        <span className={`w-6 h-6 rounded-full border border-line flex items-center justify-center text-fog group-hover:border-steel group-hover:text-steel transition-all duration-300 ${open ? 'rotate-180' : ''}`}>
+        <span className={`w-6 h-6 rounded-full ring-1 ring-white/15 flex items-center justify-center text-paper/50 group-hover:ring-tide/60 group-hover:text-tide transition-all duration-300 ${open ? 'rotate-180' : ''}`}>
           <IconChevronDown size={13} />
         </span>
       </button>
@@ -123,16 +123,16 @@ function CheckList({ options, selected, onToggle, max = 6 }: { options: Option[]
           return (
             <li key={o.value}>
               <label className="flex items-center gap-3 py-1.5 cursor-pointer group">
-                <input type="checkbox" checked={on} onChange={() => onToggle(o.value)} className="w-4 h-4 rounded-sm accent-steel shrink-0" />
-                <span className={`flex-1 truncate text-fl-sm ${on ? 'text-ink font-medium' : 'text-slate group-hover:text-ink'} transition-colors`}>{o.label}</span>
-                <span className="text-fl-xs text-fog tabular-nums">{o.count}</span>
+                <input type="checkbox" checked={on} onChange={() => onToggle(o.value)} className="w-4 h-4 rounded-sm accent-tide shrink-0" />
+                <span className={`flex-1 truncate text-fl-sm ${on ? 'text-paper font-medium' : 'text-paper/65 group-hover:text-paper'} transition-colors`}>{o.label}</span>
+                <span className="text-fl-xs text-paper/40 tabular-nums">{o.count}</span>
               </label>
             </li>
           )
         })}
       </ul>
       {options.length > max && (
-        <button type="button" onClick={() => setExpanded(e => !e)} className="mt-1.5 text-fl-xs font-medium text-steel link-underline">
+        <button type="button" onClick={() => setExpanded(e => !e)} className="mt-1.5 text-fl-xs font-medium text-tide link-underline">
           {expanded ? t('filter.showLess') : t('filter.showAll')} {expanded ? '' : `(${options.length})`}
         </button>
       )}
@@ -164,10 +164,10 @@ export default function Filters({ projects, filters, bounds, onChange }: Props) 
   const active = activeFilterCount(filters, bounds)
 
   return (
-    <div className="text-ink">
-      <div className="flex items-center justify-between pb-3 border-b border-ink">
+    <div className="text-paper">
+      <div className="flex items-center justify-between pb-3 border-b border-white/25">
         <span className="font-bold uppercase tracking-tight text-fl-sm">{t('filter.title')}</span>
-        {active > 0 && <span className="text-fl-xs text-fog">{active} {t('filter.active')}</span>}
+        {active > 0 && <span className="text-fl-xs text-paper/50">{active} {t('filter.active')}</span>}
       </div>
 
       {bounds && yearValue && bounds[1] > bounds[0] && (
@@ -213,7 +213,7 @@ export default function Filters({ projects, filters, bounds, onChange }: Props) 
         type="button"
         disabled={active === 0}
         onClick={() => onChange({ ...emptyFilters })}
-        className="mt-5 w-full border border-line bg-white py-3 text-[11px] font-semibold uppercase tracking-[.14em] text-slate hover:border-steel hover:text-steel disabled:opacity-40 disabled:hover:border-line disabled:hover:text-slate transition-colors rounded-sm"
+        className="mt-5 w-full ring-1 ring-white/15 py-3 text-[11px] font-semibold uppercase tracking-[.14em] text-paper/70 hover:ring-tide/60 hover:text-paper disabled:opacity-40 disabled:hover:ring-white/15 disabled:hover:text-paper/70 transition-colors rounded-full"
       >
         {t('filter.reset')}
       </button>

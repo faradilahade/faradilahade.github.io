@@ -110,3 +110,55 @@ to authenticated
 using (bucket_id = 'portfolio');
 
 -- Done. Reload the schema cache is automatic; the site picks the new columns up immediately.
+
+-- ============================================================
+-- Articles (added Sept 2026): short posts managed from /admin →
+-- Articles. Same idempotent style as above — safe to re-run.
+-- ============================================================
+create table if not exists public.articles (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  slug text unique not null,
+  summary text,
+  content text,
+  cover_url text,
+  tags text[] default '{}',
+  external_url text,
+  published boolean default false,
+  featured boolean default false,
+  published_at timestamptz default now(),
+  translations jsonb default '{}'::jsonb,
+  source_lang text default 'en',
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+alter table public.articles add column if not exists cover_url    text;
+alter table public.articles add column if not exists tags         text[] default '{}';
+alter table public.articles add column if not exists external_url text;
+alter table public.articles add column if not exists featured     boolean default false;
+alter table public.articles add column if not exists published_at timestamptz default now();
+alter table public.articles add column if not exists translations jsonb default '{}'::jsonb;
+alter table public.articles add column if not exists source_lang  text default 'en';
+
+create index if not exists articles_published_idx on public.articles (published, featured, published_at desc);
+create index if not exists articles_slug_idx on public.articles (slug);
+
+drop trigger if exists articles_updated_at on public.articles;
+create trigger articles_updated_at
+before update on public.articles
+for each row execute function public.set_updated_at();
+
+alter table public.articles enable row level security;
+
+drop policy if exists "Public read published articles" on public.articles;
+create policy "Public read published articles"
+on public.articles for select
+using (published = true);
+
+drop policy if exists "Admin full access articles" on public.articles;
+create policy "Admin full access articles"
+on public.articles for all
+to authenticated
+using (true)
+with check (true);

@@ -73,7 +73,7 @@ export type Project = {
   source_lang: Lang4
   created_at: string
   updated_at: string
-  /** Present on copies produced by localizeProject() */
+  /** Present on copies produced by localizeItem() (hooks/useLocalized) */
   _i18n?: I18nInfo
 }
 
@@ -128,38 +128,6 @@ export function normalizeProject(raw: Record<string, unknown>): Project {
     created_at: String(raw.created_at ?? new Date().toISOString()),
     updated_at: String(raw.updated_at ?? raw.created_at ?? new Date().toISOString()),
   }
-}
-
-/**
- * Returns a copy of the project in the requested language.
- * Stored (admin-reviewed) translations win; otherwise machine-translated fields passed in
- * `auto` are used; otherwise the original text is kept and mode stays "original".
- */
-export function localizeProject(p: Project, lang: Lang4, auto?: TranslatedFields): Project {
-  const original = { title: p.title, summary: p.summary, content: p.content, role: p.role }
-  if (lang === p.source_lang) return { ...p, _i18n: { lang, mode: 'original', original } }
-  const stored = p.translations[lang]
-  if (stored?.title?.trim()) {
-    return {
-      ...p,
-      title: stored.title,
-      summary: stored.summary?.trim() ? stored.summary : p.summary,
-      content: stored.content?.trim() ? stored.content : p.content,
-      role: stored.role?.trim() ? stored.role : p.role,
-      _i18n: { lang, mode: 'stored', original },
-    }
-  }
-  if (auto?.title?.trim()) {
-    return {
-      ...p,
-      title: auto.title,
-      summary: auto.summary?.trim() ? auto.summary : p.summary,
-      content: auto.content?.trim() ? auto.content : p.content,
-      role: auto.role?.trim() ? auto.role : p.role,
-      _i18n: { lang, mode: 'auto', original },
-    }
-  }
-  return { ...p, _i18n: { lang, mode: 'original', original } }
 }
 
 /** Featured first, then manual order, then newest. Done in JS so older schemas never break the query. */

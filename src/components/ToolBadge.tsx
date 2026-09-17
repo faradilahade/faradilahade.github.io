@@ -1,7 +1,7 @@
 /**
  * Small square monogram badges for tools — the equivalent of Behance's
- * Ps / Ai / Ae icons. Colours are picked deterministically from the palette
- * so the same tool always looks the same.
+ * Ps / Ai / Ae icons. Colours are picked deterministically from the blue
+ * palette so the same tool always looks the same and nothing clashes.
  */
 const KNOWN: Record<string, string> = {
   python: 'Py', sql: 'SQL', r: 'R', excel: 'Xl', 'power bi': 'PBI', powerbi: 'PBI', tableau: 'Tb',
@@ -16,8 +16,8 @@ const KNOWN: Record<string, string> = {
 }
 
 const COLORS = [
-  'bg-ocean text-night', 'bg-brass text-night', 'bg-clay text-night', 'bg-steel text-paper',
-  'bg-tide text-night', 'bg-sand text-night', 'bg-graphite text-tide border border-tide/30',
+  'bg-ocean text-night', 'bg-steel text-paper', 'bg-tide text-night',
+  'bg-graphite text-tide ring-1 ring-tide/30', 'bg-ink text-tide', 'bg-frost text-steel ring-1 ring-steel/30',
 ]
 
 function hash(s: string) {
