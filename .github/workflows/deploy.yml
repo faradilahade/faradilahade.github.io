@@ -25,11 +25,46 @@ jobs:
           node-version: 20
           cache: npm
 
-      # Enables GitHub Pages (source: GitHub Actions) if it is not enabled yet
-      - uses: actions/configure-pages@v5
+      # Reads the real Pages URL for this repo (and enables Pages with the
+      # "GitHub Actions" source if it is not enabled yet).
+      - id: pages
+        uses: actions/configure-pages@v5
         with:
           enablement: true
         continue-on-error: true
+
+      # Base path comes from the actual Pages configuration, so it is right
+      # even after the repository is renamed or a re-run uses an old event:
+      #   user site  faradilahade.github.io  ->  "/"
+      #   project    <owner>/<repo>          ->  "/<repo>/"
+      - name: Resolve base path
+        id: base
+        env:
+          PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}
+          PAGES_ORIGIN: ${{ steps.pages.outputs.origin }}
+        run: |
+          set -eu
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
+          OWNER="${GITHUB_REPOSITORY_OWNER}"
+          if [ -n "${PAGES_BASE_URL}" ]; then
+            BASE="$(printf '%s' "${PAGES_BASE_URL}" | sed -E 's#^https?://[^/]+##')"
+            ORIGIN="${PAGES_ORIGIN}"
+          else
+            ORIGIN="https://${OWNER}.github.io"
+            if [ "$(printf '%s' "${REPO_NAME}" | tr '[:upper:]' '[:lower:]')" = "$(printf '%s' "${OWNER}.github.io" | tr '[:upper:]' '[:lower:]')" ]; then
+              BASE=""
+            else
+              BASE="/${REPO_NAME}"
+            fi
+          fi
+          case "${BASE}" in
+            "" ) BASE="/" ;;
+            */) ;;
+            * ) BASE="${BASE}/" ;;
+          esac
+          echo "VITE_BASE=${BASE}" >> "$GITHUB_ENV"
+          echo "VITE_SITE_ORIGIN=${ORIGIN}" >> "$GITHUB_ENV"
+          echo "Building for ${ORIGIN}${BASE}"
 
       - run: npm ci
 
@@ -37,11 +72,6 @@ jobs:
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-          # Base path is automatic:
-          #   repo named  <owner>.github.io  ->  "/"        (https://faradilahade.github.io/)
-          #   any other repo name            ->  "/<repo>/" (https://faradilahade.github.io/<repo>/)
-          VITE_BASE: ${{ github.event.repository.name == format('{0}.github.io', github.repository_owner) && '/' || format('/{0}/', github.event.repository.name) }}
-          VITE_SITE_ORIGIN: https://${{ github.repository_owner }}.github.io
         run: npm run build
 
       - uses: actions/upload-pages-artifact@v3

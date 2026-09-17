@@ -38,8 +38,8 @@ function renderContent(text: string): ReactNode[] {
   lines.forEach((raw, i) => {
     const line = raw.trim()
     if (!line) { flush(); return }
-    if (line.startsWith('## ')) { flush(); out.push(<h2 key={i} className="font-display text-fl-xl text-ink pt-3">{line.slice(3)}</h2>); return }
-    if (line.startsWith('# ')) { flush(); out.push(<h2 key={i} className="font-display text-fl-xl text-ink pt-3">{line.slice(2)}</h2>); return }
+    if (line.startsWith('## ')) { flush(); out.push(<h2 key={i} className="font-bold uppercase tracking-tight text-fl-base text-ink pt-3">{line.slice(3)}</h2>); return }
+    if (line.startsWith('# ')) { flush(); out.push(<h2 key={i} className="font-bold uppercase tracking-tight text-fl-base text-ink pt-3">{line.slice(2)}</h2>); return }
     if (/^[-•*]\s+/.test(line)) { list.push(line.replace(/^[-•*]\s+/, '')); return }
     flush()
     out.push(<p key={i}>{line}</p>)
@@ -156,7 +156,7 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
       aria-modal="true"
       aria-labelledby="project-title"
     >
-      <div className="modal-backdrop absolute inset-0 bg-night/85 backdrop-blur-sm" onClick={requestClose} />
+      <div className="modal-backdrop absolute inset-0 bg-ink/85 backdrop-blur-sm" onClick={requestClose} />
 
       {/* Close — always top right, like Behance */}
       <button
@@ -193,7 +193,7 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
 
           {!loading && !project && (
             <div className="p-10 md:p-16 text-center">
-              <p className="font-display text-fl-2xl">{t('modal.notfound')}</p>
+              <p className="h-display text-fl-2xl">{t('modal.notfound')}</p>
               <Link to="/" className="mt-6 inline-block link-underline text-steel">{t('modal.backToWork')}</Link>
             </div>
           )}
@@ -201,7 +201,7 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
           {project && (
             <article key={project.id} className="animate-fade">
               {project.cover_url && (
-                <figure className="relative bg-mist">
+                <figure className="relative bg-frost">
                   <img
                     src={project.cover_url}
                     alt={project.title}
@@ -211,7 +211,7 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
               )}
 
               <div className="px-[clamp(1.25rem,5vw,4.5rem)] pt-[clamp(1.75rem,4vw,3.25rem)]">
-                <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-fl-xs uppercase tracking-[.14em] text-slate">
+                <p className="flex flex-wrap items-center gap-x-3 gap-y-1 label-caps">
                   <span className="inline-flex items-center gap-2">
                     <span className={`w-1.5 h-1.5 rounded-full ${CAT_DOT[project.category]}`} />
                     {t(`cat.${project.category}`)}
@@ -219,14 +219,14 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
                   {project.year && <span>· {project.year}</span>}
                   {project.client && <span>· {project.client}</span>}
                 </p>
-                <h1 id="project-title" className="mt-3 font-display text-fl-3xl leading-[1.08] tracking-tight text-ink max-w-3xl">
+                <h1 id="project-title" className="mt-3 h-display text-[clamp(1.8rem,4vw,3.2rem)] text-ink max-w-3xl">
                   {project.title}
                 </h1>
                 {project.summary && (
-                  <p className="mt-5 text-fl-lg text-slate leading-relaxed max-w-2xl">{project.summary}</p>
+                  <p className="mt-5 font-display text-fl-xl text-ink/80 leading-snug max-w-2xl">{project.summary}</p>
                 )}
 
-                <dl className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4 border-y border-mist py-5 text-fl-sm">
+                <dl className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4 border-y border-line py-5 text-fl-sm">
                   {project.role && (<div><dt className="text-slate text-fl-xs uppercase tracking-wider">{t('modal.role')}</dt><dd className="mt-1 text-ink">{project.role}</dd></div>)}
                   {project.client && (<div><dt className="text-slate text-fl-xs uppercase tracking-wider">{t('modal.client')}</dt><dd className="mt-1 text-ink">{project.client}</dd></div>)}
                   <div><dt className="text-slate text-fl-xs uppercase tracking-wider">{t('modal.category')}</dt><dd className="mt-1 text-ink">{t(`cat.${project.category}`)}</dd></div>
@@ -240,7 +240,7 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
                 )}
 
                 {project.embed_url && (
-                  <div className="mt-10 rounded-xl overflow-hidden ring-1 ring-mist bg-mist">
+                  <div className="mt-10 rounded-xl overflow-hidden ring-1 ring-line bg-frost">
                     <iframe
                       src={project.embed_url}
                       title={`${project.title} — Behance`}
@@ -257,7 +257,7 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
                   <section className="mt-10 md:mt-12" aria-label={t('modal.gallery')}>
                     <div className="space-y-4 md:space-y-6">
                       {gallery.map((src, i) => (
-                        <figure key={src} className="rounded-xl overflow-hidden bg-mist ring-1 ring-mist">
+                        <figure key={src} className="rounded-xl overflow-hidden bg-frost ring-1 ring-line">
                           <img src={src} alt={`${project.title} — ${i + 1}`} loading="lazy" decoding="async" className="w-full h-auto" />
                         </figure>
                       ))}
@@ -268,10 +268,10 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
                 <div className="mt-10 md:mt-12 grid gap-8 md:grid-cols-2">
                   {project.tools.length > 0 && (
                     <section id="tools" className="scroll-mt-6">
-                      <h2 className="text-fl-xs uppercase tracking-[.14em] text-slate">{t('modal.toolsTitle')}</h2>
+                      <h2 className="label-caps">{t('modal.toolsTitle')}</h2>
                       <ul className="mt-3 flex flex-wrap gap-2.5">
                         {project.tools.map(tool => (
-                          <li key={tool} className="inline-flex items-center gap-2 rounded-full border border-mist bg-white pl-1 pr-3 py-1 text-fl-sm">
+                          <li key={tool} className="inline-flex items-center gap-2 rounded-full border border-line bg-white pl-1 pr-3 py-1 text-fl-sm">
                             <ToolBadge name={tool} size="sm" /> {tool}
                           </li>
                         ))}
@@ -280,10 +280,10 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
                   )}
                   {keywords.length > 0 && (
                     <section>
-                      <h2 className="text-fl-xs uppercase tracking-[.14em] text-slate">{t('modal.keywords')}</h2>
+                      <h2 className="label-caps">{t('modal.keywords')}</h2>
                       <ul className="mt-3 flex flex-wrap gap-2">
                         {keywords.map(k => (
-                          <li key={k} className="rounded-full bg-mist/70 text-slate px-3 py-1 text-fl-xs">{k}</li>
+                          <li key={k} className="rounded-full bg-frost text-slate px-3 py-1 text-fl-xs">{k}</li>
                         ))}
                       </ul>
                     </section>
@@ -292,8 +292,8 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
 
                 {files.length > 0 && (
                   <section id="files" className="mt-10 scroll-mt-6">
-                    <h2 className="text-fl-xs uppercase tracking-[.14em] text-slate">{t('modal.attachments')}</h2>
-                    <ul className="mt-3 divide-y divide-mist border-y border-mist">
+                    <h2 className="label-caps">{t('modal.attachments')}</h2>
+                    <ul className="mt-3 divide-y divide-line border-y border-line">
                       {files.map((a, i) => (
                         <li key={i}>
                           <a href={a.url} target="_blank" rel="noreferrer" className="group flex items-center gap-3 py-3 text-fl-sm hover:text-steel transition-colors">
@@ -307,12 +307,12 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
                   </section>
                 )}
 
-                <div className="mt-12 flex flex-wrap items-center gap-3 border-t border-mist pt-8">
-                  <a href={contactHref} className="inline-flex items-center gap-2 rounded-full bg-ink text-paper px-5 py-2.5 text-fl-sm hover:bg-steel transition-colors duration-300">
+                <div className="mt-12 flex flex-wrap items-center gap-3 border-t border-line pt-8">
+                  <a href={contactHref} className="inline-flex items-center gap-2 rounded-sm bg-steel text-paper px-5 py-3 text-[11px] font-semibold uppercase tracking-[.14em] hover:bg-ink transition-colors duration-300">
                     <IconMail size={16} /> {t('modal.ask')}
                   </a>
                   {project.external_url && (
-                    <a href={project.external_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-ink/20 px-5 py-2.5 text-fl-sm hover:border-brass hover:text-brass transition-colors duration-300">
+                    <a href={project.external_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-sm border border-ink/20 px-5 py-3 text-[11px] font-semibold uppercase tracking-[.14em] hover:border-steel hover:text-steel transition-colors duration-300">
                       {t('modal.viewExternal')} <IconExternal size={15} />
                     </a>
                   )}
@@ -321,15 +321,15 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
                 {(prev || next) && (
                   <nav className="mt-10 grid sm:grid-cols-2 gap-3" aria-label="More projects">
                     {prev ? (
-                      <button type="button" onClick={() => onNavigate(prev.slug)} className="group text-left rounded-xl border border-mist p-4 hover:border-steel transition-colors">
+                      <button type="button" onClick={() => onNavigate(prev.slug)} className="group text-left rounded-xl border border-line p-4 hover:border-steel transition-colors">
                         <span className="text-fl-xs text-slate uppercase tracking-wider">← {t('modal.prev')}</span>
-                        <span className="mt-1 block font-display text-fl-lg leading-snug group-hover:text-steel transition-colors">{prev.title}</span>
+                        <span className="mt-1 block font-semibold uppercase tracking-tight text-fl-sm leading-snug group-hover:text-steel transition-colors">{prev.title}</span>
                       </button>
                     ) : <span />}
                     {next && (
-                      <button type="button" onClick={() => onNavigate(next.slug)} className="group text-right rounded-xl border border-mist p-4 hover:border-steel transition-colors">
+                      <button type="button" onClick={() => onNavigate(next.slug)} className="group text-right rounded-xl border border-line p-4 hover:border-steel transition-colors">
                         <span className="text-fl-xs text-slate uppercase tracking-wider">{t('modal.next')} →</span>
-                        <span className="mt-1 block font-display text-fl-lg leading-snug group-hover:text-steel transition-colors">{next.title}</span>
+                        <span className="mt-1 block font-semibold uppercase tracking-tight text-fl-sm leading-snug group-hover:text-steel transition-colors">{next.title}</span>
                       </button>
                     )}
                   </nav>

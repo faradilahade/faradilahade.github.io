@@ -1,6 +1,6 @@
 # Faradilah Ade — Portfolio 2026
 
-Portofolio profesional bergaya Behance: halaman profil gelap dengan grid karya, pop-up detail proyek dengan tombol aksi di samping, panel admin untuk mengelola konten, 4 bahasa otomatis (EN · ID · 日本語 · 中文), dan SEO lengkap.
+Portofolio profesional dengan tata letak katalog ala Behance (referensi *Framerate E-commerce*) dalam tema terang & biru: hero, sidebar filter, grid karya, pop-up detail proyek dengan tombol aksi di samping, FAQ, form *Book a call*, panel admin untuk mengelola konten, 4 bahasa otomatis (EN · ID · 日本語 · 中文), dan SEO lengkap.
 
 **Stack:** Vite + React + TypeScript + Tailwind CSS + Supabase (database, auth, storage) → GitHub Pages.
 
@@ -12,7 +12,7 @@ Portofolio profesional bergaya Behance: halaman profil gelap dengan grid karya, 
 | --- | --- |
 | `ERROR 42710: policy "Public read published" … already exists` saat run SQL | `supabase/schema.sql` sekarang **idempotent** — aman dijalankan berulang kali (drop-if-exists sebelum create, `add column if not exists`, bucket dibuat otomatis). |
 | Login admin: `Invalid path specified in request URL` | Penyebabnya `VITE_SUPABASE_URL` diisi `…supabase.co/rest/v1/`. Kode kini **menormalkan URL otomatis** (membuang `/rest/v1/`), jadi login jalan walau secret-nya masih salah. Tetap disarankan memperbaiki secret (lihat §1.3). |
-| Layout kaku | Tipografi & spasi **fluid (clamp)**, grid 2/3/4 kolom, sidebar berpindah ke bawah grid di ponsel, modal full-screen di ponsel. |
+| Layout | Tata letak mengikuti referensi Behance *Framerate E-commerce* dalam versi terang & bersih dengan palet biru: hero, strip statistik, About, katalog karya dengan **sidebar filter** (tahun, bidang, tools, klien, kata kunci), toolbar hasil (urutkan, grid/list, cari), kartu spesifikasi + tile promo, FAQ, form *Book a call*, footer 4 kolom, dan wordmark raksasa. Tipografi & spasi **fluid (clamp)**. |
 | URL `…/porto_faradilahade-2026/` | Workflow otomatis memakai base `/` bila repo bernama `faradilahade.github.io` (lihat §2). |
 | Kontak | Tombol **Email me** di navbar, sidebar, modal proyek, CTA, dan halaman kontak → `pmb.faradilahade@gmail.com` (subjek & isi terisi otomatis). |
 | SEO | Meta/Open Graph/Twitter per halaman, JSON-LD (Person, ItemList, CreativeWork per proyek), canonical, `sitemap.xml` + `robots.txt` dibuat saat build, keyword & tools per proyek. |
@@ -47,19 +47,25 @@ Simpan keduanya di GitHub: **repo → Settings → Secrets and variables → Act
 
 ## 2. Deploy ke `https://faradilahade.github.io/`
 
-GitHub hanya melayani alamat root itu dari repo yang **bernama persis** `faradilahade.github.io` (user site). Langkahnya:
+### Kenapa halaman masih kosong (blank)?
+Repo sudah di-rename menjadi `faradilahade.github.io`, tetapi:
+1. Branch `main` masih berisi kode lama — branch `claude/modest-goodall-r5aesu` belum di-merge.
+2. Satu-satunya deploy yang ada adalah **re-run** dari push lama. Re-run memakai data event lama, sehingga build dibuat dengan base path `/porto_faradilahade-2026/`. Di alamat root semua aset menjadi 404 → halaman putih kosong.
 
-1. **Rename repo**: repo → **Settings → General → Repository name** → ganti menjadi `faradilahade.github.io` → **Rename**.
-   GitHub otomatis mengarahkan (redirect) alamat repo lama.
-2. **Sumber Pages**: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-3. **Merge** branch ini ke `main` (atau push ke `main`). Workflow `Deploy to GitHub Pages` berjalan otomatis (tab **Actions**).
-4. Tunggu ±1–2 menit → buka `https://faradilahade.github.io/`.
+Workflow yang baru membaca base path langsung dari konfigurasi GitHub Pages (`actions/configure-pages`), jadi rename repo atau re-run tidak lagi bisa menghasilkan path yang salah.
+
+### Langkah memperbaiki (±5 menit)
+1. **Merge** branch `claude/modest-goodall-r5aesu` ke `main`
+   (GitHub → tab **Pull requests** → **New pull request** → base `main`, compare `claude/modest-goodall-r5aesu` → **Create** → **Merge**; atau `git checkout main && git merge claude/modest-goodall-r5aesu && git push`).
+2. Pastikan **Settings → Pages → Build and deployment → Source = GitHub Actions**.
+3. Pastikan **Settings → Secrets and variables → Actions** berisi `VITE_SUPABASE_URL` (tanpa `/rest/v1/`) dan `VITE_SUPABASE_ANON_KEY`.
+4. Push ke `main` memicu workflow **Deploy to GitHub Pages** otomatis. Kalau perlu, jalankan manual: tab **Actions → Deploy to GitHub Pages → Run workflow**.
+5. Tunggu ±1–2 menit, lalu buka `https://faradilahade.github.io/` (tekan Ctrl+Shift+R untuk melewati cache).
 
 Catatan:
-- Base path dihitung otomatis di workflow: `/` untuk `faradilahade.github.io`, `/<nama-repo>/` untuk repo lain. Tidak ada yang perlu diubah manual.
 - `404.html` dibuat otomatis agar `/work/<slug>` dan `/contact` bisa dibuka/refresh langsung.
 - Build **tidak akan gagal** meski secret Supabase belum diisi: situs tetap tampil (grid kosong) dan halaman admin menjelaskan apa yang kurang.
-- Ingin domain sendiri (misal `faradilahade.com`)? Tambahkan di **Settings → Pages → Custom domain**; tidak perlu mengubah kode.
+- Ingin domain sendiri (misal `faradilahade.com`)? Tambahkan di **Settings → Pages → Custom domain**; base path terdeteksi otomatis.
 
 ---
 
@@ -114,8 +120,9 @@ Tips konten agar mudah ditemukan mesin pencari:
 | --- | --- |
 | Nama, email, WhatsApp, link sosial, embed Behance, kata kunci SEO | `src/lib/site.ts` |
 | Teks UI 4 bahasa (judul, tombol, bio, sorotan 240/92%/15.000/350+) | `src/lib/translations.ts` |
-| Palet warna & skala tipografi | `tailwind.config.js` (ink, paper, steel, brass, slate, mist + night, graphite, ocean, tide, sand, fog, clay) dan token `--fs-*` di `src/index.css` |
-| Banner "data bands" | `src/components/Banner.tsx` |
+| Palet warna & skala tipografi | `tailwind.config.js` (ink, paper, steel, brass, slate, mist + ocean, tide, frost, line, fog, clay) dan token `--fs-*` di `src/index.css` |
+| Visual hero & banner "data bands" | `src/components/HeroVisual.tsx`, `src/components/Banner.tsx` |
+| FAQ (8 tanya-jawab, 4 bahasa) | kunci `faq.q1…a8` di `src/lib/translations.ts` |
 | Singkatan badge tools (Py, SQL, PBI…) | `src/components/ToolBadge.tsx` |
 
 ---
@@ -130,7 +137,7 @@ npm run build            # tsc + vite build + 404.html/.nojekyll/sitemap/robots
 npm run preview
 ```
 
-Rute: `/` (profil + grid karya), `/work/<slug>` (modal proyek, bisa dibagikan), `/contact`, `/admin`, `/admin/dashboard`.
+Rute: `/` (hero + katalog karya; `/?field=data#work` membuka filter bidang), `/work/<slug>` (modal proyek, bisa dibagikan), `/contact`, `/admin`, `/admin/dashboard`.
 
 ---
 
@@ -146,8 +153,8 @@ src/lib/site.ts             data diri & konfigurasi situs
 src/lib/supabase.ts         klien Supabase (normalisasi URL), tipe Project
 src/lib/seo.ts              hook <head> per halaman
 src/lib/translations.ts     kamus 4 bahasa
-src/pages/Profile.tsx       halaman utama bergaya Behance (+ modal via /work/:slug)
+src/pages/Home.tsx          halaman utama (hero, statistik, about, katalog+filter, FAQ, book a call; modal via /work/:slug)
 src/pages/Contact.tsx       kontak + form yang membuka aplikasi email
 src/pages/admin/*           login & dashboard admin
-src/components/*            Navbar, Footer, Banner, Avatar, ProjectCard, ProjectModal, ToolBadge, Icons
+src/components/*            Navbar, Footer, Wordmark, HeroVisual, Filters, RangeSlider, ProjectCard, ProjectModal, Faq, BookCall, ToolBadge, Icons
 ```

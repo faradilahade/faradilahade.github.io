@@ -3,9 +3,8 @@
 @tailwind utilities;
 
 /* ------------------------------------------------------------------
-   Fluid design tokens. Everything scales with the viewport between
-   a phone (≈360px) and a wide desktop (≈1440px) — no hard breakpoints
-   for type, so text never jumps in size.
+   Fluid design tokens: type and spacing scale smoothly between a
+   360px phone and a 1440px desktop, so nothing jumps at breakpoints.
 ------------------------------------------------------------------- */
 :root {
   --fs-xs:   clamp(0.72rem, 0.70rem + 0.15vw, 0.80rem);
@@ -18,33 +17,34 @@
   --fs-4xl:  clamp(2.55rem, 1.75rem + 3.80vw, 4.40rem);
 
   --gutter:  clamp(1rem, 0.5rem + 2.6vw, 2.75rem);
-  --section: clamp(3rem, 2rem + 5vw, 6.5rem);
+  --section: clamp(3rem, 2rem + 4.5vw, 6rem);
 
   --ease: cubic-bezier(.2,.7,.3,1);
 }
 
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 4.5rem; }
 html, body { overflow-x: clip; }
 body {
-  @apply bg-night text-paper font-body antialiased;
+  @apply bg-paper text-ink font-body antialiased;
   font-size: var(--fs-base);
   line-height: 1.6;
-  font-feature-settings: "ss01", "cv11";
 }
-body.admin-theme { @apply bg-paper text-ink; }
 
 img, video, iframe { max-width: 100%; }
 img { display: block; }
 button, input, select, textarea { font: inherit; color: inherit; }
 
-::selection { background: #B08D4A; color: #FAF9F6; }
+::selection { background: #3E6B8F; color: #FAF9F6; }
+:focus-visible { outline: 2px solid #3E6B8F; outline-offset: 3px; border-radius: 2px; }
 
-:focus-visible { outline: 2px solid #B08D4A; outline-offset: 3px; border-radius: 2px; }
+/* Display headings: bold, uppercase, tight — the Framerate register */
+.h-display { @apply font-body font-bold uppercase tracking-[-0.02em] leading-[0.95]; }
+.label-caps { @apply text-[10px] font-semibold uppercase tracking-[.16em] text-fog; }
 
-/* Thin, quiet scrollbars inside the modal panel */
-.scroll-quiet { scrollbar-width: thin; scrollbar-color: rgba(74,85,104,.5) transparent; }
+/* Quiet scrollbars inside panels */
+.scroll-quiet { scrollbar-width: thin; scrollbar-color: rgba(74,85,104,.4) transparent; }
 .scroll-quiet::-webkit-scrollbar { width: 8px; }
-.scroll-quiet::-webkit-scrollbar-thumb { background: rgba(74,85,104,.45); border-radius: 8px; }
+.scroll-quiet::-webkit-scrollbar-thumb { background: rgba(74,85,104,.35); border-radius: 8px; }
 .scroll-quiet::-webkit-scrollbar-track { background: transparent; }
 
 /* ---- Motion ---------------------------------------------------- */
@@ -52,30 +52,24 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .rise-2 { animation: rise .7s .10s var(--ease) both; }
 .rise-3 { animation: rise .7s .20s var(--ease) both; }
 .rise-4 { animation: rise .7s .30s var(--ease) both; }
-
 .page-enter { animation: fade .5s var(--ease) both; }
 
-/* Scroll reveal: elements start hidden and are shown by IntersectionObserver */
 .reveal { opacity: 0; transform: translateY(16px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
 .reveal.is-visible { opacity: 1; transform: none; }
 .reveal-delay-1 { transition-delay: .06s; }
 .reveal-delay-2 { transition-delay: .12s; }
 .reveal-delay-3 { transition-delay: .18s; }
 
-/* Images fade in once loaded so the grid never pops */
 .img-fade { opacity: 0; transition: opacity .6s ease; }
 .img-fade.is-loaded { opacity: 1; }
 
-/* Modal */
 .modal-backdrop { animation: fade .3s ease both; }
 .modal-panel { animation: pop .42s var(--ease) both; }
 .modal-closing .modal-backdrop { animation: fade .25s ease reverse both; }
 .modal-closing .modal-panel { animation: pop .25s var(--ease) reverse both; }
 
-/* Line-clamp helper for card titles */
 .clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-/* Underline that draws in on hover */
 .link-underline { position: relative; }
 .link-underline::after {
   content: ""; position: absolute; left: 0; bottom: -2px; height: 1px; width: 100%;
@@ -84,22 +78,35 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .link-underline:hover::after, .link-underline:focus-visible::after { transform: scaleX(1); }
 
-/* Rail button (Behance-style circular action) */
-.rail-btn {
-  @apply flex flex-col items-center gap-1.5 text-fl-xs text-fog;
-}
+/* Rail button (Behance-style circular action, sits on the dark modal backdrop) */
+.rail-btn { @apply flex flex-col items-center gap-1.5 text-fl-xs text-paper/80; }
 .rail-btn > span:first-child {
   @apply w-12 h-12 md:w-[52px] md:h-[52px] rounded-full bg-paper text-ink flex items-center justify-center shadow-lift;
-  transition: transform .3s var(--ease), background-color .3s, color .3s, box-shadow .3s;
+  transition: transform .3s var(--ease), background-color .3s, color .3s;
 }
-.rail-btn:hover > span:first-child, .rail-btn:focus-visible > span:first-child {
-  @apply bg-brass text-night;
-  transform: translateY(-2px);
-}
-.rail-btn.is-primary > span:first-child { @apply bg-ocean text-night; }
-.rail-btn.is-primary:hover > span:first-child { @apply bg-tide; }
+.rail-btn:hover > span:first-child, .rail-btn:focus-visible > span:first-child { @apply bg-steel text-paper; transform: translateY(-2px); }
+.rail-btn.is-primary > span:first-child { @apply bg-steel text-paper; }
+.rail-btn.is-primary:hover > span:first-child { @apply bg-ocean; }
 
-/* Grain overlay for an organic, non-flat surface */
+/* Dual-thumb range slider (year filter) */
+.range-dual { position: relative; height: 1.5rem; }
+.range-dual input[type=range] {
+  position: absolute; inset: 0; width: 100%; height: 100%; margin: 0;
+  background: transparent; -webkit-appearance: none; appearance: none; pointer-events: none;
+}
+.range-dual input[type=range]::-webkit-slider-runnable-track { background: transparent; }
+.range-dual input[type=range]::-moz-range-track { background: transparent; }
+.range-dual input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; pointer-events: auto; width: 16px; height: 16px; border-radius: 9999px;
+  background: #FAF9F6; border: 2px solid #3E6B8F; box-shadow: 0 1px 4px rgba(14,27,44,.25); cursor: pointer; margin-top: 0;
+}
+.range-dual input[type=range]::-moz-range-thumb {
+  pointer-events: auto; width: 12px; height: 12px; border-radius: 9999px;
+  background: #FAF9F6; border: 2px solid #3E6B8F; box-shadow: 0 1px 4px rgba(14,27,44,.25); cursor: pointer;
+}
+.range-dual input[type=range]:focus-visible::-webkit-slider-thumb { outline: 2px solid #B08D4A; outline-offset: 2px; }
+
+/* Grain overlay for organic, non-flat dark surfaces */
 .grain::before {
   content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .06; mix-blend-mode: soft-light;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
