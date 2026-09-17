@@ -159,12 +159,12 @@ export default function ArticleEditor({ draft, onChange, onSave, onCancel, savin
               }}
               onKeyDown={e => { if (e.key === 'Enter') e.preventDefault() }}
               ref={el => { if (el) { el.style.height = 'auto'; el.style.height = `${el.scrollHeight}px` } }}
-              placeholder="Title — what will the reader learn?"
+              placeholder="Title: what will the reader learn?"
               className="w-full bg-transparent border-0 border-b border-line focus:border-steel outline-none py-2 text-fl-2xl font-bold tracking-tight leading-tight placeholder:text-fog/50 resize-none overflow-hidden"
             />
             <textarea
               rows={2} maxLength={240} value={draft.summary} onChange={e => set({ summary: e.target.value })}
-              placeholder="Standfirst — one or two sentences shown on the card and used as the SEO description."
+              placeholder="Standfirst: one or two sentences shown on the card and used as the SEO description."
               className="mt-3 w-full bg-transparent border-0 border-b border-line focus:border-steel outline-none py-2 text-fl-lg leading-snug placeholder:text-fog/50 placeholder:text-fl-sm resize-none"
             />
             <p className="mt-1 text-right text-[11px] text-fog tabular-nums">{draft.summary.length}/240</p>
@@ -198,7 +198,7 @@ export default function ArticleEditor({ draft, onChange, onSave, onCancel, savin
               </div>
               <div className="space-y-4">
                 <div>
-                  <span className={label}>Topics / tags (comma separated) — become filter chips</span>
+                  <span className={label}>Topics / tags (comma separated), become filter chips</span>
                   <input value={draft.tags} onChange={e => set({ tags: e.target.value })} placeholder="Actuarial, Python, IFRS 17" className={field} />
                 </div>
                 <div>
@@ -206,13 +206,13 @@ export default function ArticleEditor({ draft, onChange, onSave, onCancel, savin
                   <input type="date" value={draft.published_at} onChange={e => set({ published_at: e.target.value })} className={field} />
                 </div>
                 <div>
-                  <span className={label}>External link (Medium, LinkedIn, PDF…) — optional</span>
+                  <span className={label}>External link (Medium, LinkedIn, PDF…), optional</span>
                   <input type="url" value={draft.external_url} onChange={e => set({ external_url: e.target.value })} placeholder="https://" className={field} />
                 </div>
               </div>
             </div>
             <div className="mt-4">
-              <span className={label}>Slug (URL) — /articles/…</span>
+              <span className={label}>Slug (URL): /articles/…</span>
               <input value={draft.slug} onChange={e => set({ slug: slugify(e.target.value) })} className={`${field} font-mono text-[12px]`} />
             </div>
           </Card>
@@ -256,7 +256,7 @@ export default function ArticleEditor({ draft, onChange, onSave, onCancel, savin
                 </div>
                 <input value={draft.translations[tLang]?.title ?? ''} onChange={e => setTr(tLang, { title: e.target.value })} placeholder={`Title (${LANG_LABEL[tLang]})`} className={`${field} font-semibold`} />
                 <textarea rows={2} value={draft.translations[tLang]?.summary ?? ''} onChange={e => setTr(tLang, { summary: e.target.value })} placeholder={`Standfirst (${LANG_LABEL[tLang]})`} className={field} />
-                <textarea rows={8} value={draft.translations[tLang]?.content ?? ''} onChange={e => setTr(tLang, { content: e.target.value })} placeholder={`Article (${LANG_LABEL[tLang]}) — same "## / - / >" markup as the source`} className={`${field} leading-relaxed text-fl-sm`} />
+                <textarea rows={8} value={draft.translations[tLang]?.content ?? ''} onChange={e => setTr(tLang, { content: e.target.value })} placeholder={`Article (${LANG_LABEL[tLang]}), same "## / - / >" markup as the source`} className={`${field} leading-relaxed text-fl-sm`} />
               </div>
             )}
           </Card>

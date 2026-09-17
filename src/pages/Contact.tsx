@@ -34,8 +34,8 @@ export default function Contact() {
 
   const compose = (e: FormEvent) => {
     e.preventDefault()
-    const subject = `${t(`contact.form.topic.${topic}`)}${company ? ` — ${company}` : ''}${name ? ` (${name})` : ''}`
-    const body = `Hi ${site.firstName},\n\n${message.trim()}\n\n—\n${name}${company ? `\n${company}` : ''}`
+    const subject = `${t(`contact.form.topic.${topic}`)}${company ? ` (${company})` : ''}${name ? ` (${name})` : ''}`
+    const body = `Hi ${site.firstName},\n\n${message.trim()}\n\n${name}${company ? `\n${company}` : ''}`
     window.location.href = mailto(subject, body)
   }
 
@@ -51,7 +51,7 @@ export default function Contact() {
             <p className="rise-3 mt-6 text-fl-lg text-slate leading-relaxed max-w-md">{t('contact.sub')}</p>
 
             <a
-              href={mailto(`Hello ${site.firstName} — from your portfolio`, `Hi ${site.firstName},\n\n`)}
+              href={mailto(`Hello ${site.firstName}, from your portfolio`, `Hi ${site.firstName},\n\n`)}
               className="rise-4 group mt-8 inline-flex items-center gap-2.5 bg-steel text-paper px-6 py-3.5 text-[11px] font-semibold uppercase tracking-[.16em] rounded-sm hover:bg-ink transition-colors duration-300"
             >
               <IconMail size={15} /> {site.email}

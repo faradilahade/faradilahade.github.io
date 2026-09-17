@@ -17,7 +17,7 @@ export const CAT_GLOW: Record<string, string> = {
   risk: 'from-steel/35',
 }
 
-/** Light gradient placeholder — varies per project so the grid never looks templated. */
+/** Light gradient placeholder: varies per project so the grid never looks templated. */
 function placeholder(seed: string) {
   let h = 0
   for (let i = 0; i < seed.length; i++) h = (h * 33 + seed.charCodeAt(i)) >>> 0
@@ -101,7 +101,7 @@ export default function ProjectCard({ p, index = 0, view = 'grid' }: Props) {
   if (view === 'list') {
     return (
       <article className={`reveal reveal-delay-${delay} group glass glass-hover grid grid-cols-[96px_1fr] sm:grid-cols-[168px_1fr_auto] gap-4 sm:gap-6 items-center p-3 sm:p-4`}>
-        <Link to={open} className="block" aria-label={`${p.title} — ${t('work.read')}`}>
+        <Link to={open} className="block" aria-label={`${p.title}: ${t('work.read')}`}>
           <Thumb p={p} className="aspect-[4/3] rounded-xl" />
         </Link>
         <div className="min-w-0">
@@ -133,7 +133,7 @@ export default function ProjectCard({ p, index = 0, view = 'grid' }: Props) {
         {stamp}
       </div>
 
-      <Link to={open} className="relative block mx-4 mt-3" aria-label={`${p.title} — ${t('work.read')}`}>
+      <Link to={open} className="relative block mx-4 mt-3" aria-label={`${p.title}: ${t('work.read')}`}>
         <Thumb p={p} className="aspect-[4/3] rounded-xl ring-1 ring-ink/[.06]" />
       </Link>
 
@@ -168,7 +168,7 @@ export function PromoTile() {
         <p className="mt-3 text-fl-sm text-paper/85 leading-relaxed max-w-[26ch]">{t('promo.body')}</p>
       </div>
       <a
-        href={mailto(`Hello ${site.firstName} — from your portfolio`, `Hi ${site.firstName},\n\n`)}
+        href={mailto(`Hello ${site.firstName}, from your portfolio`, `Hi ${site.firstName},\n\n`)}
         className="relative mt-6 inline-flex items-center justify-center gap-2 self-start bg-paper text-night text-[11px] font-semibold uppercase tracking-[.14em] px-4 py-2.5 rounded-full hover:bg-tide transition-colors duration-300 group"
       >
         <IconMail size={14} /> {t('promo.button')} <IconArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />

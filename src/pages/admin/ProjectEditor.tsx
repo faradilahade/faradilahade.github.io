@@ -182,12 +182,12 @@ export default function ProjectEditor({ draft, onChange, onSave, onCancel, savin
               }}
               onKeyDown={e => { if (e.key === 'Enter') e.preventDefault() }}
               ref={el => { if (el) { el.style.height = 'auto'; el.style.height = `${el.scrollHeight}px` } }}
-              placeholder="Title — say what you built and for whom"
+              placeholder="Title: say what you built and for whom"
               className="w-full bg-transparent border-0 border-b border-line focus:border-steel outline-none py-2 text-fl-2xl font-bold tracking-tight leading-tight placeholder:text-fog/50 resize-none overflow-hidden"
             />
             <textarea
               rows={2} maxLength={220} value={draft.summary} onChange={e => set({ summary: e.target.value })}
-              placeholder="Summary — one or two sentences with a measurable result. Shown on cards and used as the SEO description."
+              placeholder="Summary: one or two sentences with a measurable result. Shown on cards and used as the SEO description."
               className="mt-3 w-full bg-transparent border-0 border-b border-line focus:border-steel outline-none py-2 text-fl-lg leading-snug placeholder:text-fog/50 placeholder:text-fl-sm resize-none"
             />
             <p className="mt-1 text-right text-[11px] text-fog tabular-nums">{draft.summary.length}/220</p>
@@ -268,7 +268,7 @@ export default function ProjectEditor({ draft, onChange, onSave, onCancel, savin
             </div>
             <div className="mt-4 grid sm:grid-cols-2 gap-4">
               <div>
-                <span className={label}>Tools used (comma separated) — shown as badges</span>
+                <span className={label}>Tools used (comma separated), shown as badges</span>
                 <input value={draft.tools} onChange={e => set({ tools: e.target.value })} placeholder="Python, SQL, Airflow, dbt, BigQuery" className={field} />
                 {tools.length > 0 && <div className="mt-2 flex flex-wrap gap-1.5">{tools.map(tl => <ToolBadge key={tl} name={tl} size="sm" />)}</div>}
               </div>
@@ -283,7 +283,7 @@ export default function ProjectEditor({ draft, onChange, onSave, onCancel, savin
               <div><span className={label}>Behance embed (iframe code or src URL)</span><input value={draft.embed_url} onChange={e => set({ embed_url: e.target.value })} placeholder='<iframe src="https://www.behance.net/embed/project/…">' className={`${field} font-mono text-[12px]`} /></div>
             </div>
             <div className="mt-4">
-              <span className={label}>Slug (URL) — /work/…</span>
+              <span className={label}>Slug (URL): /work/…</span>
               <input value={draft.slug} onChange={e => set({ slug: slugify(e.target.value) })} className={`${field} font-mono text-[12px]`} />
             </div>
           </Card>
@@ -331,7 +331,7 @@ export default function ProjectEditor({ draft, onChange, onSave, onCancel, savin
                 <input value={draft.translations[tLang]?.title ?? ''} onChange={e => setTr(tLang, { title: e.target.value })} placeholder={`Title (${LANG_LABEL[tLang]})`} className={`${field} font-semibold`} />
                 <textarea rows={2} value={draft.translations[tLang]?.summary ?? ''} onChange={e => setTr(tLang, { summary: e.target.value })} placeholder={`Summary (${LANG_LABEL[tLang]})`} className={field} />
                 <input value={draft.translations[tLang]?.role ?? ''} onChange={e => setTr(tLang, { role: e.target.value })} placeholder={`Role (${LANG_LABEL[tLang]})`} className={field} />
-                <textarea rows={8} value={draft.translations[tLang]?.content ?? ''} onChange={e => setTr(tLang, { content: e.target.value })} placeholder={`Case study (${LANG_LABEL[tLang]}) — same "## / - / >" markup as the source`} className={`${field} leading-relaxed text-fl-sm`} />
+                <textarea rows={8} value={draft.translations[tLang]?.content ?? ''} onChange={e => setTr(tLang, { content: e.target.value })} placeholder={`Case study (${LANG_LABEL[tLang]}), same "## / - / >" markup as the source`} className={`${field} leading-relaxed text-fl-sm`} />
               </div>
             )}
           </Card>

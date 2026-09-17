@@ -20,7 +20,7 @@ export function normalizeSupabaseUrl(raw?: string): string {
 const url = normalizeSupabaseUrl(import.meta.env.VITE_SUPABASE_URL as string | undefined)
 const anon = ((import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined) ?? '').trim()
 
-/** False when the build has no Supabase credentials — pages still render, admin explains what to do. */
+/** False when the build has no Supabase credentials: pages still render, admin explains what to do. */
 export const supabaseConfigured = Boolean(url && anon)
 
 export const supabase = createClient(

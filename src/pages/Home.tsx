@@ -173,13 +173,13 @@ export default function Home() {
     const ld: Record<string, unknown>[] = [personJsonLd(lang)]
     if (projects.length) {
       ld.push({
-        '@context': 'https://schema.org', '@type': 'ItemList', name: `${site.name} — ${t('work.title')}`,
+        '@context': 'https://schema.org', '@type': 'ItemList', name: `${site.name} | ${t('work.title')}`,
         itemListElement: localized.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: absoluteUrl(`work/${p.slug}`), name: p.title })),
       })
     }
     if (articles.length) {
       ld.push({
-        '@context': 'https://schema.org', '@type': 'Blog', name: `${site.name} — ${t('articles.title')}`, url: absoluteUrl('#articles'),
+        '@context': 'https://schema.org', '@type': 'Blog', name: `${site.name} | ${t('articles.title')}`, url: absoluteUrl('#articles'),
         blogPost: localizedArticles.map(a => ({ '@type': 'BlogPosting', headline: a.title, url: absoluteUrl(`articles/${a.slug}`), datePublished: a.published_at, author: { '@type': 'Person', name: site.name } })),
       })
     }
@@ -219,15 +219,15 @@ export default function Home() {
 
   useSeo(active
     ? {
-        title: `${active.title} — ${t(`cat.${active.category}`)} case study`,
-        description: active.summary ?? `${active.title} — a ${t(`cat.${active.category}`).toLowerCase()} project by ${site.name}.`,
+        title: `${active.title} | ${t(`cat.${active.category}`)} case study`,
+        description: active.summary ?? `${active.title}, a ${t(`cat.${active.category}`).toLowerCase()} project by ${site.name}.`,
         path: `work/${active.slug}`, type: 'article', image: active.cover_url,
         keywords: [...active.keywords, ...active.tags, ...active.tools, site.name], jsonLd: projectJsonLd,
       }
     : activeArticle
       ? {
           title: activeArticle.title,
-          description: activeArticle.summary ?? `${activeArticle.title} — ${t('articles.title')} by ${site.name}.`,
+          description: activeArticle.summary ?? `${activeArticle.title}, ${t('articles.title')} by ${site.name}.`,
           path: `articles/${activeArticle.slug}`, type: 'article', image: activeArticle.cover_url,
           keywords: [...activeArticle.tags, site.name], jsonLd: articleJsonLd,
         }

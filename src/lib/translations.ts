@@ -1,10 +1,11 @@
 export type Lang = 'en' | 'id' | 'ja' | 'zh'
 
-export const LANGS: { code: Lang; label: string; short: string; locale: string }[] = [
-  { code: 'en', label: 'English', short: 'EN', locale: 'en-US' },
-  { code: 'id', label: 'Indonesia', short: 'ID', locale: 'id-ID' },
-  { code: 'ja', label: '日本語', short: 'JA', locale: 'ja-JP' },
-  { code: 'zh', label: '中文', short: 'ZH', locale: 'zh-CN' },
+/** `short` is what the navbar button shows; `native` and `hint` are written in that language itself. */
+export const LANGS: { code: Lang; label: string; short: string; native: string; hint: string; locale: string }[] = [
+  { code: 'en', label: 'English', short: 'EN', native: 'English', hint: 'Read this site in English', locale: 'en-US' },
+  { code: 'id', label: 'Indonesia', short: 'ID', native: 'Bahasa Indonesia', hint: 'Baca situs ini dalam Bahasa Indonesia', locale: 'id-ID' },
+  { code: 'ja', label: '日本語', short: '日本語', native: '日本語', hint: 'このサイトは日本語で表示できます', locale: 'ja-JP' },
+  { code: 'zh', label: '中文', short: '中文', native: '中文（简体）', hint: '本站可以切换为中文显示', locale: 'zh-CN' },
 ]
 
 type Dict = Record<string, string>
@@ -18,14 +19,14 @@ const en: Dict = {
   'nav.menu': 'Menu',
   'nav.admin': 'Admin',
 
-  'seo.home.title': 'Faradilah Ade — Actuarial Data Scientist | Data, Finance & Risk Portfolio',
+  'seo.home.title': 'Faradilah Ade | Actuarial Data Scientist | Data, Finance & Risk Portfolio',
   'seo.home.desc': 'Portfolio of Faradilah Ade, an actuarial data scientist in Jakarta: data pipelines, forecasting, IFRS 17 finance analytics and risk modelling for the World Bank, insurers and public institutions. Available for remote roles and consulting.',
-  'seo.contact.title': 'Contact Faradilah Ade — Data, Finance & Risk Consulting',
+  'seo.contact.title': 'Contact Faradilah Ade | Data, Finance & Risk Consulting',
   'seo.contact.desc': 'Get in touch with Faradilah Ade for data science, financial analytics and actuarial risk work. Reply within one working day.',
 
   'hero.eyebrow': 'Actuarial Data Scientist · Jakarta, Indonesia',
   'hero.title': 'Turning data into decisions for finance and risk.',
-  'hero.body': 'I build data pipelines, financial models and risk frameworks that institutions actually use — from national infrastructure programmes with the World Bank to insurance portfolios of fifteen thousand policies.',
+  'hero.body': 'I build data pipelines, financial models and risk frameworks that institutions actually use, from national infrastructure programmes with the World Bank to insurance portfolios of fifteen thousand policies.',
   'hero.cta': 'Email me',
   'hero.cta2': 'WhatsApp',
   'hero.cta3': 'See the work',
@@ -45,7 +46,7 @@ const en: Dict = {
   'pillar.finance.title': 'Finance',
   'pillar.finance.body': 'IFRS 17 impact analysis, board and regulator reporting, and automation that cut reconciliation time across 13 banks by 70% at Zurich Topas Life.',
   'pillar.risk.title': 'Risk',
-  'pillar.risk.body': 'Reserving, stress testing and pricing grounded in actuarial method — including published research on Tweedie GLM and a risk framework co-developed with the World Bank.',
+  'pillar.risk.body': 'Reserving, stress testing and pricing grounded in actuarial method, including published research on Tweedie GLM and a risk framework co-developed with the World Bank.',
 
   'work.title': 'Work',
   'work.home': 'Home',
@@ -54,7 +55,7 @@ const en: Dict = {
   'sort.featured': 'Featured',
   'sort.newest': 'Newest',
   'sort.oldest': 'Oldest',
-  'sort.az': 'A – Z',
+  'sort.az': 'A-Z',
   'view.grid': 'Grid view',
   'view.list': 'List view',
   'work.viewMore': 'View more',
@@ -106,11 +107,11 @@ const en: Dict = {
   'faq.q1': 'Are you available for remote or international work?',
   'faq.a1': 'Yes. I work remotely from Jakarta (GMT+7) with comfortable overlap for Asia-Pacific and European mornings, and I travel for on-site kick-offs when it helps.',
   'faq.q2': 'What kind of engagements do you take on?',
-  'faq.a2': 'Data pipelines and forecasting, financial analysis and IFRS 17 reporting, actuarial reserving, pricing and risk frameworks — from a two-week audit to a multi-month build.',
+  'faq.a2': 'Data pipelines and forecasting, financial analysis and IFRS 17 reporting, actuarial reserving, pricing and risk frameworks, from a two-week audit to a multi-month build.',
   'faq.q3': 'Which tools do you work with?',
   'faq.a3': 'Python, SQL, Airflow, dbt and BigQuery on Google Cloud for data; R and Excel for actuarial work; Power BI and Looker Studio for reporting. Every project lists its exact stack.',
   'faq.q4': 'How does a project usually start?',
-  'faq.a4': 'A 30-minute call to understand the problem, a short written proposal with scope, timeline and price, then kick-off — usually within a week.',
+  'faq.a4': 'A 30-minute call to understand the problem, a short written proposal with scope, timeline and price, then kick-off, usually within a week.',
   'faq.q5': 'Do you sign NDAs and work with confidential data?',
   'faq.a5': 'Yes. Several projects here are described at a high level for that reason; details can be shared under NDA.',
   'faq.q6': 'Which languages do you work in?',
@@ -134,7 +135,7 @@ const en: Dict = {
   'footer.consultation': 'Consultation',
   'footer.scrollUp': 'Scroll up',
   'footer.replies': 'Replies within one working day',
-  'footer.tagline': 'Data, finance and risk — built to be used.',
+  'footer.tagline': 'Data, finance and risk. Built to be used.',
   'footer.rights': 'All rights reserved.',
 
   'modal.close': 'Close',
@@ -219,7 +220,7 @@ const en: Dict = {
   'work.sub': 'Selected data, finance and risk work. Open any piece for the full case study and the tools behind it.',
   'work.chip.all': 'All',
   'articles.title': 'Articles',
-  'articles.sub': 'Notes on data, actuarial method and finance — written to be useful.',
+  'articles.sub': 'Notes on data, actuarial method and finance, written to be useful.',
   'articles.empty': 'No articles published yet. Check back soon.',
   'articles.noresults': 'No articles match this search.',
   'articles.read': 'Read',
@@ -232,6 +233,7 @@ const en: Dict = {
   'articles.external': 'Read on the original site',
 
   'articles.kicker': 'Notes & writing',
+  'nav.language': 'Language',
 }
 
 const id: Dict = {
@@ -243,14 +245,14 @@ const id: Dict = {
   'nav.menu': 'Menu',
   'nav.admin': 'Admin',
 
-  'seo.home.title': 'Faradilah Ade — Actuarial Data Scientist | Portofolio Data, Keuangan & Risiko',
+  'seo.home.title': 'Faradilah Ade | Actuarial Data Scientist | Portofolio Data, Keuangan & Risiko',
   'seo.home.desc': 'Portofolio Faradilah Ade, actuarial data scientist di Jakarta: pipeline data, peramalan, analitik keuangan IFRS 17, dan pemodelan risiko untuk World Bank, perusahaan asuransi, dan lembaga publik. Terbuka untuk peran remote dan konsultasi.',
-  'seo.contact.title': 'Kontak Faradilah Ade — Konsultasi Data, Keuangan & Risiko',
+  'seo.contact.title': 'Kontak Faradilah Ade | Konsultasi Data, Keuangan & Risiko',
   'seo.contact.desc': 'Hubungi Faradilah Ade untuk pekerjaan data science, analitik keuangan, dan risiko aktuaria. Dibalas dalam satu hari kerja.',
 
   'hero.eyebrow': 'Actuarial Data Scientist · Jakarta, Indonesia',
   'hero.title': 'Mengubah data menjadi keputusan untuk keuangan dan risiko.',
-  'hero.body': 'Saya membangun pipeline data, model keuangan, dan kerangka risiko yang benar-benar dipakai institusi — dari program infrastruktur nasional bersama World Bank hingga portofolio asuransi lima belas ribu polis.',
+  'hero.body': 'Saya membangun pipeline data, model keuangan, dan kerangka risiko yang benar-benar dipakai institusi, dari program infrastruktur nasional bersama World Bank hingga portofolio asuransi lima belas ribu polis.',
   'hero.cta': 'Kirim email',
   'hero.cta2': 'WhatsApp',
   'hero.cta3': 'Lihat karya',
@@ -270,7 +272,7 @@ const id: Dict = {
   'pillar.finance.title': 'Keuangan',
   'pillar.finance.body': 'Analisis dampak IFRS 17, pelaporan direksi dan regulator, serta otomasi yang memangkas waktu rekonsiliasi 13 bank sebesar 70% di Zurich Topas Life.',
   'pillar.risk.title': 'Risiko',
-  'pillar.risk.body': 'Reserving, stress testing, dan pricing berbasis metode aktuaria — termasuk riset terpublikasi tentang Tweedie GLM dan kerangka risiko yang dikembangkan bersama World Bank.',
+  'pillar.risk.body': 'Reserving, stress testing, dan pricing berbasis metode aktuaria, termasuk riset terpublikasi tentang Tweedie GLM dan kerangka risiko yang dikembangkan bersama World Bank.',
 
   'work.title': 'Karya',
   'work.home': 'Beranda',
@@ -279,7 +281,7 @@ const id: Dict = {
   'sort.featured': 'Unggulan',
   'sort.newest': 'Terbaru',
   'sort.oldest': 'Terlama',
-  'sort.az': 'A – Z',
+  'sort.az': 'A-Z',
   'view.grid': 'Tampilan grid',
   'view.list': 'Tampilan daftar',
   'work.viewMore': 'Lihat lebih banyak',
@@ -331,11 +333,11 @@ const id: Dict = {
   'faq.q1': 'Apakah Anda tersedia untuk kerja remote atau internasional?',
   'faq.a1': 'Ya. Saya bekerja remote dari Jakarta (GMT+7) dengan jam tumpang tindih yang nyaman untuk Asia-Pasifik dan pagi hari Eropa, dan bersedia datang untuk kick-off di lokasi bila diperlukan.',
   'faq.q2': 'Jenis pekerjaan apa yang Anda ambil?',
-  'faq.a2': 'Pipeline data dan peramalan, analisis keuangan dan pelaporan IFRS 17, reserving aktuaria, pricing, dan kerangka risiko — dari audit dua minggu hingga pembangunan beberapa bulan.',
+  'faq.a2': 'Pipeline data dan peramalan, analisis keuangan dan pelaporan IFRS 17, reserving aktuaria, pricing, dan kerangka risiko, dari audit dua minggu hingga pembangunan beberapa bulan.',
   'faq.q3': 'Tools apa yang Anda gunakan?',
   'faq.a3': 'Python, SQL, Airflow, dbt, dan BigQuery di Google Cloud untuk data; R dan Excel untuk pekerjaan aktuaria; Power BI dan Looker Studio untuk pelaporan. Setiap proyek mencantumkan stack persisnya.',
   'faq.q4': 'Bagaimana sebuah proyek biasanya dimulai?',
-  'faq.a4': 'Panggilan 30 menit untuk memahami persoalan, proposal tertulis singkat berisi lingkup, jadwal, dan biaya, lalu kick-off — biasanya dalam satu minggu.',
+  'faq.a4': 'Panggilan 30 menit untuk memahami persoalan, proposal tertulis singkat berisi lingkup, jadwal, dan biaya, lalu kick-off, biasanya dalam satu minggu.',
   'faq.q5': 'Apakah Anda menandatangani NDA dan bekerja dengan data rahasia?',
   'faq.a5': 'Ya. Beberapa proyek di sini dijelaskan secara umum karena alasan itu; detailnya dapat dibagikan di bawah NDA.',
   'faq.q6': 'Dalam bahasa apa Anda bekerja?',
@@ -359,7 +361,7 @@ const id: Dict = {
   'footer.consultation': 'Konsultasi',
   'footer.scrollUp': 'Ke atas',
   'footer.replies': 'Dibalas dalam satu hari kerja',
-  'footer.tagline': 'Data, keuangan, dan risiko — dibangun untuk dipakai.',
+  'footer.tagline': 'Data, keuangan, dan risiko. Dibangun untuk dipakai.',
   'footer.rights': 'Hak cipta dilindungi.',
 
   'modal.close': 'Tutup',
@@ -444,7 +446,7 @@ const id: Dict = {
   'work.sub': 'Karya pilihan di bidang data, keuangan, dan risiko. Buka salah satu untuk membaca studi kasus lengkap dan tools di baliknya.',
   'work.chip.all': 'Semua',
   'articles.title': 'Artikel',
-  'articles.sub': 'Catatan tentang data, metode aktuaria, dan keuangan — ditulis agar berguna.',
+  'articles.sub': 'Catatan tentang data, metode aktuaria, dan keuangan, ditulis agar berguna.',
   'articles.empty': 'Belum ada artikel yang diterbitkan. Kembali lagi nanti.',
   'articles.noresults': 'Tidak ada artikel yang cocok dengan pencarian ini.',
   'articles.read': 'Baca',
@@ -457,6 +459,7 @@ const id: Dict = {
   'articles.external': 'Baca di situs asli',
 
   'articles.kicker': 'Catatan & tulisan',
+  'nav.language': 'Bahasa',
 }
 
 const ja: Dict = {
@@ -468,9 +471,9 @@ const ja: Dict = {
   'nav.menu': 'メニュー',
   'nav.admin': '管理',
 
-  'seo.home.title': 'Faradilah Ade — アクチュアリー・データサイエンティスト | データ・金融・リスク ポートフォリオ',
+  'seo.home.title': 'Faradilah Ade | アクチュアリー・データサイエンティスト | データ・金融・リスク ポートフォリオ',
   'seo.home.desc': 'ジャカルタ在住のアクチュアリー・データサイエンティスト Faradilah Ade のポートフォリオ。世界銀行、保険会社、公的機関向けのデータ基盤、予測、IFRS 17 財務分析、リスクモデリング。リモート業務・コンサルティングのご相談を承ります。',
-  'seo.contact.title': 'Faradilah Ade へのお問い合わせ — データ・金融・リスク コンサルティング',
+  'seo.contact.title': 'Faradilah Ade へのお問い合わせ | データ・金融・リスク コンサルティング',
   'seo.contact.desc': 'データサイエンス、財務分析、アクチュアリー・リスク業務のご相談は Faradilah Ade まで。1営業日以内に返信します。',
 
   'hero.eyebrow': 'アクチュアリー・データサイエンティスト · ジャカルタ・インドネシア',
@@ -504,7 +507,7 @@ const ja: Dict = {
   'sort.featured': '注目順',
   'sort.newest': '新しい順',
   'sort.oldest': '古い順',
-  'sort.az': 'A – Z',
+  'sort.az': 'A-Z',
   'view.grid': 'グリッド表示',
   'view.list': 'リスト表示',
   'work.viewMore': 'もっと見る',
@@ -584,7 +587,7 @@ const ja: Dict = {
   'footer.consultation': 'ご相談',
   'footer.scrollUp': '上へ戻る',
   'footer.replies': '1営業日以内に返信',
-  'footer.tagline': 'データ・金融・リスク — 実際に使われるために。',
+  'footer.tagline': 'データ・金融・リスク。実際に使われるために。',
   'footer.rights': 'All rights reserved.',
 
   'modal.close': '閉じる',
@@ -682,6 +685,7 @@ const ja: Dict = {
   'articles.external': '元のサイトで読む',
 
   'articles.kicker': 'ノートと記事',
+  'nav.language': '言語',
 }
 
 const zh: Dict = {
@@ -693,14 +697,14 @@ const zh: Dict = {
   'nav.menu': '菜单',
   'nav.admin': '管理',
 
-  'seo.home.title': 'Faradilah Ade — 精算数据科学家 | 数据、金融与风险作品集',
+  'seo.home.title': 'Faradilah Ade | 精算数据科学家 | 数据、金融与风险作品集',
   'seo.home.desc': '雅加达精算数据科学家 Faradilah Ade 的作品集：为世界银行、保险公司和公共机构构建数据管道、预测模型、IFRS 17 财务分析与风险建模。承接远程工作与咨询项目。',
-  'seo.contact.title': '联系 Faradilah Ade — 数据、金融与风险咨询',
+  'seo.contact.title': '联系 Faradilah Ade | 数据、金融与风险咨询',
   'seo.contact.desc': '数据科学、财务分析与精算风险项目，欢迎联系 Faradilah Ade。一个工作日内回复。',
 
   'hero.eyebrow': '精算数据科学家 · 印度尼西亚雅加达',
   'hero.title': '让数据成为金融与风险的决策依据。',
-  'hero.body': '我构建真正被机构使用的数据管道、财务模型与风险框架——从与世界银行合作的国家基础设施项目，到一万五千份保单的保险组合。',
+  'hero.body': '我构建真正被机构使用的数据管道、财务模型与风险框架，从与世界银行合作的国家基础设施项目，到一万五千份保单的保险组合。',
   'hero.cta': '发送邮件',
   'hero.cta2': 'WhatsApp',
   'hero.cta3': '查看作品',
@@ -720,7 +724,7 @@ const zh: Dict = {
   'pillar.finance.title': '金融',
   'pillar.finance.body': 'IFRS 17 影响分析、董事会与监管报告，以及在苏黎世 Topas 人寿将13家银行对账时间缩短70%的自动化方案。',
   'pillar.risk.title': '风险',
-  'pillar.risk.body': '基于精算方法的准备金评估、压力测试与定价——包括关于 Tweedie GLM 的已发表研究，以及与世界银行共同开发的风险框架。',
+  'pillar.risk.body': '基于精算方法的准备金评估、压力测试与定价，包括关于 Tweedie GLM 的已发表研究，以及与世界银行共同开发的风险框架。',
 
   'work.title': '作品',
   'work.home': '首页',
@@ -729,7 +733,7 @@ const zh: Dict = {
   'sort.featured': '精选优先',
   'sort.newest': '最新',
   'sort.oldest': '最早',
-  'sort.az': 'A – Z',
+  'sort.az': 'A-Z',
   'view.grid': '网格视图',
   'view.list': '列表视图',
   'work.viewMore': '查看更多',
@@ -781,11 +785,11 @@ const zh: Dict = {
   'faq.q1': '是否接受远程或国际项目？',
   'faq.a1': '是。我在雅加达（GMT+7）远程工作，与亚太地区及欧洲上午时段有充分的重叠，必要时也可到现场参加启动会。',
   'faq.q2': '承接哪些类型的项目？',
-  'faq.a2': '数据管道与预测、财务分析与 IFRS 17 报告、精算准备金评估、定价与风险框架——从两周的审计到数月的搭建。',
+  'faq.a2': '数据管道与预测、财务分析与 IFRS 17 报告、精算准备金评估、定价与风险框架，从两周的审计到数月的搭建。',
   'faq.q3': '使用哪些工具？',
   'faq.a3': '数据方面使用 Python、SQL、Airflow、dbt 和 Google Cloud 上的 BigQuery；精算工作使用 R 和 Excel；报告使用 Power BI 和 Looker Studio。每个项目都列出了具体技术栈。',
   'faq.q4': '项目通常如何开始？',
-  'faq.a4': '30分钟通话了解问题，随后提供包含范围、时间和费用的简短书面提案，然后启动——通常在一周内。',
+  'faq.a4': '30分钟通话了解问题，随后提供包含范围、时间和费用的简短书面提案，然后启动，通常在一周内。',
   'faq.q5': '是否签署保密协议并处理机密数据？',
   'faq.a5': '是。正因如此，这里的部分项目只作概述；细节可在保密协议下分享。',
   'faq.q6': '工作语言是什么？',
@@ -809,7 +813,7 @@ const zh: Dict = {
   'footer.consultation': '咨询',
   'footer.scrollUp': '回到顶部',
   'footer.replies': '一个工作日内回复',
-  'footer.tagline': '数据、金融与风险——为真正被使用而建。',
+  'footer.tagline': '数据、金融与风险。为真正被使用而建。',
   'footer.rights': '版权所有。',
 
   'modal.close': '关闭',
@@ -907,6 +911,7 @@ const zh: Dict = {
   'articles.external': '在原网站阅读',
 
   'articles.kicker': '笔记与文章',
+  'nav.language': '语言',
 }
 
 export const dictionaries: Record<Lang, Dict> = { en, id, ja, zh }

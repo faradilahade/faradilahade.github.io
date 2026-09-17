@@ -1,9 +1,62 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useLang } from '../contexts/LanguageContext'
 import { LANGS } from '../lib/translations'
 import { site, mailto } from '../lib/site'
-import { IconMail, IconMenu, IconClose, IconPhone, IconGrid } from './Icons'
+import { IconMail, IconMenu, IconClose, IconPhone, IconGrid, IconLanguage, IconChevronDown } from './Icons'
+
+/** Language switcher: the button shows each language in its own script; the list explains, in that language, that the site can be read in it. */
+function LanguageMenu() {
+  const { lang, setLang, t } = useLang()
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  const current = LANGS.find(l => l.code === lang) ?? LANGS[0]
+
+  useEffect(() => {
+    if (!open) return
+    const onDoc = (e: MouseEvent) => { if (!ref.current?.contains(e.target as Node)) setOpen(false) }
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false) }
+    document.addEventListener('mousedown', onDoc)
+    document.addEventListener('keydown', onKey)
+    return () => { document.removeEventListener('mousedown', onDoc); document.removeEventListener('keydown', onKey) }
+  }, [open])
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button" onClick={() => setOpen(o => !o)} aria-haspopup="listbox" aria-expanded={open}
+        aria-label={`${t('nav.language')}: ${current.native}`} title={current.hint}
+        className="inline-flex items-center gap-1.5 h-9 pl-3 pr-2.5 rounded-full ring-1 ring-ink/10 bg-white/60 text-[11px] font-semibold tracking-[.08em] text-slate hover:ring-steel hover:text-ink transition-colors duration-300"
+      >
+        <IconLanguage size={14} className="text-steel" />
+        <span lang={current.code}>{current.short}</span>
+        <IconChevronDown size={12} className={`text-fog transition-transform duration-300 ${open ? 'rotate-180' : ''}`} />
+      </button>
+
+      <div
+        role="listbox" aria-label={t('nav.language')}
+        className={`absolute right-0 top-full mt-2 w-72 glass p-1.5 z-50 origin-top-right transition-all duration-300 ease-smooth ${open ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-95 -translate-y-1 pointer-events-none'}`}
+      >
+        {LANGS.map(l => {
+          const on = l.code === lang
+          return (
+            <button
+              key={l.code} type="button" role="option" aria-selected={on} lang={l.code}
+              onClick={() => { setLang(l.code); setOpen(false) }}
+              className={`w-full flex items-start gap-3 px-3 py-2.5 rounded-xl text-left transition-colors duration-300 ${on ? 'bg-ink text-paper' : 'text-ink hover:bg-white/90'}`}
+            >
+              <span className={`mt-0.5 min-w-[3.2rem] text-[11px] font-semibold tracking-[.08em] ${on ? 'text-paper/70' : 'text-steel'}`}>{l.short}</span>
+              <span className="min-w-0">
+                <span className="block text-fl-sm font-semibold leading-tight">{l.native}</span>
+                <span className={`block mt-0.5 text-[11px] leading-snug ${on ? 'text-paper/70' : 'text-slate'}`}>{l.hint}</span>
+              </span>
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
 
 export default function Navbar() {
   const { lang, setLang, t } = useLang()
@@ -18,7 +71,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-40 bg-paper/70 backdrop-blur-xl border-b border-ink/[.06]">
       <div className="max-w-site mx-auto px-gutter h-14 flex items-stretch justify-between gap-4">
         <div className="flex items-stretch gap-5 lg:gap-7 min-w-0">
-          <Link to="/" className="self-center font-bold uppercase tracking-tight text-fl-base whitespace-nowrap" aria-label={`${site.name} — home`}>
+          <Link to="/" className="self-center font-bold uppercase tracking-tight text-fl-base whitespace-nowrap" aria-label={`${site.name}: home`}>
             {site.name}<span className="text-ocean">.</span>
           </Link>
 
@@ -43,17 +96,7 @@ export default function Navbar() {
             <IconPhone size={15} className="text-steel" /> {site.phoneDisplay}
           </a>
 
-          <div className="relative">
-            <select
-              aria-label="Language"
-              value={lang}
-              onChange={(e) => setLang(e.target.value as typeof lang)}
-              className="appearance-none bg-transparent border border-line rounded-sm pl-2.5 pr-6 py-1.5 text-[11px] font-semibold uppercase tracking-[.12em] text-slate cursor-pointer hover:border-steel hover:text-ink transition-colors"
-            >
-              {LANGS.map(l => <option key={l.code} value={l.code}>{l.short}</option>)}
-            </select>
-            <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[9px] text-fog">▾</span>
-          </div>
+          <LanguageMenu />
 
           <a
             href={mailto()}

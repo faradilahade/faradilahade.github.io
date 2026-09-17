@@ -23,10 +23,10 @@ export default {
         sand: "#8FC3E3",
       },
       fontFamily: {
-        // One family everywhere — display and body share it so type stays uniform.
-        display: ['"Instrument Sans"', 'system-ui', 'sans-serif'],
-        body: ['"Instrument Sans"', 'system-ui', 'sans-serif'],
-        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
+        // One family everywhere: display, body and code share Plus Jakarta Sans so type stays uniform.
+        display: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        body: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        mono: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         'fl-xs': 'var(--fs-xs)',

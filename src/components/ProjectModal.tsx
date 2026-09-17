@@ -95,7 +95,7 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
     if (!project) return
     const url = absoluteUrl(`work/${project.slug}`)
     try {
-      if (navigator.share) { await navigator.share({ title: `${project.title} — ${site.name}`, url }); return }
+      if (navigator.share) { await navigator.share({ title: `${project.title} | ${site.name}`, url }); return }
       await navigator.clipboard.writeText(url)
       setToast(t('modal.copied'))
       window.setTimeout(() => setToast(''), 1800)
@@ -162,7 +162,7 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
     >
       <div className="modal-backdrop absolute inset-0 bg-night/85 backdrop-blur-sm" onClick={requestClose} />
 
-      {/* Close — always top right, like Behance */}
+      {/* Close: always top right, like Behance */}
       <button
         ref={closeRef}
         type="button"
@@ -186,7 +186,7 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
       )}
 
       <div className="absolute inset-x-0 top-0 md:top-[clamp(.75rem,3vh,2.25rem)] bottom-0 flex justify-center gap-5 md:px-[clamp(0px,2vw,2rem)]">
-        {/* Panel — full-screen on phones, floating sheet on larger screens */}
+        {/* Panel: full-screen on phones, floating sheet on larger screens */}
         <div
           ref={panelRef}
           className="modal-panel relative w-full max-w-[1040px] h-full bg-paper text-ink md:rounded-t-2xl shadow-modal overflow-y-auto overflow-x-hidden scroll-quiet pb-24 md:pb-10"
@@ -252,7 +252,7 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
                 {project.embed_url && (
                   <div className="mt-10 rounded-xl overflow-hidden ring-1 ring-line bg-frost">
                     <iframe
-                      src={project.embed_url} title={`${view.title} — Behance`} loading="lazy" allowFullScreen allow="clipboard-write"
+                      src={project.embed_url} title={`${view.title} on Behance`} loading="lazy" allowFullScreen allow="clipboard-write"
                       referrerPolicy="strict-origin-when-cross-origin" className="w-full aspect-[404/316] md:aspect-[16/9]"
                     />
                   </div>
@@ -263,7 +263,7 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
                     <div className="space-y-4 md:space-y-6">
                       {gallery.map((src, i) => (
                         <figure key={src} className="rounded-xl overflow-hidden bg-frost ring-1 ring-line">
-                          <img src={src} alt={`${view.title} — ${i + 1}`} loading="lazy" decoding="async" className="w-full h-auto" />
+                          <img src={src} alt={`${view.title} (${i + 1})`} loading="lazy" decoding="async" className="w-full h-auto" />
                         </figure>
                       ))}
                     </div>
@@ -342,7 +342,7 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
           )}
         </div>
 
-        {/* Right rail — desktop (Behance-style actions) */}
+        {/* Right rail: desktop (Behance-style actions) */}
         {project && (
           <aside className="hidden md:flex flex-col items-center gap-5 pt-14 shrink-0 w-[68px]" aria-label="Project actions">
             {railBtn(t('modal.contact'), <IconMail size={20} />, undefined, contactHref, 'is-primary')}
@@ -360,7 +360,7 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
         )}
       </div>
 
-      {/* Bottom bar — mobile */}
+      {/* Bottom bar: mobile */}
       {project && (
         <div className="md:hidden absolute inset-x-0 bottom-0 z-30 bg-night/92 backdrop-blur border-t border-paper/10 px-2 py-2 flex items-center justify-around" role="toolbar" aria-label="Project actions">
           {railBtn(t('modal.contact'), <IconMail size={18} />, undefined, contactHref, 'is-primary')}

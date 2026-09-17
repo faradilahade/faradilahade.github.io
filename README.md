@@ -1,6 +1,6 @@
 # Faradilah Ade — Portfolio 2026
 
-Portofolio profesional untuk memulai kerja remote skala internasional. Satu keluarga huruf (Instrument Sans) dan satu palet biru: **hero tipografis** dengan nama besar di tengah, kartu-kartu melayang (dasbor peramalan, potongan kode, rumus aktuaria + statistik, daftar keahlian, pil telepon) yang bergerak halus mengikuti pointer & scroll, tombol **Request a call** di tengah; satu latar terang yang menyambung dari atas ke bawah, bagian **Work** (chip Data · Finance · Risk, sidebar filter) dan bagian **Articles** terpisah, keduanya dengan **kartu kaca (glass/blur)**; pop-up detail proyek & artikel; FAQ; form *Book a call*; **panel admin ala WordPress/Medium** untuk proyek **dan artikel** (tambah, edit, hapus, duplikat, draft, pratinjau langsung); serta **terjemahan otomatis** ke Inggris · Indonesia · 日本語 · 中文.
+Portofolio profesional untuk memulai kerja remote skala internasional. Satu keluarga huruf (Plus Jakarta Sans) dan satu palet biru: **hero tipografis** dengan nama besar di tengah, kartu-kartu melayang (dasbor peramalan, potongan kode, rumus aktuaria + statistik, daftar keahlian, pil telepon) yang bergerak halus mengikuti pointer & scroll, tombol **Request a call** di tengah; satu latar terang yang menyambung dari atas ke bawah, bagian **Work** (chip Data · Finance · Risk, sidebar filter) dan bagian **Articles** terpisah, keduanya dengan **kartu kaca (glass/blur)**; pop-up detail proyek & artikel; FAQ; form *Book a call*; **panel admin ala WordPress/Medium** untuk proyek **dan artikel** (tambah, edit, hapus, duplikat, draft, pratinjau langsung); serta **terjemahan otomatis** ke Inggris · Indonesia · 日本語 · 中文.
 
 **Stack:** Vite + React + TypeScript + Tailwind CSS + Supabase (database, auth, storage) → GitHub Pages.
 
@@ -142,7 +142,7 @@ Tips agar mudah ditemukan mesin pencari: judul berisi hasil terukur, ringkasan m
 | --- | --- |
 | Nama, email, WhatsApp, link sosial, domain username admin, saklar auto-translate, kata kunci SEO | `src/lib/site.ts` |
 | Teks UI 4 bahasa (judul, tombol, bio, sorotan 240/92%/15.000/350+) | `src/lib/translations.ts` |
-| Palet warna & skala tipografi | `tailwind.config.js` — satu keluarga biru (night, ink, graphite, steel, ocean, tide, frost, paper, line, fog) dan satu font (Instrument Sans); token `--fs-*` di `src/index.css` |
+| Palet warna & skala tipografi | `tailwind.config.js` — satu keluarga biru (night, ink, graphite, steel, ocean, tide, frost, paper, line, fog) dan satu font (Plus Jakarta Sans); token `--fs-*` di `src/index.css` |
 | Hero: kartu melayang (dasbor, kode, rumus, keahlian, pil telepon), gerak paralaks | `src/components/Hero.tsx` (angka statistik & rumus ada di komponen `DashboardCard`, `FormulaCard`, `SkillsCard`) |
 | Latar situs, gaya kaca, animasi float | kelas `.site-bg`, `.site-grid`, `.glass`, `.hero-card`, keyframes di `tailwind.config.js` dan `src/index.css` |
 | FAQ (8 tanya-jawab, 4 bahasa) | kunci `faq.q1…a8` di `src/lib/translations.ts` |

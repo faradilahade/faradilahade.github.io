@@ -104,9 +104,9 @@ export default function Overview({ projects, articles, articlesMissing, onNew, o
             <h3 className="mt-2 font-bold uppercase tracking-tight text-fl-lg">Publish a case study in 10 minutes</h3>
             <ol className="mt-3 space-y-2 text-fl-sm text-paper/85 list-decimal pl-4">
               <li>Title with the outcome, e.g. <em>“Forecasting for 240 dam sites at 92% accuracy”</em>.</li>
-              <li>Summary in two sentences — what, for whom, result.</li>
+              <li>Summary in two sentences: what, for whom, result.</li>
               <li>Story: Context → What I built → Result. Add a cover and a few images.</li>
-              <li>Tools and keywords — they become filters, badges and SEO signals.</li>
+              <li>Tools and keywords: they become filters, badges and SEO signals.</li>
               <li>Auto-translate, skim the four languages, publish.</li>
             </ol>
             <button type="button" onClick={onNew} className="mt-4 inline-flex items-center gap-2 bg-paper text-ink px-4 py-2.5 rounded-lg text-[11px] font-semibold uppercase tracking-[.12em] hover:bg-tide"><IconPlus size={14} /> New project</button>

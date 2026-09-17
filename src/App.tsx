@@ -24,7 +24,7 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [group])
 
-  // The admin area has its own shell — no public navbar/footer.
+  // The admin area has its own shell: no public navbar/footer.
   if (isAdmin) {
     return (
       <Routes>

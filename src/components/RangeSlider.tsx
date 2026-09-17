@@ -35,7 +35,7 @@ export default function RangeSlider({ min, max, value, onChange, label = 'Range'
       </div>
       <div className="mt-2 grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-fl-sm">
         <span className="ring-1 ring-ink/10 bg-white/70 rounded-md px-2.5 py-1.5 text-center tabular-nums text-ink">{lo}</span>
-        <span className="text-fog">—</span>
+        <span className="text-fog">·</span>
         <span className="ring-1 ring-ink/10 bg-white/70 rounded-md px-2.5 py-1.5 text-center tabular-nums text-ink">{hi}</span>
       </div>
     </div>

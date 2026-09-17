@@ -1,6 +1,6 @@
 /**
  * Single place for everything about the person and the site itself.
- * Edit here — every page, the footer, SEO tags and the contact buttons read from it.
+ * Edit here: every page, the footer, SEO tags and the contact buttons read from it.
  */
 export const site = {
   name: 'Faradilah Ade',
@@ -13,7 +13,7 @@ export const site = {
   timezone: 'GMT+7',
   // Canonical production URL (user site). Runtime code also derives the live origin.
   url: 'https://faradilahade.github.io',
-  avatar: 'avatar.jpg', // drop a square photo at public/avatar.jpg — falls back to a monogram
+  avatar: 'avatar.jpg', // drop a square photo at public/avatar.jpg: falls back to a monogram
   ogImage: 'og.png',
 
   links: [
@@ -27,7 +27,7 @@ export const site = {
 
   /**
    * Admin sign-in accepts a username. A bare username is mapped to
-   * `<username>@<adminEmailDomain>` — create that user once in Supabase → Authentication.
+   * `<username>@<adminEmailDomain>`: create that user once in Supabase → Authentication.
    * e.g. username "admin-fara" → admin-fara@faradilahade.github.io
    */
   adminEmailDomain: 'faradilahade.github.io',
@@ -38,7 +38,7 @@ export const site = {
    */
   autoTranslate: true,
 
-  // Search terms the site should rank for — used in meta keywords and JSON-LD "knowsAbout"
+  // Search terms the site should rank for: used in meta keywords and JSON-LD "knowsAbout"
   keywords: [
     'Faradilah Ade', 'actuarial data scientist', 'actuary Indonesia', 'data scientist Jakarta',
     'financial analytics', 'risk modelling', 'IFRS 17', 'insurance reserving', 'stress testing',
@@ -54,7 +54,7 @@ export const site = {
 
 export type SiteLinkKey = typeof site.links[number]['key']
 
-/** Live origin + base path — correct on localhost, project pages and the root user site. */
+/** Live origin + base path: correct on localhost, project pages and the root user site. */
 export function siteOrigin(): string {
   if (typeof window === 'undefined') return site.url + '/'
   const base = import.meta.env.BASE_URL || '/'

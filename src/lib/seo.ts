@@ -45,7 +45,7 @@ export function useSeo(input: SeoInput) {
   useEffect(() => {
     const url = absoluteUrl(path)
     const img = image || absoluteUrl(asset(site.ogImage).replace(/^\//, ''))
-    const fullTitle = title.includes(site.name) ? title : `${title} — ${site.name}`
+    const fullTitle = title.includes(site.name) ? title : `${title} | ${site.name}`
 
     document.title = fullTitle
     upsertMeta('name', 'description', description)

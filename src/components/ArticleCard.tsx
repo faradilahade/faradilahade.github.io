@@ -27,7 +27,7 @@ export default function ArticleCard({ a, index = 0, featuredLayout = false }: Pr
   return (
     <article className={`reveal reveal-delay-${delay} group relative glass glass-hover overflow-hidden flex flex-col ${featuredLayout ? 'sm:col-span-2 sm:grid sm:grid-cols-2' : ''}`}>
       <div className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[130%] h-56 rounded-full bg-gradient-to-b from-ocean/40 to-transparent blur-2xl opacity-60 group-hover:opacity-100 transition-opacity duration-700" aria-hidden="true" />
-      <Link to={to} className={`relative block overflow-hidden ${featuredLayout ? 'sm:h-full' : 'mx-4 mt-4 rounded-xl ring-1 ring-ink/[.06]'}`} aria-label={`${a.title} — ${t('articles.read')}`}>
+      <Link to={to} className={`relative block overflow-hidden ${featuredLayout ? 'sm:h-full' : 'mx-4 mt-4 rounded-xl ring-1 ring-ink/[.06]'}`} aria-label={`${a.title}: ${t('articles.read')}`}>
         <div className={`relative overflow-hidden ${featuredLayout ? 'h-full min-h-[220px]' : 'aspect-[16/10]'}`} style={a.cover_url ? undefined : placeholder(a.slug)}>
           {a.cover_url ? (
             <img src={a.cover_url} alt={a.title} loading="lazy" decoding="async" onLoad={() => setLoaded(true)}

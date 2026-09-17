@@ -66,7 +66,7 @@ export default function Login() {
         <div className="w-full max-w-sm">
           <div className="w-12 h-12 rounded-full bg-ink text-paper flex items-center justify-center mb-5"><IconUser size={22} /></div>
           <h1 className="h-display text-fl-2xl">Sign in</h1>
-          <p className="mt-2 text-fl-sm text-slate">Manage your portfolio — add, edit, translate and publish work.</p>
+          <p className="mt-2 text-fl-sm text-slate">Manage your portfolio: add, edit, translate and publish work.</p>
 
           {!supabaseConfigured && (
             <p className="mt-6 rounded-lg border border-steel/40 bg-steel/10 text-ink text-fl-sm p-4 leading-relaxed">

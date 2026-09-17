@@ -57,10 +57,10 @@ export function parseEmbed(input: string): string {
 export function hint(msg: string): string {
   const m = msg.toLowerCase()
   if (m.includes('column') && m.includes('does not exist')) {
-    return `${msg} — run supabase/schema.sql again in the Supabase SQL Editor (it adds the new columns and is safe to re-run).`
+    return `${msg}. Run supabase/schema.sql again in the Supabase SQL Editor (it adds the new columns and is safe to re-run).`
   }
   if (m.includes('row-level security') || m.includes('permission denied')) {
-    return `${msg} — your session may have expired. Sign out and in again, and make sure the policies from supabase/schema.sql are applied.`
+    return `${msg}. Your session may have expired. Sign out and in again, and make sure the policies from supabase/schema.sql are applied.`
   }
   if (m.includes('duplicate key') && m.includes('slug')) return 'That slug is already used by another project. Change the slug.'
   if (m.includes('articles') && (m.includes('does not exist') || m.includes('schema cache'))) return 'The "articles" table is missing. Run supabase/schema.sql once in the Supabase SQL Editor (it creates the table and is safe to re-run).'

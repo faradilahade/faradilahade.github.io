@@ -16,7 +16,7 @@ type Props = {
   onNavigate: (slug: string) => void
 }
 
-/** Reading sheet for an article — same behaviour as the project modal (Esc, arrows, focus trap, share). */
+/** Reading sheet for an article: same behaviour as the project modal (Esc, arrows, focus trap, share). */
 export default function ArticleModal({ article, list, loading, onClose, onNavigate }: Props) {
   const { t, locale } = useLang()
   const panelRef = useRef<HTMLDivElement>(null)
@@ -75,7 +75,7 @@ export default function ArticleModal({ article, list, loading, onClose, onNaviga
     if (!article) return
     const url = absoluteUrl(`articles/${article.slug}`)
     try {
-      if (navigator.share) { await navigator.share({ title: `${article.title} — ${site.name}`, url }); return }
+      if (navigator.share) { await navigator.share({ title: `${article.title} | ${site.name}`, url }); return }
       await navigator.clipboard.writeText(url)
       setToast(t('modal.copied'))
       window.setTimeout(() => setToast(''), 1800)

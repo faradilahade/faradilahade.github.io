@@ -10,7 +10,7 @@ export default function BookCall() {
 
   const submit = (e: FormEvent) => {
     e.preventDefault()
-    const subject = `${t('call.subject')}${name ? ` — ${name}` : ''}`
+    const subject = `${t('call.subject')}${name ? ` (${name})` : ''}`
     const body = `${t('call.body')}\n\n${t('call.name')}: ${name}\n${t('call.contact')}: ${contact}\n`
     window.location.href = mailto(subject, body)
   }

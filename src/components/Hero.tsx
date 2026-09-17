@@ -5,7 +5,7 @@ import { IconPhone, IconArrowDown, IconMail, IconWhatsapp, IconArrowRight } from
 
 /* ------------------------------------------------------------------
    Hero: the name set as large type in the middle, surrounded by
-   floating "work" cards — a live-looking dashboard, a code snippet,
+   floating "work" cards: a live-looking dashboard, a code snippet,
    the actuarial formulas used every week and a skills list. Cards
    drift on their own and respond to the pointer and to scrolling.
 ------------------------------------------------------------------- */
@@ -50,7 +50,7 @@ function DashboardCard() {
   const { t } = useLang()
   const acc = useCountUp(92)
   const sites = useCountUp(240, 1800, 700)
-  // observed vs forecast — smooth, plausible series
+  // observed vs forecast: smooth, plausible series
   const obs = 'M0 58 C 18 52, 30 40, 48 44 S 78 30, 96 34 S 126 18, 148 24 S 178 12, 200 16 S 232 8, 260 12'
   const fc = 'M0 60 C 20 56, 32 44, 50 46 S 80 34, 98 36 S 128 22, 150 26 S 180 16, 202 18 S 234 10, 260 13'
   return (

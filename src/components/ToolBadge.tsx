@@ -1,5 +1,5 @@
 /**
- * Small square monogram badges for tools — the equivalent of Behance's
+ * Small square monogram badges for tools: the equivalent of Behance's
  * Ps / Ai / Ae icons. Colours are picked deterministically from the blue
  * palette so the same tool always looks the same and nothing clashes.
  */

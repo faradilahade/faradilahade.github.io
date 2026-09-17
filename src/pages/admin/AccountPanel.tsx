@@ -34,7 +34,7 @@ export default function AccountPanel({ email, onSignOut }: Props) {
         <dl className="mt-4 space-y-3 text-fl-sm">
           <div><dt className="label-caps">Username</dt><dd className="mt-0.5 font-mono">{username}</dd></div>
           <div><dt className="label-caps">Sign-in email</dt><dd className="mt-0.5 font-mono break-all">{email}</dd></div>
-          <div><dt className="label-caps">Role</dt><dd className="mt-0.5">Administrator — can create, edit, translate, publish and delete projects and files.</dd></div>
+          <div><dt className="label-caps">Role</dt><dd className="mt-0.5">Administrator: can create, edit, translate, publish and delete projects and files.</dd></div>
         </dl>
         <button type="button" onClick={onSignOut} className="mt-6 inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-line text-[11px] font-semibold uppercase tracking-[.12em] text-slate hover:border-steel hover:text-ink"><IconLogout size={14} /> Sign out</button>
       </section>
