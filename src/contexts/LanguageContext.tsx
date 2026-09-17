@@ -1,18 +1,23 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
-import { Lang, dictionaries } from '../lib/translations'
+import { createContext, useContext, useEffect, useMemo, useState, ReactNode, useCallback } from 'react'
+import { Lang, LANGS, dictionaries } from '../lib/translations'
 
 type Ctx = {
   lang: Lang
+  locale: string
   setLang: (l: Lang) => void
   t: (key: string) => string
 }
 
 const LanguageContext = createContext<Ctx | null>(null)
 
+const VALID: Lang[] = ['en', 'id', 'ja', 'zh']
+
 function detectLang(): Lang {
-  const saved = localStorage.getItem('lang') as Lang | null
-  if (saved && ['en', 'id', 'ja', 'zh'].includes(saved)) return saved
-  const nav = navigator.language.toLowerCase()
+  try {
+    const saved = localStorage.getItem('lang') as Lang | null
+    if (saved && VALID.includes(saved)) return saved
+  } catch { /* storage may be blocked */ }
+  const nav = (navigator.language || 'en').toLowerCase()
   if (nav.startsWith('id')) return 'id'
   if (nav.startsWith('ja')) return 'ja'
   if (nav.startsWith('zh')) return 'zh'
@@ -20,23 +25,30 @@ function detectLang(): Lang {
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>('en')
+  const [lang, setLangState] = useState<Lang>(() => (typeof window === 'undefined' ? 'en' : detectLang()))
 
-  useEffect(() => { setLangState(detectLang()) }, [])
+  useEffect(() => {
+    document.documentElement.lang = lang
+  }, [lang])
 
-  const setLang = (l: Lang) => {
+  const setLang = useCallback((l: Lang) => {
     setLangState(l)
-    localStorage.setItem('lang', l)
-    document.documentElement.lang = l
-  }
+    try { localStorage.setItem('lang', l) } catch { /* ignore */ }
+  }, [])
 
-  const t = (key: string) => dictionaries[lang][key] ?? dictionaries.en[key] ?? key
-
-  return (
-    <LanguageContext.Provider value={{ lang, setLang, t }}>
-      {children}
-    </LanguageContext.Provider>
+  const t = useCallback(
+    (key: string) => dictionaries[lang][key] ?? dictionaries.en[key] ?? key,
+    [lang],
   )
+
+  const value = useMemo<Ctx>(() => ({
+    lang,
+    locale: LANGS.find(l => l.code === lang)?.locale ?? 'en-US',
+    setLang,
+    t,
+  }), [lang, setLang, t])
+
+  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>
 }
 
 export function useLang() {

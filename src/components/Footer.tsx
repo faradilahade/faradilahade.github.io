@@ -1,19 +1,36 @@
+import { Link, useLocation } from 'react-router-dom'
 import { useLang } from '../contexts/LanguageContext'
+import { site } from '../lib/site'
 
 export default function Footer() {
   const { t } = useLang()
+  const { pathname } = useLocation()
   const year = new Date().getFullYear()
+  const isAdmin = pathname.startsWith('/admin')
+
   return (
-    <footer className="border-t border-mist bg-ink text-paper/70">
-      <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-sm">
-        <p className="font-display text-paper text-lg">Faradilah Ade<span className="text-brass">.</span></p>
-        <div className="flex flex-wrap gap-x-6 gap-y-2">
-          <a className="link-underline" href="mailto:faradilahade@gmail.com">faradilahade@gmail.com</a>
-          <a className="link-underline" href="https://anakaktuaria.org" target="_blank" rel="noreferrer">anakaktuaria.org</a>
-          <a className="link-underline" href="https://www.tiktok.com/@anakaktuaria.id" target="_blank" rel="noreferrer">TikTok</a>
-          <a className="link-underline" href="https://www.youtube.com/@KomunitasAnakAktuariaIndonesia" target="_blank" rel="noreferrer">YouTube</a>
+    <footer className={`border-t ${isAdmin ? 'border-mist bg-paper text-slate' : 'border-paper/10 bg-night text-fog'}`}>
+      <div className="max-w-site mx-auto px-gutter py-10 md:py-12 grid gap-8 md:grid-cols-[1.2fr_2fr_1fr] items-start text-fl-sm">
+        <div>
+          <p className={`font-display text-fl-lg ${isAdmin ? 'text-ink' : 'text-paper'}`}>
+            {site.name}<span className="text-brass">.</span>
+          </p>
+          <p className="mt-1.5 max-w-xs leading-relaxed">{t('footer.tagline')}</p>
         </div>
-        <p>© {year} · {t('footer.rights')}</p>
+
+        <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2.5">
+          <a className="link-underline" href={`mailto:${site.email}`}>{site.email}</a>
+          {site.links.map(l => (
+            <a key={l.key} className="link-underline" href={l.href} target="_blank" rel="noreferrer">{l.label}</a>
+          ))}
+        </nav>
+
+        <div className="md:text-right space-y-1.5">
+          <p>© {year} {site.name} · {t('footer.rights')}</p>
+          <p className="text-fl-xs opacity-60">
+            {site.location} · {site.timezone} · <Link to="/admin" className="link-underline">{t('nav.admin')}</Link>
+          </p>
+        </div>
       </div>
     </footer>
   )

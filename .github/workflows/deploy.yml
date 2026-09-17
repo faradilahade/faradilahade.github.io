@@ -25,17 +25,24 @@ jobs:
           node-version: 20
           cache: npm
 
+      # Enables GitHub Pages (source: GitHub Actions) if it is not enabled yet
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+        continue-on-error: true
+
       - run: npm ci
 
       - name: Build
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-          # Base path otomatis: "/" untuk username.github.io, "/repo/" untuk project page
+          # Base path is automatic:
+          #   repo named  <owner>.github.io  ->  "/"        (https://faradilahade.github.io/)
+          #   any other repo name            ->  "/<repo>/" (https://faradilahade.github.io/<repo>/)
           VITE_BASE: ${{ github.event.repository.name == format('{0}.github.io', github.repository_owner) && '/' || format('/{0}/', github.event.repository.name) }}
-        run: |
-          npm run build
-          cp dist/index.html dist/404.html
+          VITE_SITE_ORIGIN: https://${{ github.repository_owner }}.github.io
+        run: npm run build
 
       - uses: actions/upload-pages-artifact@v3
         with:

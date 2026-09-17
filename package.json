@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build": "tsc && vite build && node scripts/postbuild.mjs",
+    "preview": "vite preview",
+    "images": "node scripts/make-images.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.0",
