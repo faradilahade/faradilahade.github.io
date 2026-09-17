@@ -17,11 +17,23 @@ function pageGroup(pathname: string) {
 export default function App() {
   const { pathname, hash } = useLocation()
   const group = pageGroup(pathname)
+  const isAdmin = pathname.startsWith('/admin')
 
   useEffect(() => {
     if (!hash) window.scrollTo({ top: 0 })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [group])
+
+  // The admin area has its own WordPress-style shell — no public navbar/footer.
+  if (isAdmin) {
+    return (
+      <Routes>
+        <Route path="/admin" element={<Login />} />
+        <Route path="/admin/dashboard" element={<Dashboard />} />
+        <Route path="/admin/*" element={<Navigate to="/admin" replace />} />
+      </Routes>
+    )
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -32,10 +44,8 @@ export default function App() {
             <Route path="/" element={<Outlet />} />
             <Route path="/work/:slug" element={<Outlet />} />
           </Route>
-          <Route path="/work" element={<Navigate to="/#work" replace />} />
+          <Route path="/work" element={<Navigate to="/#showcase" replace />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/admin" element={<Login />} />
-          <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

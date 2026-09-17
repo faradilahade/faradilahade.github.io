@@ -1,13 +1,21 @@
 import { useEffect, useState, FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { supabase, supabaseConfigured } from '../../lib/supabase'
-import { useLang } from '../../contexts/LanguageContext'
+import { site } from '../../lib/site'
 import { useSeo } from '../../lib/seo'
+import { IconEye, IconArrowLeft, IconUser } from '../../components/Icons'
+
+/** "admin-fara" → "admin-fara@<adminEmailDomain>"; a full email is used as typed. */
+export function usernameToEmail(input: string): string {
+  const v = input.trim().toLowerCase()
+  if (!v) return ''
+  return v.includes('@') ? v : `${v}@${site.adminEmailDomain}`
+}
 
 function friendly(msg: string): string {
   const m = msg.toLowerCase()
-  if (m.includes('invalid login credentials')) return 'Email or password is incorrect. Check the user you created under Supabase → Authentication → Users.'
-  if (m.includes('email not confirmed')) return 'This email is not confirmed yet. In Supabase → Authentication → Users, open the user and confirm the email (or disable "Confirm email" in Auth settings).'
+  if (m.includes('invalid login credentials')) return 'Username or password is incorrect. The admin user must exist in Supabase → Authentication → Users (see supabase/admin-user.sql).'
+  if (m.includes('email not confirmed')) return 'This user is not confirmed yet. In Supabase → Authentication → Users open it and confirm the email.'
   if (m.includes('invalid path')) return 'The Supabase URL is wrong: it must be the project URL (https://xxxx.supabase.co) without /rest/v1/.'
   if (m.includes('failed to fetch') || m.includes('networkerror')) return 'Could not reach Supabase. Check the project URL and your connection.'
   return msg
@@ -15,9 +23,9 @@ function friendly(msg: string): string {
 
 export default function Login() {
   const nav = useNavigate()
-  const { t } = useLang()
-  const [email, setEmail] = useState('')
+  const [user, setUser] = useState('')
   const [password, setPassword] = useState('')
+  const [show, setShow] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -35,7 +43,7 @@ export default function Login() {
     setError('')
     setLoading(true)
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
+      const { error } = await supabase.auth.signInWithPassword({ email: usernameToEmail(user), password })
       if (error) setError(friendly(error.message))
       else nav('/admin/dashboard', { replace: true })
     } catch (err) {
@@ -45,37 +53,55 @@ export default function Login() {
     }
   }
 
-  const field = 'w-full border border-mist rounded-lg px-3.5 py-2.5 bg-white text-ink focus:border-steel outline-none transition-colors'
+  const field = 'w-full border border-line rounded-lg px-3.5 py-2.5 bg-white text-ink focus:border-steel outline-none transition-colors'
 
   return (
-    <section className="page-enter max-w-sm mx-auto px-gutter py-section">
-      <h1 className="font-display text-fl-2xl text-ink">Admin sign in</h1>
-      <p className="mt-2 text-fl-sm text-slate">Manage your portfolio content.</p>
+    <main className="min-h-screen bg-paper text-ink flex flex-col">
+      <div className="px-gutter h-14 flex items-center justify-between border-b border-line bg-white/70 backdrop-blur">
+        <Link to="/" className="font-bold uppercase tracking-tight text-fl-base">{site.name}<span className="text-brass">.</span> <span className="text-fog font-medium normal-case tracking-normal">· Admin</span></Link>
+        <Link to="/" className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[.14em] text-slate hover:text-ink"><IconArrowLeft size={14} /> View site</Link>
+      </div>
 
-      {!supabaseConfigured && (
-        <p className="mt-6 rounded-lg border border-brass/40 bg-brass/10 text-ink text-fl-sm p-4 leading-relaxed">
-          {t('admin.notConfigured')}
-        </p>
-      )}
+      <section className="flex-1 flex items-center justify-center px-gutter py-12">
+        <div className="w-full max-w-sm">
+          <div className="w-12 h-12 rounded-full bg-ink text-paper flex items-center justify-center mb-5"><IconUser size={22} /></div>
+          <h1 className="h-display text-fl-2xl">Sign in</h1>
+          <p className="mt-2 text-fl-sm text-slate">Manage your portfolio — add, edit, translate and publish work.</p>
 
-      <form onSubmit={handleLogin} className="mt-8 space-y-4">
-        <div>
-          <label className="block text-fl-sm text-slate mb-1.5" htmlFor="email">Email</label>
-          <input id="email" type="email" required autoComplete="username" value={email} onChange={e => setEmail(e.target.value)} className={field} />
+          {!supabaseConfigured && (
+            <p className="mt-6 rounded-lg border border-brass/40 bg-brass/10 text-ink text-fl-sm p-4 leading-relaxed">
+              Supabase is not configured for this build. Set <code className="font-mono text-[12px]">VITE_SUPABASE_URL</code> and <code className="font-mono text-[12px]">VITE_SUPABASE_ANON_KEY</code> (GitHub → Settings → Secrets) and redeploy.
+            </p>
+          )}
+
+          <form onSubmit={handleLogin} className="mt-8 space-y-4 bg-white border border-line rounded-2xl p-6 shadow-sm">
+            <div>
+              <label className="label-caps block mb-1.5" htmlFor="user">Username or email</label>
+              <input id="user" type="text" required autoComplete="username" autoCapitalize="none" spellCheck={false} value={user} onChange={e => setUser(e.target.value)} className={field} placeholder="admin-fara" />
+              {user && !user.includes('@') && (
+                <p className="mt-1.5 text-[11px] text-fog">Signs in as <span className="font-mono">{usernameToEmail(user)}</span></p>
+              )}
+            </div>
+            <div>
+              <label className="label-caps block mb-1.5" htmlFor="password">Password</label>
+              <div className="relative">
+                <input id="password" type={show ? 'text' : 'password'} required autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} className={`${field} pr-11`} />
+                <button type="button" onClick={() => setShow(s => !s)} aria-label={show ? 'Hide password' : 'Show password'} className={`absolute right-2.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-md flex items-center justify-center ${show ? 'text-steel' : 'text-fog'} hover:text-ink`}>
+                  <IconEye size={16} />
+                </button>
+              </div>
+            </div>
+            {error && <p className="text-fl-sm text-red-700 leading-relaxed" role="alert">{error}</p>}
+            <button type="submit" disabled={loading || !supabaseConfigured} className="w-full bg-ink text-paper py-3 rounded-lg text-[11px] font-semibold uppercase tracking-[.16em] hover:bg-steel transition-colors disabled:opacity-60">
+              {loading ? 'Signing in…' : 'Sign in'}
+            </button>
+          </form>
+
+          <p className="mt-5 text-[11px] text-fog leading-relaxed">
+            First time? Create the admin user once in Supabase (Authentication → Users, or run <span className="font-mono">supabase/admin-user.sql</span>). Username <span className="font-mono">admin-fara</span> maps to <span className="font-mono">admin-fara@{site.adminEmailDomain}</span>.
+          </p>
         </div>
-        <div>
-          <label className="block text-fl-sm text-slate mb-1.5" htmlFor="password">Password</label>
-          <input id="password" type="password" required autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} className={field} />
-        </div>
-        {error && <p className="text-fl-sm text-red-700 leading-relaxed" role="alert">{error}</p>}
-        <button
-          type="submit"
-          disabled={loading || !supabaseConfigured}
-          className="w-full bg-ink text-paper py-2.5 rounded-lg hover:bg-steel transition-colors disabled:opacity-60"
-        >
-          {loading ? 'Signing in…' : 'Sign in'}
-        </button>
-      </form>
-    </section>
+      </section>
+    </main>
   )
 }

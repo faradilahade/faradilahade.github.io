@@ -90,3 +90,36 @@ export const IconDownload = ({ size, ...p }: P) => (
 export const IconTag = ({ size, ...p }: P) => (
   <svg {...base(size)} {...p}><path d="M3 12V4h8l10 10-8 8z" /><circle cx="7.5" cy="8.5" r="1.2" /></svg>
 )
+export const IconEdit = ({ size, ...p }: P) => (
+  <svg {...base(size)} {...p}><path d="M4 20h4l10.5-10.5a2.1 2.1 0 0 0-3-3L5 17z" /><path d="m13.5 6.5 3 3" /></svg>
+)
+export const IconTrash = ({ size, ...p }: P) => (
+  <svg {...base(size)} {...p}><path d="M4 7h16" /><path d="M10 11v6M14 11v6" /><path d="M6 7l1 13h10l1-13" /><path d="M9 7V4h6v3" /></svg>
+)
+export const IconCopy = ({ size, ...p }: P) => (
+  <svg {...base(size)} {...p}><rect x="9" y="9" width="11" height="11" rx="2" /><path d="M5 15V6a2 2 0 0 1 2-2h9" /></svg>
+)
+export const IconEye = ({ size, ...p }: P) => (
+  <svg {...base(size)} {...p}><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z" /><circle cx="12" cy="12" r="2.5" /></svg>
+)
+export const IconUpload = ({ size, ...p }: P) => (
+  <svg {...base(size)} {...p}><path d="M12 16V4" /><path d="m8 8 4-4 4 4" /><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" /></svg>
+)
+export const IconLogout = ({ size, ...p }: P) => (
+  <svg {...base(size)} {...p}><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4" /><path d="M14 8l4 4-4 4" /><path d="M18 12H9" /></svg>
+)
+export const IconLanguage = ({ size, ...p }: P) => (
+  <svg {...base(size)} {...p}><path d="M4 5h9M8.5 3v2M6 9c1.5 3 4 5 6.5 6.5" /><path d="M11 9c-1 3-3 5.5-6 7" /><path d="m13 20 3.5-8 3.5 8M14.2 17.5h4.6" /></svg>
+)
+export const IconLayers = ({ size, ...p }: P) => (
+  <svg {...base(size)} {...p}><path d="m12 3 9 5-9 5-9-5z" /><path d="m3 13 9 5 9-5" /></svg>
+)
+export const IconStar = ({ size, ...p }: P) => (
+  <svg {...base(size)} {...p}><path d="m12 3 2.8 5.9 6.2.8-4.5 4.4 1.1 6.4L12 17.5 6.4 20.5l1.1-6.4L3 9.7l6.2-.8z" /></svg>
+)
+export const IconUser = ({ size, ...p }: P) => (
+  <svg {...base(size)} {...p}><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /></svg>
+)
+export const IconHome = ({ size, ...p }: P) => (
+  <svg {...base(size)} {...p}><path d="m3 11 9-7 9 7" /><path d="M5 10v10h14V10" /></svg>
+)

@@ -34,6 +34,8 @@ alter table public.projects add column if not exists client       text;
 alter table public.projects add column if not exists external_url text;
 alter table public.projects add column if not exists embed_url    text;
 alter table public.projects add column if not exists sort_order   integer default 0;
+alter table public.projects add column if not exists translations jsonb  default '{}'::jsonb; -- {"id":{"title":..},"ja":{..},"zh":{..}}
+alter table public.projects add column if not exists source_lang  text    default 'en';
 
 -- Keep category values clean (constraint added only once)
 do $$

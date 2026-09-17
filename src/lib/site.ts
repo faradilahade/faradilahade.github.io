@@ -25,11 +25,18 @@ export const site = {
     { label: 'YouTube', href: 'https://www.youtube.com/@KomunitasAnakAktuariaIndonesia', key: 'youtube' },
   ],
 
-  // Behance projects shown in the "Also on Behance" section (embed src URLs)
-  behanceEmbeds: [
-    { id: '254415369', src: 'https://www.behance.net/embed/project/254415369?ilo0=1', href: 'https://www.behance.net/gallery/254415369' },
-    { id: '251337883', src: 'https://www.behance.net/embed/project/251337883?ilo0=1', href: 'https://www.behance.net/gallery/251337883' },
-  ],
+  /**
+   * Admin sign-in accepts a username. A bare username is mapped to
+   * `<username>@<adminEmailDomain>` — create that user once in Supabase → Authentication.
+   * e.g. username "admin-fara" → admin-fara@faradilahade.github.io
+   */
+  adminEmailDomain: 'faradilahade.github.io',
+
+  /**
+   * Machine-translate project text into the visitor's language when no reviewed
+   * translation is stored (free Google / MyMemory endpoints, cached in the browser).
+   */
+  autoTranslate: true,
 
   // Search terms the site should rank for — used in meta keywords and JSON-LD "knowsAbout"
   keywords: [
