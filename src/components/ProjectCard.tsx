@@ -1,5 +1,5 @@
 import { ReactNode, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Project } from '../lib/supabase'
 import { useLang } from '../contexts/LanguageContext'
 import { site, mailto, absoluteUrl } from '../lib/site'
@@ -68,8 +68,10 @@ type Props = { p: Project; index?: number; view?: 'grid' | 'list' }
 
 export default function ProjectCard({ p, index = 0, view = 'grid' }: Props) {
   const { t } = useLang()
+  const { search } = useLocation()
   const delay = Math.min((index % 3) + 1, 3)
-  const open = `/work/${p.slug}`
+  // Carry the active filters (?field=…&q=…) into the modal URL so closing it restores the same view
+  const open = { pathname: `/work/${p.slug}`, search }
   const when = p.year ?? new Date(p.created_at).getFullYear()
   const askHref = mailto(
     `${t('modal.subject')}${p.title}`,
