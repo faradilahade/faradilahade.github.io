@@ -14,7 +14,7 @@ function Item({ n, q, a, open, onToggle }: { n: number; q: string; a: string; op
     <div className={`bg-white/75 backdrop-blur ring-1 rounded-xl transition-all duration-300 ${open ? 'ring-steel/50 shadow-float' : 'ring-ink/[.06] hover:ring-steel/30'}`}>
       <button type="button" onClick={onToggle} aria-expanded={open} className="w-full flex items-center gap-4 px-4 py-3.5 text-left">
         <span className="text-fl-xs text-fog tabular-nums w-6 shrink-0">{String(n).padStart(2, '0')}</span>
-        <span className="flex-1 text-[11px] sm:text-[12px] font-semibold uppercase tracking-[.08em] text-ink leading-snug">{q}</span>
+        <span className="flex-1 btn-text text-ink leading-snug">{q}</span>
         <span className={`w-7 h-7 rounded-full border flex items-center justify-center shrink-0 transition-colors duration-300 ${open ? 'bg-steel border-steel text-paper' : 'border-line text-steel'}`}>
           {open ? <IconMinus size={14} /> : <IconPlus size={14} />}
         </span>

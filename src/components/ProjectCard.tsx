@@ -95,8 +95,8 @@ export default function ProjectCard({ p, index = 0, view = 'grid' }: Props) {
       <span className={`w-2 h-2 rounded-[2px] ${CAT_DOT[p.category]}`} aria-hidden="true" />
     </div>
   )
-  const btnSolid = 'inline-flex items-center justify-center gap-2 bg-ink text-paper text-[11px] font-semibold uppercase tracking-[.14em] px-4 py-2.5 rounded-full hover:bg-steel transition-colors duration-300'
-  const btnGhost = 'inline-flex items-center justify-center gap-2 ring-1 ring-ink/15 bg-white/60 text-slate text-[11px] font-semibold uppercase tracking-[.14em] px-4 py-2.5 rounded-full hover:ring-steel hover:text-steel transition-colors duration-300'
+  const btnSolid = 'inline-flex items-center justify-center gap-2 bg-ink text-paper btn-text px-4 py-2.5 rounded-full hover:bg-steel transition-colors duration-300'
+  const btnGhost = 'inline-flex items-center justify-center gap-2 ring-1 ring-ink/15 bg-white/60 text-slate btn-text px-4 py-2.5 rounded-full hover:ring-steel hover:text-steel transition-colors duration-300'
 
   if (view === 'list') {
     return (
@@ -169,7 +169,7 @@ export function PromoTile() {
       </div>
       <a
         href={mailto(`Hello ${site.firstName}, from your portfolio`, `Hi ${site.firstName},\n\n`)}
-        className="relative mt-6 inline-flex items-center justify-center gap-2 self-start bg-paper text-night text-[11px] font-semibold uppercase tracking-[.14em] px-4 py-2.5 rounded-full hover:bg-tide transition-colors duration-300 group"
+        className="relative mt-6 inline-flex items-center justify-center gap-2 self-start bg-paper text-night btn-text px-4 py-2.5 rounded-full hover:bg-tide transition-colors duration-300 group"
       >
         <IconMail size={14} /> {t('promo.button')} <IconArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
       </a>

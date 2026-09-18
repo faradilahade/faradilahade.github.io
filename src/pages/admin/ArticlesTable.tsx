@@ -53,7 +53,7 @@ export default function ArticlesTable({ articles, busyId, missingTable, onNew, o
       )}
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap gap-1 text-[11px] font-semibold uppercase tracking-[.12em]">
+        <div className="flex flex-wrap gap-1 btn-text">
           {(['all', 'published', 'draft', 'featured'] as Status[]).map(s => (
             <button key={s} type="button" onClick={() => setStatus(s)} className={`px-3 py-1.5 rounded-md transition-colors ${status === s ? 'bg-ink text-paper' : 'text-slate hover:text-ink hover:bg-white'}`}>
               {s} <span className={`ml-1 tabular-nums ${status === s ? 'text-paper/70' : 'text-fog'}`}>{counts[s]}</span>
@@ -65,7 +65,7 @@ export default function ArticlesTable({ articles, busyId, missingTable, onNew, o
             <IconSearch size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-fog" />
             <input value={q} onChange={e => setQ(e.target.value)} placeholder="Search articles…" className="pl-8 pr-3 py-2 w-56 border border-line rounded-lg bg-white text-fl-sm focus:border-steel outline-none" />
           </label>
-          <button type="button" onClick={onNew} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-steel text-paper text-[11px] font-semibold uppercase tracking-[.12em] hover:bg-ink"><IconPlus size={14} /> New</button>
+          <button type="button" onClick={onNew} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-steel text-paper btn-text hover:bg-ink"><IconPlus size={14} /> New</button>
         </div>
       </div>
 
@@ -102,7 +102,7 @@ export default function ArticlesTable({ articles, busyId, missingTable, onNew, o
                   </div>
                   <div className="col-span-2 md:col-span-1 flex flex-wrap items-center gap-1.5 justify-end">
                     <button type="button" disabled={busy} onClick={() => onToggle(a, 'featured')} className={`${iconBtn} ${a.featured ? 'text-steel border-steel/50' : ''}`} aria-label={a.featured ? 'Unfeature' : 'Feature'}><IconStar size={14} /></button>
-                    <button type="button" disabled={busy} onClick={() => onToggle(a, 'published')} className={`px-2.5 h-8 rounded-md border text-[11px] font-semibold uppercase tracking-[.1em] transition-colors ${a.published ? 'border-line text-slate hover:border-steel' : 'border-steel text-steel hover:bg-steel hover:text-paper'}`}>{a.published ? 'Unpublish' : 'Publish'}</button>
+                    <button type="button" disabled={busy} onClick={() => onToggle(a, 'published')} className={`px-2.5 h-8 rounded-md border btn-text transition-colors ${a.published ? 'border-line text-slate hover:border-steel' : 'border-steel text-steel hover:bg-steel hover:text-paper'}`}>{a.published ? 'Unpublish' : 'Publish'}</button>
                     <a href={previewHref(a)} target="_blank" rel="noreferrer" className={iconBtn} aria-label="Preview"><IconEye size={14} /></a>
                     <button type="button" disabled={busy} onClick={() => onDuplicate(a)} className={iconBtn} aria-label="Duplicate"><IconCopy size={14} /></button>
                     <button type="button" onClick={() => onEdit(a)} className={`${iconBtn} border-ink/30 text-ink`} aria-label="Edit"><IconEdit size={14} /></button>

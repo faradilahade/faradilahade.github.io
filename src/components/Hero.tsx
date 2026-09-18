@@ -162,7 +162,7 @@ function SkillsCard() {
   const skills = [1, 2, 3, 4, 5].map(i => ({ label: t(`hero.skill.${i}`), level: [96, 90, 88, 92, 84][i - 1] }))
   return (
     <div className="w-[268px]">
-      <span className="inline-flex items-center rounded-full bg-ink text-paper px-4 py-2 text-[11px] font-semibold uppercase tracking-[.14em] shadow-lift rise-4">{t('hero.card.skills')}</span>
+      <span className="inline-flex items-center rounded-full bg-ink text-paper px-4 py-2 btn-text shadow-lift rise-4">{t('hero.card.skills')}</span>
       <ul className="hero-card-dark mt-3 divide-y divide-white/10 overflow-hidden">
         {skills.map((s, i) => (
           <li key={s.label} className="flex items-center justify-between gap-3 px-4 py-2.5">
@@ -234,8 +234,8 @@ export default function Hero() {
     }
   }, [])
 
-  const btnPrimary = 'group inline-flex items-center justify-center gap-3 rounded-full bg-ink text-paper pl-6 pr-5 py-4 text-[11px] font-semibold uppercase tracking-[.16em] shadow-lift hover:bg-steel transition-all duration-500 ease-smooth hover:-translate-y-0.5'
-  const btnGhost = 'inline-flex items-center justify-center gap-2 rounded-full bg-white/70 ring-1 ring-ink/10 text-ink px-6 py-4 text-[11px] font-semibold uppercase tracking-[.16em] hover:ring-steel hover:text-steel transition-all duration-500 ease-smooth hover:-translate-y-0.5 backdrop-blur'
+  const btnPrimary = 'group inline-flex items-center justify-center gap-3 rounded-full bg-ink text-paper pl-6 pr-5 py-4 btn-text shadow-lift hover:bg-steel transition-all duration-500 ease-smooth hover:-translate-y-0.5'
+  const btnGhost = 'inline-flex items-center justify-center gap-2 rounded-full bg-white/70 ring-1 ring-ink/10 text-ink px-6 py-4 btn-text hover:ring-steel hover:text-steel transition-all duration-500 ease-smooth hover:-translate-y-0.5 backdrop-blur'
 
   return (
     <section ref={ref} id="top" className="relative overflow-hidden" aria-label={site.name}>

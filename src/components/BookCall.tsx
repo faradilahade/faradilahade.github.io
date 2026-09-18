@@ -36,7 +36,7 @@ export default function BookCall() {
           </label>
           <button
             type="submit"
-            className="group inline-flex items-center justify-center gap-3 bg-ink text-paper px-8 py-4 text-[11px] font-semibold uppercase tracking-[.16em] rounded-full hover:bg-steel transition-colors duration-300"
+            className="group inline-flex items-center justify-center gap-3 bg-ink text-paper px-8 py-4 btn-text rounded-full hover:bg-steel transition-colors duration-300"
           >
             {t('call.button')} <IconArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
           </button>

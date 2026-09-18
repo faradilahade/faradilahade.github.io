@@ -65,7 +65,7 @@ export default function Navbar() {
 
   useEffect(() => { setOpen(false) }, [location.pathname, location.hash])
 
-  const navCls = 'text-[11px] font-semibold uppercase tracking-[.14em] text-slate hover:text-ink transition-colors link-underline'
+  const navCls = 'btn-text text-slate hover:text-ink transition-colors link-underline'
 
   return (
     <header className="sticky top-0 z-40 bg-paper/70 backdrop-blur-xl border-b border-ink/[.06]">
@@ -77,7 +77,7 @@ export default function Navbar() {
 
           <Link
             to="/#work"
-            className="hidden sm:inline-flex items-center gap-2 -my-px bg-ink text-paper px-4 text-[11px] font-semibold uppercase tracking-[.14em] hover:bg-steel transition-colors duration-300"
+            className="hidden sm:inline-flex items-center gap-2 -my-px bg-ink text-paper px-4 btn-text hover:bg-steel transition-colors duration-300"
           >
             <IconGrid size={14} /> {t('nav.work')}
           </Link>
@@ -121,7 +121,7 @@ export default function Navbar() {
       {/* Mobile menu */}
       <div className={`md:hidden grid transition-[grid-template-rows] duration-300 ease-smooth ${open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
         <div className="overflow-hidden">
-          <nav className="border-t border-line bg-paper px-gutter py-4 grid gap-1 text-[12px] font-semibold uppercase tracking-[.14em]" aria-label="Mobile">
+          <nav className="border-t border-line bg-paper px-gutter py-4 grid gap-1 btn-text" aria-label="Mobile">
             <Link to="/#work" className="flex items-center justify-between py-2.5 border-b border-line text-steel">{t('nav.work')} <IconGrid size={15} /></Link>
             <Link to="/#articles" className="py-2.5 border-b border-line text-ink">{t('nav.articles')}</Link>
             <Link to="/#about" className="py-2.5 border-b border-line text-ink">{t('nav.about')}</Link>

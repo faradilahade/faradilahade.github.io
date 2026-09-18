@@ -223,7 +223,7 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
                     <button
                       type="button"
                       onClick={() => setShowOriginal(o => !o)}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white px-3 py-1 text-[11px] font-medium text-slate hover:border-steel hover:text-steel transition-colors"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white px-3 py-1.5 btn-text text-slate hover:border-steel hover:text-steel transition-colors"
                     >
                       <IconLanguage size={13} />
                       {translating ? t('modal.translating') : autoMode ? t('modal.autoTranslated') : t('modal.translation')}
@@ -311,11 +311,11 @@ export default function ProjectModal({ project, list, loading, onClose, onNaviga
                 )}
 
                 <div className="mt-12 flex flex-wrap items-center gap-3 border-t border-line pt-8">
-                  <a href={contactHref} className="inline-flex items-center gap-2 rounded-full bg-steel text-paper px-5 py-3 text-[11px] font-semibold uppercase tracking-[.14em] hover:bg-ink transition-colors duration-300">
+                  <a href={contactHref} className="inline-flex items-center gap-2 rounded-full bg-steel text-paper px-5 py-3 btn-text hover:bg-ink transition-colors duration-300">
                     <IconMail size={16} /> {t('modal.ask')}
                   </a>
                   {project.external_url && (
-                    <a href={project.external_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-ink/20 px-5 py-3 text-[11px] font-semibold uppercase tracking-[.14em] hover:border-steel hover:text-steel transition-colors duration-300">
+                    <a href={project.external_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-ink/20 px-5 py-3 btn-text hover:border-steel hover:text-steel transition-colors duration-300">
                       {t('modal.viewExternal')} <IconExternal size={15} />
                     </a>
                   )}

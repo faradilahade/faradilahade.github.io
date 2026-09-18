@@ -15,7 +15,7 @@ export default function Wordmark() {
       </div>
       <a
         href={mailto()}
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 inline-flex items-stretch rounded-full overflow-hidden bg-ink text-paper text-[11px] font-semibold uppercase tracking-[.16em] shadow-lift hover:bg-night transition-colors"
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 inline-flex items-stretch rounded-full overflow-hidden bg-ink text-paper btn-text shadow-lift hover:bg-night transition-colors"
       >
         <span className="px-5 py-3">{t('hero.cta')}</span>
         <span className="px-3 flex items-center bg-ocean text-night"><IconMail size={15} /></span>

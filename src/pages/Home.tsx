@@ -245,7 +245,7 @@ export default function Home() {
     return items
   }, [visible, view])
 
-  const btnGhost = 'inline-flex items-center justify-center gap-2.5 ring-1 ring-ink/15 bg-white/60 text-slate px-6 py-3.5 text-[11px] font-semibold uppercase tracking-[.16em] rounded-full hover:ring-steel hover:text-steel transition-colors duration-300'
+  const btnGhost = 'inline-flex items-center justify-center gap-2.5 ring-1 ring-ink/15 bg-white/60 text-slate px-6 py-3.5 btn-text rounded-full hover:ring-steel hover:text-steel transition-colors duration-300'
   const emptyBox = 'mt-6 glass p-10 text-center text-fl-sm text-slate'
   const toggleBtn = (on: boolean) => `w-9 h-9 flex items-center justify-center transition-colors ${on ? 'bg-ink text-paper' : 'text-slate hover:text-ink'}`
 
@@ -339,7 +339,7 @@ export default function Home() {
                     <span className="sr-only">{t('work.sortBy')}</span>
                     <select
                       value={sort} onChange={e => setSort(e.target.value as SortKey)}
-                      className="glass-input appearance-none pl-3 pr-8 h-9 text-[11px] font-semibold uppercase tracking-[.12em] text-slate hover:text-ink cursor-pointer"
+                      className="glass-input appearance-none pl-3 pr-8 h-9 btn-text text-slate hover:text-ink cursor-pointer"
                     >
                       {SORTS.map(s => <option key={s} value={s}>{t('work.sortBy')}: {t(`sort.${s}`)}</option>)}
                     </select>
@@ -348,7 +348,7 @@ export default function Home() {
 
                   <button
                     type="button" onClick={() => setFiltersOpen(o => !o)} aria-expanded={filtersOpen}
-                    className={`lg:hidden inline-flex items-center gap-2 h-9 px-3 rounded-lg text-[11px] font-semibold uppercase tracking-[.12em] transition-colors ${filtersOpen ? 'bg-ink text-paper' : 'glass-input text-slate hover:text-ink'}`}
+                    className={`lg:hidden inline-flex items-center gap-2 h-9 px-3 rounded-lg btn-text transition-colors ${filtersOpen ? 'bg-ink text-paper' : 'glass-input text-slate hover:text-ink'}`}
                   >
                     <IconFilter size={14} /> {t('filter.title')}
                     {activeCount > 0 && <span className="inline-flex items-center justify-center min-w-[1.1rem] h-[1.1rem] rounded-full bg-ink text-paper text-[9px] px-1">{activeCount}</span>}

@@ -23,7 +23,7 @@ export default function Footer() {
           <button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="mt-6 inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[.14em] text-slate hover:text-ink transition-colors group"
+            className="mt-6 inline-flex items-center gap-3 btn-text text-slate hover:text-ink transition-colors group"
           >
             <span className="w-9 h-9 rounded-sm border border-line flex items-center justify-center group-hover:border-steel group-hover:text-steel transition-colors"><IconArrowUp size={15} /></span>
             {t('footer.scrollUp')}

@@ -52,7 +52,7 @@ export default function Contact() {
 
             <a
               href={mailto(`Hello ${site.firstName}, from your portfolio`, `Hi ${site.firstName},\n\n`)}
-              className="rise-4 group mt-8 inline-flex items-center gap-2.5 bg-steel text-paper px-6 py-3.5 text-[11px] font-semibold uppercase tracking-[.16em] rounded-sm hover:bg-ink transition-colors duration-300"
+              className="rise-4 group mt-8 inline-flex items-center gap-2.5 bg-steel text-paper px-6 py-3.5 btn-text rounded-sm hover:bg-ink transition-colors duration-300"
             >
               <IconMail size={15} /> {site.email}
               <IconArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
@@ -95,7 +95,7 @@ export default function Contact() {
               <legend className="label-caps mb-1.5">{t('contact.form.topic')}</legend>
               <div className="flex flex-wrap gap-2">
                 {TOPICS.map(k => (
-                  <label key={k} className={`cursor-pointer rounded-sm px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[.1em] border transition-all duration-300 ${topic === k ? 'bg-steel text-paper border-steel' : 'border-line text-slate hover:border-steel hover:text-steel'}`}>
+                  <label key={k} className={`cursor-pointer rounded-sm px-3.5 py-1.5 btn-text border transition-all duration-300 ${topic === k ? 'bg-steel text-paper border-steel' : 'border-line text-slate hover:border-steel hover:text-steel'}`}>
                     <input type="radio" name="topic" value={k} checked={topic === k} onChange={() => setTopic(k)} className="sr-only" />
                     {t(`contact.form.topic.${k}`)}
                   </label>
@@ -108,7 +108,7 @@ export default function Contact() {
               <textarea required rows={6} value={message} onChange={e => setMessage(e.target.value)} className={`${field} resize-y leading-relaxed`} />
             </label>
 
-            <button type="submit" className="group mt-5 w-full inline-flex items-center justify-center gap-2 bg-ink text-paper px-6 py-3.5 text-[11px] font-semibold uppercase tracking-[.16em] rounded-sm hover:bg-steel transition-colors duration-300">
+            <button type="submit" className="group mt-5 w-full inline-flex items-center justify-center gap-2 bg-ink text-paper px-6 py-3.5 btn-text rounded-sm hover:bg-steel transition-colors duration-300">
               <IconMail size={15} /> {t('contact.form.send')}
               <IconArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
             </button>

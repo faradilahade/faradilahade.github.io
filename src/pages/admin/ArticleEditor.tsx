@@ -86,7 +86,7 @@ export default function ArticleEditor({ draft, onChange, onSave, onCancel, savin
 
   const preview = (
     <div className="bg-white border border-line rounded-2xl overflow-hidden">
-      <div className="px-4 py-2.5 border-b border-line flex items-center justify-between text-[11px] font-semibold uppercase tracking-[.14em] text-fog">
+      <div className="px-4 py-2.5 border-b border-line flex items-center justify-between btn-text text-fog">
         <span className="inline-flex items-center gap-1.5"><IconEye size={13} /> Live preview</span>
         <span className="tabular-nums normal-case tracking-normal font-medium">{words} words · {readingMinutes(draft.content)} min read</span>
       </div>
@@ -119,15 +119,15 @@ export default function ArticleEditor({ draft, onChange, onSave, onCancel, savin
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <div className="lg:hidden inline-flex border border-line rounded-lg overflow-hidden text-[11px] font-semibold uppercase tracking-[.12em]">
+          <div className="lg:hidden inline-flex border border-line rounded-lg overflow-hidden btn-text">
             <button type="button" onClick={() => setMobileTab('edit')} className={`px-3 py-2 ${mobileTab === 'edit' ? 'bg-ink text-paper' : 'text-slate'}`}>Edit</button>
             <button type="button" onClick={() => setMobileTab('preview')} className={`px-3 py-2 border-l border-line ${mobileTab === 'preview' ? 'bg-ink text-paper' : 'text-slate'}`}>Preview</button>
           </div>
-          {previewHref && !isNew && <a href={previewHref} target="_blank" rel="noreferrer" className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-line text-[11px] font-semibold uppercase tracking-[.12em] text-slate hover:text-ink hover:border-steel"><IconExternal size={13} /> View</a>}
-          <button type="button" disabled={!canSave} onClick={() => onSave(false)} className="px-3.5 py-2 rounded-lg border border-line bg-white text-[11px] font-semibold uppercase tracking-[.12em] text-ink hover:border-steel disabled:opacity-50">
+          {previewHref && !isNew && <a href={previewHref} target="_blank" rel="noreferrer" className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-line btn-text text-slate hover:text-ink hover:border-steel"><IconExternal size={13} /> View</a>}
+          <button type="button" disabled={!canSave} onClick={() => onSave(false)} className="px-3.5 py-2 rounded-lg border border-line bg-white btn-text text-ink hover:border-steel disabled:opacity-50">
             {saving ? 'Saving…' : draft.published ? 'Save' : 'Save draft'}
           </button>
-          <button type="button" disabled={!canSave} onClick={() => onSave(true)} className="px-3.5 py-2 rounded-lg bg-steel text-paper text-[11px] font-semibold uppercase tracking-[.12em] hover:bg-ink disabled:opacity-50">
+          <button type="button" disabled={!canSave} onClick={() => onSave(true)} className="px-3.5 py-2 rounded-lg bg-steel text-paper btn-text hover:bg-ink disabled:opacity-50">
             {draft.published ? 'Update' : 'Publish'}
           </button>
         </div>
@@ -137,8 +137,8 @@ export default function ArticleEditor({ draft, onChange, onSave, onCancel, savin
         <div className="mt-4 rounded-xl border border-steel/40 bg-steel/10 px-4 py-3 text-fl-sm flex flex-wrap items-center justify-between gap-3">
           <span>Unsaved changes from {new Date(restore.at).toLocaleString()} were found on this device.</span>
           <span className="flex gap-2">
-            <button type="button" onClick={() => { onChange(restore.draft); setRestore(null) }} className="px-3 py-1.5 rounded-md bg-ink text-paper text-[11px] font-semibold uppercase tracking-[.12em]">Restore</button>
-            <button type="button" onClick={() => { clearLocalArticle(draft.id); setRestore(null) }} className="px-3 py-1.5 rounded-md border border-line text-[11px] font-semibold uppercase tracking-[.12em] text-slate">Discard</button>
+            <button type="button" onClick={() => { onChange(restore.draft); setRestore(null) }} className="px-3 py-1.5 rounded-md bg-ink text-paper btn-text">Restore</button>
+            <button type="button" onClick={() => { clearLocalArticle(draft.id); setRestore(null) }} className="px-3 py-1.5 rounded-md border border-line btn-text text-slate">Discard</button>
           </span>
         </div>
       )}
@@ -228,7 +228,7 @@ export default function ArticleEditor({ draft, onChange, onSave, onCancel, savin
                   {LANG4.map(l => <option key={l} value={l}>{LANG_LABEL[l]}</option>)}
                 </select>
               </label>
-              <button type="button" disabled={!!tBusy || !draft.title.trim()} onClick={() => translateTo(targets)} className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-ink text-paper text-[11px] font-semibold uppercase tracking-[.12em] hover:bg-steel disabled:opacity-50">
+              <button type="button" disabled={!!tBusy || !draft.title.trim()} onClick={() => translateTo(targets)} className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-ink text-paper btn-text hover:bg-steel disabled:opacity-50">
                 <IconLanguage size={14} /> {tBusy ? tBusy : 'Auto-translate to all languages'}
               </button>
             </div>
@@ -250,8 +250,8 @@ export default function ArticleEditor({ draft, onChange, onSave, onCancel, savin
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <p className="text-[11px] text-fog">Editing the {LANG_LABEL[tLang]} version. Leave a field empty to fall back to the source text.</p>
                   <span className="flex gap-2">
-                    <button type="button" disabled={!!tBusy} onClick={() => translateTo([tLang])} className="px-2.5 py-1.5 rounded-md border border-line text-[11px] font-semibold uppercase tracking-[.12em] text-slate hover:border-steel hover:text-ink disabled:opacity-50">Retranslate</button>
-                    <button type="button" onClick={() => onChange(d => { const tr = { ...d.translations }; delete tr[tLang]; return { ...d, translations: tr } })} className="px-2.5 py-1.5 rounded-md border border-line text-[11px] font-semibold uppercase tracking-[.12em] text-slate hover:border-red-300 hover:text-red-700">Clear</button>
+                    <button type="button" disabled={!!tBusy} onClick={() => translateTo([tLang])} className="px-2.5 py-1.5 rounded-md border border-line btn-text text-slate hover:border-steel hover:text-ink disabled:opacity-50">Retranslate</button>
+                    <button type="button" onClick={() => onChange(d => { const tr = { ...d.translations }; delete tr[tLang]; return { ...d, translations: tr } })} className="px-2.5 py-1.5 rounded-md border border-line btn-text text-slate hover:border-red-300 hover:text-red-700">Clear</button>
                   </span>
                 </div>
                 <input value={draft.translations[tLang]?.title ?? ''} onChange={e => setTr(tLang, { title: e.target.value })} placeholder={`Title (${LANG_LABEL[tLang]})`} className={`${field} font-semibold`} />
@@ -267,9 +267,9 @@ export default function ArticleEditor({ draft, onChange, onSave, onCancel, savin
               <label className="inline-flex items-center gap-2"><input type="checkbox" className="w-4 h-4 accent-steel" checked={draft.featured} onChange={e => set({ featured: e.target.checked })} /> Featured (shown first, larger card)</label>
             </div>
             <div className="mt-5 flex flex-wrap gap-2">
-              <button type="button" disabled={!canSave} onClick={() => onSave(false)} className="px-4 py-2.5 rounded-lg border border-line bg-white text-[11px] font-semibold uppercase tracking-[.12em] hover:border-steel disabled:opacity-50">{saving ? 'Saving…' : draft.published ? 'Save' : 'Save draft'}</button>
-              <button type="button" disabled={!canSave} onClick={() => onSave(true)} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-steel text-paper text-[11px] font-semibold uppercase tracking-[.12em] hover:bg-ink disabled:opacity-50">{draft.published ? 'Update' : 'Publish'} <IconArrowRight size={13} /></button>
-              <button type="button" onClick={onCancel} className="px-4 py-2.5 rounded-lg text-[11px] font-semibold uppercase tracking-[.12em] text-slate hover:text-ink">Cancel</button>
+              <button type="button" disabled={!canSave} onClick={() => onSave(false)} className="px-4 py-2.5 rounded-lg border border-line bg-white btn-text hover:border-steel disabled:opacity-50">{saving ? 'Saving…' : draft.published ? 'Save' : 'Save draft'}</button>
+              <button type="button" disabled={!canSave} onClick={() => onSave(true)} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-steel text-paper btn-text hover:bg-ink disabled:opacity-50">{draft.published ? 'Update' : 'Publish'} <IconArrowRight size={13} /></button>
+              <button type="button" onClick={onCancel} className="px-4 py-2.5 rounded-lg btn-text text-slate hover:text-ink">Cancel</button>
             </div>
           </Card>
         </div>

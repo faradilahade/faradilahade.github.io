@@ -35,7 +35,7 @@ body {
 
 img, video, iframe { max-width: 100%; }
 img { display: block; }
-button, input, select, textarea { font: inherit; color: inherit; }
+button, input, select, textarea, option { font: inherit; font-family: "Plus Jakarta Sans", system-ui, sans-serif; color: inherit; }
 
 ::selection { background: #3E6B8F; color: #F6F8FB; }
 :focus-visible { outline: 2px solid #5C9DC9; outline-offset: 3px; border-radius: 2px; }
@@ -43,6 +43,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
 /* Display headings: bold, uppercase, tight */
 .h-display { @apply font-body font-bold uppercase tracking-[-0.02em] leading-[0.95]; }
 .label-caps { @apply text-[10px] font-semibold uppercase tracking-[.16em] text-fog; }
+
+/* Button / control label: the exact type used by the navbar items, so every button on the site reads the same */
+.btn-text { @apply font-body text-[11px] font-semibold uppercase tracking-[.14em]; }
 
 /* Quiet scrollbars inside panels */
 .scroll-quiet { scrollbar-width: thin; scrollbar-color: rgba(74,85,104,.4) transparent; }
@@ -134,7 +137,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .glass-hover:hover { @apply bg-white/90 ring-steel/35; transform: translateY(-3px); box-shadow: 0 40px 90px -40px rgba(62,107,143,.45), 0 0 0 1px rgba(62,107,143,.08); }
 .glass-input { @apply bg-white/70 ring-1 ring-ink/10 text-ink placeholder:text-fog/70 rounded-lg outline-none; transition: background-color .3s, box-shadow .3s; -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
 .glass-input:focus { @apply bg-white ring-steel/60; }
-.chip { @apply inline-flex items-center gap-1.5 h-8 px-3.5 rounded-full text-[11px] font-semibold uppercase tracking-[.12em] transition-all duration-300 ease-smooth; }
+.chip { @apply inline-flex items-center gap-1.5 h-8 px-3.5 rounded-full btn-text transition-all duration-300 ease-smooth; }
 .chip-off { @apply text-slate bg-white/60 ring-1 ring-ink/10 hover:ring-steel/60 hover:text-ink; }
 .chip-on { @apply bg-ink text-paper ring-1 ring-ink shadow-lift; }
 

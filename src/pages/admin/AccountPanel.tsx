@@ -36,7 +36,7 @@ export default function AccountPanel({ email, onSignOut }: Props) {
           <div><dt className="label-caps">Sign-in email</dt><dd className="mt-0.5 font-mono break-all">{email}</dd></div>
           <div><dt className="label-caps">Role</dt><dd className="mt-0.5">Administrator: can create, edit, translate, publish and delete projects and files.</dd></div>
         </dl>
-        <button type="button" onClick={onSignOut} className="mt-6 inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-line text-[11px] font-semibold uppercase tracking-[.12em] text-slate hover:border-steel hover:text-ink"><IconLogout size={14} /> Sign out</button>
+        <button type="button" onClick={onSignOut} className="mt-6 inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-line btn-text text-slate hover:border-steel hover:text-ink"><IconLogout size={14} /> Sign out</button>
       </section>
 
       <section className="bg-white border border-line rounded-2xl p-6">
@@ -47,7 +47,7 @@ export default function AccountPanel({ email, onSignOut }: Props) {
           <div><label className="label-caps block mb-1">Repeat new password</label><input type="password" autoComplete="new-password" value={pw2} onChange={e => setPw2(e.target.value)} className={field} /></div>
           {err && <p className="text-fl-xs text-red-700">{err}</p>}
           {msg && <p className="text-fl-xs text-steel inline-flex items-center gap-1.5"><IconCheck size={13} /> {msg}</p>}
-          <button type="submit" disabled={busy} className="px-4 py-2.5 rounded-lg bg-ink text-paper text-[11px] font-semibold uppercase tracking-[.12em] hover:bg-steel disabled:opacity-50">{busy ? 'Saving…' : 'Update password'}</button>
+          <button type="submit" disabled={busy} className="px-4 py-2.5 rounded-lg bg-ink text-paper btn-text hover:bg-steel disabled:opacity-50">{busy ? 'Saving…' : 'Update password'}</button>
         </form>
       </section>
     </div>

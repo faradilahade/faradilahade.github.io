@@ -51,7 +51,7 @@ export default function ArticleCard({ a, index = 0, featuredLayout = false }: Pr
         {a.summary && <p className="mt-2 text-fl-sm text-slate leading-relaxed clamp-3">{a.summary}</p>}
         <div className="mt-auto pt-4 flex items-center justify-between gap-3 text-fl-xs text-fog tabular-nums">
           <span>{date} · {minutes} {t('articles.minRead')}</span>
-          <Link to={to} className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[.14em] text-ink hover:text-steel transition-colors group/link">
+          <Link to={to} className="inline-flex items-center gap-1.5 btn-text text-ink hover:text-steel transition-colors group/link">
             {t('articles.read')} <IconArrowRight size={13} className="transition-transform group-hover/link:translate-x-0.5" />
           </Link>
         </div>

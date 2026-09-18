@@ -213,7 +213,7 @@ export default function Filters({ projects, filters, bounds, onChange }: Props) 
         type="button"
         disabled={active === 0}
         onClick={() => onChange({ ...emptyFilters })}
-        className="mt-5 w-full ring-1 ring-ink/15 bg-white/60 py-3 text-[11px] font-semibold uppercase tracking-[.14em] text-slate hover:ring-steel hover:text-steel disabled:opacity-40 disabled:hover:ring-ink/15 disabled:hover:text-slate transition-colors rounded-full"
+        className="mt-5 w-full ring-1 ring-ink/15 bg-white/60 py-3 btn-text text-slate hover:ring-steel hover:text-steel disabled:opacity-40 disabled:hover:ring-ink/15 disabled:hover:text-slate transition-colors rounded-full"
       >
         {t('filter.reset')}
       </button>

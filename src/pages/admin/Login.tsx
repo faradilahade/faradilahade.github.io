@@ -59,7 +59,7 @@ export default function Login() {
     <main className="min-h-screen bg-paper text-ink flex flex-col">
       <div className="px-gutter h-14 flex items-center justify-between border-b border-line bg-white/70 backdrop-blur">
         <Link to="/" className="font-bold uppercase tracking-tight text-fl-base">{site.name}<span className="text-ocean">.</span> <span className="text-fog font-medium normal-case tracking-normal">· Admin</span></Link>
-        <Link to="/" className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[.14em] text-slate hover:text-ink"><IconArrowLeft size={14} /> View site</Link>
+        <Link to="/" className="inline-flex items-center gap-1.5 btn-text text-slate hover:text-ink"><IconArrowLeft size={14} /> View site</Link>
       </div>
 
       <section className="flex-1 flex items-center justify-center px-gutter py-12">
@@ -92,7 +92,7 @@ export default function Login() {
               </div>
             </div>
             {error && <p className="text-fl-sm text-red-700 leading-relaxed" role="alert">{error}</p>}
-            <button type="submit" disabled={loading || !supabaseConfigured} className="w-full bg-ink text-paper py-3 rounded-lg text-[11px] font-semibold uppercase tracking-[.16em] hover:bg-steel transition-colors disabled:opacity-60">
+            <button type="submit" disabled={loading || !supabaseConfigured} className="w-full bg-ink text-paper py-3 rounded-lg btn-text hover:bg-steel transition-colors disabled:opacity-60">
               {loading ? 'Signing in…' : 'Sign in'}
             </button>
           </form>

@@ -49,7 +49,7 @@ export default function Overview({ projects, articles, articlesMissing, onNew, o
           <div className={tile}>
             <div className="flex items-center justify-between gap-4">
               <h3 className="font-bold uppercase tracking-tight text-fl-sm">Recently updated projects</h3>
-              <button type="button" onClick={onOpenProjects} className="text-[11px] font-semibold uppercase tracking-[.12em] text-steel link-underline">All projects</button>
+              <button type="button" onClick={onOpenProjects} className="btn-text text-steel link-underline">All projects</button>
             </div>
             {recent.length === 0 ? (
               <p className="mt-4 text-fl-sm text-slate">Nothing here yet. Start with your strongest case study.</p>
@@ -73,8 +73,8 @@ export default function Overview({ projects, articles, articlesMissing, onNew, o
             <div className="flex items-center justify-between gap-4">
               <h3 className="font-bold uppercase tracking-tight text-fl-sm inline-flex items-center gap-2"><IconFile size={14} /> Articles</h3>
               <span className="flex items-center gap-3">
-                <button type="button" onClick={onOpenArticles} className="text-[11px] font-semibold uppercase tracking-[.12em] text-steel link-underline">All articles</button>
-                <button type="button" onClick={onNewArticle} className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[.12em] px-2.5 py-1.5 rounded-md bg-ink text-paper hover:bg-steel"><IconPlus size={12} /> New</button>
+                <button type="button" onClick={onOpenArticles} className="btn-text text-steel link-underline">All articles</button>
+                <button type="button" onClick={onNewArticle} className="inline-flex items-center gap-1 btn-text px-2.5 py-1.5 rounded-md bg-ink text-paper hover:bg-steel"><IconPlus size={12} /> New</button>
               </span>
             </div>
             {articlesMissing ? (
@@ -109,7 +109,7 @@ export default function Overview({ projects, articles, articlesMissing, onNew, o
               <li>Tools and keywords: they become filters, badges and SEO signals.</li>
               <li>Auto-translate, skim the four languages, publish.</li>
             </ol>
-            <button type="button" onClick={onNew} className="mt-4 inline-flex items-center gap-2 bg-paper text-ink px-4 py-2.5 rounded-lg text-[11px] font-semibold uppercase tracking-[.12em] hover:bg-tide"><IconPlus size={14} /> New project</button>
+            <button type="button" onClick={onNew} className="mt-4 inline-flex items-center gap-2 bg-paper text-ink px-4 py-2.5 rounded-lg btn-text hover:bg-tide"><IconPlus size={14} /> New project</button>
           </div>
 
           {untranslated.length > 0 && (

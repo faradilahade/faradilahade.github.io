@@ -255,9 +255,9 @@ export default function Dashboard() {
               <h1 className="mt-1 h-display text-fl-2xl">{heading[view][1]}</h1>
             </div>
             {view === 'articles' ? (
-              <button type="button" onClick={startNewArticle} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-steel text-paper text-[11px] font-semibold uppercase tracking-[.12em] hover:bg-ink"><IconPlus size={14} /> New article</button>
+              <button type="button" onClick={startNewArticle} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-steel text-paper btn-text hover:bg-ink"><IconPlus size={14} /> New article</button>
             ) : view !== 'account' && (
-              <button type="button" onClick={startNew} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-steel text-paper text-[11px] font-semibold uppercase tracking-[.12em] hover:bg-ink"><IconPlus size={14} /> New project</button>
+              <button type="button" onClick={startNew} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-steel text-paper btn-text hover:bg-ink"><IconPlus size={14} /> New project</button>
             )}
           </header>
         )}
