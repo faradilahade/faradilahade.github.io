@@ -91,9 +91,9 @@ export function personJsonLd(lang: string) {
     url: absoluteUrl(''),
     image: absoluteUrl(asset(site.avatar).replace(/^\//, '')),
     email: `mailto:${site.email}`,
-    jobTitle: 'Actuarial Data Scientist',
+    jobTitle: 'Remote Data Scientist & AI Engineer',
     description:
-      'Actuarial data scientist building data pipelines, financial models and risk frameworks for finance, insurance and public-sector institutions.',
+      'Remote data scientist and AI engineer focused on data science, analytics, finance data analytics, machine learning and data engineering.',
     address: { '@type': 'PostalAddress', addressLocality: 'Jakarta', addressCountry: 'ID' },
     knowsLanguage: ['en', 'id', 'ja', 'zh'],
     inLanguage: lang,

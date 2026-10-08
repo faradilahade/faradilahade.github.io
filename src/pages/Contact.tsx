@@ -26,7 +26,6 @@ export default function Contact() {
 
   const rows = [
     { label: t('contact.email'), value: site.email, href: `mailto:${site.email}` },
-    { label: t('contact.phone'), value: site.phoneDisplay, href: site.whatsapp },
     { label: 'LinkedIn', value: site.name, href: site.links.find(l => l.key === 'linkedin')!.href },
     { label: 'Behance', value: `@${site.handle}`, href: site.links.find(l => l.key === 'behance')!.href },
     { label: t('contact.community'), value: 'anakaktuaria.org', href: 'https://anakaktuaria.org' },

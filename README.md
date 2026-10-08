@@ -12,7 +12,7 @@ Portofolio profesional untuk memulai kerja remote skala internasional. Satu kelu
 | --- | --- |
 | `ERROR 42710: policy "Public read published" … already exists` saat run SQL | `supabase/schema.sql` sekarang **idempotent** — aman dijalankan berulang kali (drop-if-exists sebelum create, `add column if not exists`, bucket dibuat otomatis). |
 | Login admin: `Invalid path specified in request URL` | Penyebabnya `VITE_SUPABASE_URL` diisi `…supabase.co/rest/v1/`. Kode kini **menormalkan URL otomatis** (membuang `/rest/v1/`), jadi login jalan walau secret-nya masih salah. Tetap disarankan memperbaiki secret (lihat §1.3). |
-| Layout (Sept 2026) | **Hero** dibangun ulang: nama FARADILAH ADE sebagai tipografi besar di tengah, dikelilingi kartu melayang — dasbor peramalan (grafik yang menggambar sendiri, angka menghitung naik), potongan kode Python, rumus aktuaria (loss ratio, chain-ladder, A<sub>x</sub>, kredibilitas, VaR) beserta statistiknya, daftar keahlian, dan pil telepon/WhatsApp. Semua elemen bergerak halus (float + paralaks pointer & scroll) dan tombol **Request a call** ada di tengah. Seluruh halaman memakai **satu latar** (gradien biru lembut + grid halus, `.site-bg`) sehingga tidak ada blok gelap atau garis pemisah; strip statistik dihapus. |
+| Layout (Sept 2026) | **Hero** dibangun ulang: nama FARADILAH ADE sebagai tipografi besar di tengah, dikelilingi kartu melayang — dasbor peramalan (grafik yang menggambar sendiri, angka menghitung naik), potongan kode Python, rumus aktuaria (loss ratio, chain-ladder, A<sub>x</sub>, kredibilitas, VaR) beserta statistiknya, daftar keahlian, dan pil email. Semua elemen bergerak halus (float + paralaks pointer & scroll) dan tombol **Request a call** ada di tengah. Seluruh halaman memakai **satu latar** (gradien biru lembut + grid halus, `.site-bg`) sehingga tidak ada blok gelap atau garis pemisah; strip statistik dihapus. |
 | URL `…/porto_faradilahade-2026/` | Workflow otomatis memakai base `/` bila repo bernama `faradilahade.github.io` (lihat §2). |
 | Kontak | Tombol **Email me** di navbar, sidebar, modal proyek, CTA, dan halaman kontak → `pmb.faradilahade@gmail.com` (subjek & isi terisi otomatis). |
 | Bagian **My work** (profil Behance) | **Dihapus** beserta sidebar info di kirinya. Yang dipertahankan adalah **katalog karya + filter** dengan **kartu kaca (backdrop-blur)** di latar terang yang sama dengan hero. Di atasnya ada chip **Data · Finance · Risk**; **Articles** menjadi bagian tersendiri di bawahnya (`/#articles`). |
@@ -140,7 +140,7 @@ Tips agar mudah ditemukan mesin pencari: judul berisi hasil terukur, ringkasan m
 
 | Ingin mengubah | File |
 | --- | --- |
-| Nama, email, WhatsApp, link sosial, domain username admin, saklar auto-translate, kata kunci SEO | `src/lib/site.ts` |
+| Nama, email, link sosial, domain username admin, saklar auto-translate, kata kunci SEO | `src/lib/site.ts` |
 | Teks UI 4 bahasa (judul, tombol, bio, sorotan 240/92%/15.000/350+) | `src/lib/translations.ts` |
 | Palet warna & skala tipografi | `tailwind.config.js` — satu keluarga biru (night, ink, graphite, steel, ocean, tide, frost, paper, line, fog) dan satu font (Plus Jakarta Sans); token `--fs-*` di `src/index.css` |
 | Hero: kartu melayang (dasbor, kode, rumus, keahlian, pil telepon), gerak paralaks | `src/components/Hero.tsx` (angka statistik & rumus ada di komponen `DashboardCard`, `FormulaCard`, `SkillsCard`) |

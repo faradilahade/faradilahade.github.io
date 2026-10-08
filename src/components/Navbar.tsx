@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useLang } from '../contexts/LanguageContext'
 import { LANGS } from '../lib/translations'
 import { site, mailto } from '../lib/site'
-import { IconMail, IconMenu, IconClose, IconPhone, IconGrid, IconLanguage, IconChevronDown } from './Icons'
+import { IconMail, IconMenu, IconClose, IconGrid, IconLanguage, IconChevronDown } from './Icons'
 
 /** Language switcher: the button shows each language in its own script; the list explains, in that language, that the site can be read in it. */
 function LanguageMenu() {
@@ -92,10 +92,6 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-2.5 sm:gap-4">
-          <a href={site.whatsapp} target="_blank" rel="noreferrer" className="hidden xl:inline-flex items-center gap-2 text-[12px] font-medium text-ink tabular-nums">
-            <IconPhone size={15} className="text-steel" /> {site.phoneDisplay}
-          </a>
-
           <LanguageMenu />
 
           <a
@@ -128,9 +124,6 @@ export default function Navbar() {
             <Link to="/#faq" className="py-2.5 border-b border-line text-ink">{t('nav.faq')}</Link>
             <Link to="/#call" className="py-2.5 border-b border-line text-ink">{t('nav.call')}</Link>
             <Link to="/contact" className="py-2.5 border-b border-line text-ink">{t('nav.contact')}</Link>
-            <a href={site.whatsapp} target="_blank" rel="noreferrer" className="flex items-center gap-2 py-2.5 text-slate normal-case tracking-normal font-medium">
-              <IconPhone size={15} className="text-steel" /> {site.phoneDisplay}
-            </a>
           </nav>
         </div>
       </div>

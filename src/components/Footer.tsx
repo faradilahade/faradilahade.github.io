@@ -59,7 +59,6 @@ export default function Footer() {
             ))}
           </div>
           <p className="label-caps text-ink mt-6 mb-2">{t('footer.consultation')}</p>
-          <a href={site.whatsapp} target="_blank" rel="noreferrer" className="block text-fl-base font-semibold text-steel hover:text-ink transition-colors tabular-nums">{site.phoneDisplay}</a>
           <a href={`mailto:${site.email}`} className="block text-fl-base font-semibold text-steel hover:text-ink transition-colors break-all">{site.email}</a>
         </div>
       </div>

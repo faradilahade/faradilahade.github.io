@@ -1,7 +1,7 @@
 import { CSSProperties, ReactNode, useEffect, useRef, useState } from 'react'
 import { useLang } from '../contexts/LanguageContext'
 import { site } from '../lib/site'
-import { IconPhone, IconArrowDown, IconMail, IconWhatsapp, IconArrowRight } from './Icons'
+import { IconPhone, IconArrowDown, IconMail, IconArrowRight } from './Icons'
 
 /* ------------------------------------------------------------------
    Hero: the name set as large type in the middle, surrounded by
@@ -188,10 +188,9 @@ function CallPill() {
       <span className="shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-tide via-ocean to-steel text-night flex items-center justify-center text-[12px] font-bold">{initials}</span>
       <span className="min-w-0 flex-1 pr-1">
         <span className="block text-[12.5px] font-semibold leading-tight truncate">{site.name}</span>
-        <span className="block text-[11px] text-paper/60 leading-tight tabular-nums truncate">{site.phoneDisplay} · {t('hero.call.label')}</span>
+        <span className="block text-[11px] text-paper/60 leading-tight truncate">{site.email}</span>
       </span>
       <a href={`mailto:${site.email}`} aria-label={`Email ${site.email}`} className="shrink-0 w-9 h-9 rounded-full bg-steel text-paper flex items-center justify-center hover:bg-ocean hover:text-night transition-colors duration-300"><IconMail size={15} /></a>
-      <a href={site.whatsapp} target="_blank" rel="noreferrer" aria-label="WhatsApp" className="shrink-0 w-9 h-9 rounded-full bg-tide text-night flex items-center justify-center hover:bg-paper transition-colors duration-300"><IconWhatsapp size={15} /></a>
     </div>
   )
 }
