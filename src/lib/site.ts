@@ -9,7 +9,7 @@ export const site = {
   email: 'pmb.faradilahade@gmail.com',
   phoneDisplay: '+62 8511 7575 990',
   whatsapp: 'https://wa.me/6285117575990',
-  location: 'Jakarta, Indonesia',
+  location: 'Japan & Indonesia',
   timezone: 'GMT+7',
   // Canonical production URL (user site). Runtime code also derives the live origin.
   url: 'https://faradilahade.github.io',
